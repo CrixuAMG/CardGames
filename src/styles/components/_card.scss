@@ -1,0 +1,421 @@
+.card {
+    min-width: 200px;
+    width: 200px;
+    height: 300px;
+    border: 2px solid black;
+    border-radius: 15px;
+    margin: 5px;
+    position: relative;
+    background-color: white;
+    transition: all 0.3s;
+    user-select: none;
+    overflow: hidden;
+
+    * {
+        user-select: none;
+    }
+
+    &.heart, &.tile, &.carjoker.red {
+        * {
+            color: red !important;
+        }
+    }
+
+    &.pike, &.clover, &.ca-joker.black {
+        * {
+            color: black !important;
+        }
+    }
+
+    .card-middle-mark {
+        position: relative;
+        height: 100%;
+        width: 100%;
+
+        * {
+            font-size: 64px;
+        }
+
+        div[class^="mark"] {
+            display: none;
+        }
+    }
+
+    .card-top-mark, .card-bottom-mark {
+        position: absolute;
+        font-size: 32px;
+        z-index: 1;
+        font-weight: bold;
+        font-family: Helvetica, sans-serif;
+        width: calc(100% - 16px);
+        margin: 0 8px;
+        display: flex;
+        flex-direction: column;
+
+        .card-name, .card-suit {
+            line-height: 1.3;
+            text-align: center;
+            width: 30px;
+        }
+    }
+
+    .card-top-mark {
+        top: 3px;
+        color: red;
+    }
+
+    .card-bottom-mark {
+        bottom: 3px;
+        color: red;
+        transform: rotate(180deg);
+    }
+
+    .card-middle-mark div[class^="mark"] {
+        position: absolute;
+        display: block;
+    }
+
+    &.card-1 .card-middle-mark {
+        .mark-1 {
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+
+            div {
+                font-size: 92px;
+            }
+        }
+    }
+
+    &.card-2 .card-middle-mark {
+        .mark-1 {
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .mark-2 {
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    }
+
+    &.card-3 .card-middle-mark {
+        .mark-1 {
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .mark-2 {
+            bottom: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .mark-3 {
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    }
+
+    &.card-4 .card-middle-mark {
+        .mark-1 {
+            top: 55px;
+            left: 25%;
+            transform: translateX(-25%);
+        }
+
+        .mark-2 {
+            bottom: 55px;
+            left: 25%;
+            transform: translateX(-25%);
+        }
+
+        .mark-3 {
+            top: 55px;
+            left: 75%;
+            transform: translateX(-75%);
+        }
+
+        .mark-4 {
+            bottom: 55px;
+            left: 75%;
+            transform: translateX(-75%);
+        }
+    }
+
+    &.card-5 .card-middle-mark {
+        .mark-1 {
+            top: 55px;
+            left: 25%;
+            transform: translateX(-25%);
+        }
+
+        .mark-2 {
+            bottom: 55px;
+            left: 25%;
+            transform: translateX(-25%);
+        }
+
+        .mark-3 {
+            top: 55px;
+            left: 75%;
+            transform: translateX(-75%);
+        }
+
+        .mark-4 {
+            bottom: 55px;
+            left: 75%;
+            transform: translateX(-75%);
+        }
+
+        .mark-5 {
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+        }
+    }
+
+    &.card-6 .card-middle-mark {
+        .mark-1 {
+            top: 45px;
+            left: 25%;
+            transform: translateX(-25%);
+        }
+
+        .mark-2 {
+            bottom: 45px;
+            left: 25%;
+            transform: translateX(-25%);
+        }
+
+        .mark-3 {
+            top: 45px;
+            left: 75%;
+            transform: translateX(-75%);
+        }
+
+        .mark-4 {
+            bottom: 45px;
+            left: 75%;
+            transform: translateX(-75%);
+        }
+
+        .mark-5 {
+            left: 25%;
+            top: 50%;
+            transform: translateY(-50%) translateX(-25%);
+        }
+
+        .mark-6 {
+            left: 75%;
+            top: 50%;
+            transform: translateY(-50%) translateX(-75%);
+        }
+    }
+
+    &.card-7 .card-middle-mark {
+        .mark-1 {
+            top: 45px;
+            left: 25%;
+            transform: translateX(-25%);
+        }
+
+        .mark-2 {
+            bottom: 45px;
+            left: 25%;
+            transform: translateX(-25%);
+        }
+
+        .mark-3 {
+            top: 45px;
+            left: 75%;
+            transform: translateX(-75%);
+        }
+
+        .mark-4 {
+            bottom: 45px;
+            left: 75%;
+            transform: translateX(-75%);
+        }
+
+        .mark-5 {
+            left: 15%;
+            top: 50%;
+            transform: translateY(-50%) translateX(-15%);
+        }
+
+        .mark-6 {
+            left: 85%;
+            top: 50%;
+            transform: translateY(-50%) translateX(-85%);
+        }
+
+        .mark-7 {
+            left: 50%;
+            top: 50%;
+            transform: translateY(-50%) translateX(-50%);
+        }
+    }
+
+    &.card-8 .card-middle-mark {
+        .mark-1 {
+            top: 45px;
+            left: 25%;
+            transform: translateX(-25%);
+        }
+
+        .mark-2 {
+            bottom: 45px;
+            left: 25%;
+            transform: translateX(-25%);
+        }
+
+        .mark-3 {
+            top: 45px;
+            left: 75%;
+            transform: translateX(-75%);
+        }
+
+        .mark-4 {
+            bottom: 45px;
+            left: 75%;
+            transform: translateX(-75%);
+        }
+
+        .mark-5 {
+            left: 25%;
+            top: 50%;
+            transform: translateY(-50%) translateX(-25%);
+        }
+
+        .mark-6 {
+            left: 75%;
+            top: 50%;
+            transform: translateY(-50%) translateX(-75%);
+        }
+    }
+
+    &.card-9 .card-middle-mark {
+        div[class^="mark"] * {
+            font-size: 56px;
+        }
+
+        .mark-1 {
+            top: 45px;
+            left: 15%;
+            transform: translateX(-15%);
+        }
+
+        .mark-2 {
+            top: 45px;
+            left: 85%;
+            transform: translateX(-85%);
+        }
+
+        .mark-3 {
+            bottom: 45px;
+            left: 15%;
+            transform: translateX(-15%);
+        }
+
+        .mark-4 {
+            bottom: 45px;
+            left: 85%;
+            transform: translateX(-85%);
+        }
+
+        .mark-5 {
+            left: 15%;
+            top: 50%;
+            transform: translateY(-50%) translateX(-15%);
+        }
+
+        .mark-6 {
+            left: 85%;
+            top: 50%;
+            transform: translateY(-50%) translateX(-85%);
+        }
+
+        .mark-7 {
+            left: 50%;
+            top: 45px;
+            transform: translateX(-50%);
+        }
+
+        .mark-8 {
+            left: 50%;
+            top: 50%;
+            transform: translateY(-50%) translateX(-50%);
+        }
+
+        .mark-9 {
+            left: 50%;
+            bottom: 45px;
+            transform: translateX(-50%);
+        }
+    }
+
+    &.card-10 .card-middle-mark {
+        div[class^="mark"] * {
+            font-size: 56px;
+        }
+
+        .mark-1 {
+            top: 45px;
+            left: 15%;
+            transform: translateX(-15%);
+        }
+
+        .mark-2 {
+            top: 45px;
+            left: 85%;
+            transform: translateX(-85%);
+        }
+
+        .mark-3 {
+            bottom: 45px;
+            left: 15%;
+            transform: translateX(-15%);
+        }
+
+        .mark-4 {
+            bottom: 45px;
+            left: 85%;
+            transform: translateX(-85%);
+        }
+
+        .mark-5 {
+            left: 10%;
+            top: 50%;
+            transform: translateY(-50%) translateX(-10%);
+        }
+
+        .mark-6 {
+            left: 90%;
+            top: 50%;
+            transform: translateY(-50%) translateX(-90%);
+        }
+
+        .mark-7 {
+            left: 50%;
+            top: 45px;
+            transform: translateX(-50%);
+        }
+
+        .mark-8 {
+            left: 50%;
+            top: 50%;
+            transform: translateY(-50%) translateX(-50%);
+        }
+
+        .mark-9 {
+            left: 50%;
+            bottom: 45px;
+            transform: translateX(-50%);
+        }
+    }
+}
