@@ -4,14 +4,14 @@ import Card from "@/lib/Cards/Card";
 
 let GameManager = {
     turnCounter: 0,
-    turnFor: null | number,
+    turnFor: <number | null>null,
     turnDirection: 'ASC',
     playerCount: 0,
     instance: null,
     Cards: Cards,
     CardsPile: [],
     Ruleset: {},
-    playedCards: Card[],
+    playedCards: [],
     players: [],
 
     registerEventHandlers() {
