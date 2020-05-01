@@ -4,7 +4,7 @@ import {Component} from "vue";
 interface Ruleset {
     deckIsEmpty: (cards: Card[]) => void;
     cardIsPlayable: (Card: Card) => (boolean | boolean);
-    beforeTurn: (Player: Component) => (boolean);
+    beforeTurn: (Player{playerId: number}) => (boolean);
     nextTurnOnDrawCardFromStack: boolean;
 }
 

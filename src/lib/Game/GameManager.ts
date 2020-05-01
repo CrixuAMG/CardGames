@@ -28,7 +28,7 @@ let GameManager = {
         });
     },
 
-    setup(instance: Component, Ruleset: object) {
+    setup(instance: {playerId: number}, Ruleset: object) {
         this.instance = instance;
         this.Cards = Cards;
         this.Ruleset = Ruleset;
@@ -42,7 +42,7 @@ let GameManager = {
         this.instance.$root.$emit('game::has-been-setup');
     },
 
-    nextTurn(Player?: Component, Card?: Card) {
+    nextTurn(Player?: {playerId: number}, Card?: Card) {
         if (this.turnFor === null) {
             this.turnFor = 0;
         }
@@ -115,7 +115,7 @@ let GameManager = {
         this.nextTurn();
     },
 
-    registerPlayer(player: Component) {
+    registerPlayer(player: {playerId: number}) {
         this.playerCount += 1;
         this.players[this.playerCount] = player;
 
