@@ -1,5 +1,4 @@
 import Cards from "@/lib/Cards/Cards";
-import {Component} from "vue";
 import Card from "@/lib/Cards/Card";
 
 let GameManager = {
@@ -28,7 +27,7 @@ let GameManager = {
         });
     },
 
-    setup(instance: {playerId: number}, Ruleset: object) {
+    setup(instance: { playerId: number }, Ruleset: object) {
         this.instance = instance;
         this.Cards = Cards;
         this.Ruleset = Ruleset;
@@ -42,7 +41,11 @@ let GameManager = {
         this.instance.$root.$emit('game::has-been-setup');
     },
 
-    nextTurn(Player?: {playerId: number}, Card?: Card) {
+    nextTurn(Player?: { playerId: number }, Card?: Card) {
+        if (this.Ruleset.afterTurn && typeof this.Ruleset.afterTurn === 'function') {
+            this.Ruleset.afterTurn(Player);
+        }
+
         if (this.turnFor === null) {
             this.turnFor = 0;
         }
@@ -70,7 +73,9 @@ let GameManager = {
             // @ts-ignore
             this.instance.$root.$emit('stack::add-card', Card);
 
-            emitEvent = this.Ruleset.beforeTurn(Player);
+            if (this.Ruleset.beforeTurn && typeof this.Ruleset.beforeTurn === 'function') {
+                emitEvent = this.Ruleset.beforeTurn(Player);
+            }
         }
 
         // @ts-ignore
@@ -115,7 +120,7 @@ let GameManager = {
         this.nextTurn();
     },
 
-    registerPlayer(player: {playerId: number}) {
+    registerPlayer(player: { playerId: number }) {
         this.playerCount += 1;
         this.players[this.playerCount] = player;
 
