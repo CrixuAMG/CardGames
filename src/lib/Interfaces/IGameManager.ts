@@ -1,17 +1,22 @@
 import Card from "@/lib/Cards/Card";
 import IPlayer from "@/lib/Interfaces/IPlayer";
+import IRuleset from "@/lib/Interfaces/IRuleset";
+import ICards from "@/lib/Interfaces/ICards";
 
 interface IGameManager {
-    Ruleset: {};
+    Ruleset: IRuleset;
     turnCounter: number;
     instance: {
         $root: {
-            $on: () => {}
+            $on: (event: string, ...any: []) => void,
+            $emit: (event: string, ...any: []) => void
         }
     };
     turnDirection: string;
     playerCount: number;
     players: any[];
+    Cards: ICards;
+    turnFor: number | null;
 
     reverseDirection(): void;
 
@@ -28,9 +33,6 @@ interface IGameManager {
     setup(instance: IPlayer, IRuleset: object): void;
 
     startGame(): void;
-
-    Cards: {};
-    turnFor: number | null
 }
 
 export default IGameManager;

@@ -1,15 +1,10 @@
 import * as _ from 'lodash';
 import Card from "./Card";
+import ICards from "@/lib/Interfaces/ICards";
+import ICard from "@/lib/Interfaces/ICard";
+import GameManager from "@/lib/Game/GameManager";
 
-interface Cards {
-    collection: Card[];
-    deck: Card[];
-    useDeck: boolean;
-    get: (shuffle?: boolean, setupdDeck?: boolean) => Card[];
-    take: (amount: number, exclude: Card[]) => Card[];
-}
-
-let Cards: Cards = {
+let Cards: ICards = {
     collection: [],
     deck: [],
     useDeck: false,
@@ -40,7 +35,7 @@ let Cards: Cards = {
 
         for (let i = 0; i < amount; i++) {
             let card = _.first(cardsFromDeck);
-            cardsFromDeck = _.remove(cardsFromDeck, (cardFromDeck: Card) => {
+            cardsFromDeck = _.remove(cardsFromDeck, (cardFromDeck: ICard) => {
                 return cardFromDeck.isNot(card);
             });
             cardsFromDeck = this.get();

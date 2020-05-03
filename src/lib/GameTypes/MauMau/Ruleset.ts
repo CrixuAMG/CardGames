@@ -1,12 +1,17 @@
-import GameManager from "../../Game/GameManager";
 import IRuleset from "@/lib/Interfaces/IRuleset";
 import Card from "@/lib/Cards/Card";
 import Cards from '@/lib/Cards/Cards';
+import IPlayer from "@/lib/Interfaces/IPlayer";
+import GameManager from '@/lib/Game/GameManager';
 
 let Ruleset: IRuleset = {
     nextTurnOnDrawCardFromStack: false,
 
-    beforeTurn: (Player) => {
+    afterTurn: function (Player: IPlayer) {
+        return false;
+    },
+
+    beforeTurn: (Player: IPlayer) => {
         if (!Player.cards.length) {
             console.log('PLAYER ' + Player.playerId + ' WON THE GAME!!');
 
@@ -22,10 +27,8 @@ let Ruleset: IRuleset = {
         if (lastPlayedCard) {
             if (lastPlayedCard.value === 2) {
                 console.log(Player.playerId + ' plays a DRAW TWO!');
-                // @ts-ignore
                 GameManager.instance.$root.$emit('log', {message: Player.playerId + ' plays a DRAW TWO!'});
 
-                // @ts-ignore
                 GameManager.instance.$root.$emit('cards::draw-cards-from-deck', {
                     player: Player.playerId >= GameManager.playerCount
                         ? Player.playerId - 1
@@ -36,7 +39,6 @@ let Ruleset: IRuleset = {
 
             if (lastPlayedCard.value === 8) {
                 console.log(Player.playerId + ' plays a SKIP!');
-                // @ts-ignore
                 GameManager.instance.$root.$emit('log', {message: Player.playerId + ' plays a SKIP!'});
 
                 GameManager.nextTurn();
@@ -46,7 +48,6 @@ let Ruleset: IRuleset = {
 
             if (lastPlayedCard.value === 14 || lastPlayedCard.value === 7) {
                 console.log(Player.playerId + ' can play again!');
-                // @ts-ignore
                 GameManager.instance.$root.$emit('log', {message: Player.playerId + ' can play again!'});
 
                 if (GameManager.turnDirection === 'ASC') {
@@ -68,7 +69,6 @@ let Ruleset: IRuleset = {
 
             if (lastPlayedCard.value === 1) {
                 console.log(Player.playerId + ' plays a REVERSE!');
-                // @ts-ignore
                 GameManager.instance.$root.$emit('log', {message: Player.playerId + ' plays a REVERSE!'});
 
                 GameManager.reverseDirection();
@@ -76,10 +76,8 @@ let Ruleset: IRuleset = {
 
             if (lastPlayedCard.value === 'JOKER') {
                 console.log(Player.playerId + ' plays a JOKER!');
-                // @ts-ignore
                 GameManager.instance.$root.$emit('log', {message: Player.playerId + ' plays a JOKER!'});
 
-                // @ts-ignore
                 GameManager.instance.$root.$emit('cards::draw-cards-from-deck', {
                     player: Player.playerId >= GameManager.playerCount
                         ? Player.playerId - 1
@@ -126,12 +124,11 @@ let Ruleset: IRuleset = {
 
     deckIsEmpty: (cards: Card[]) => {
         _.forEach(cards, (card: Card) => {
-            // @ts-ignore
             GameManager.instance.$root.$emit('stack::remove-card', card);
         });
 
         Cards.deck = _.shuffle(cards);
-    },
+    }
 };
 
 export default Ruleset;

@@ -1,12 +1,18 @@
-import GameManager from "../../Game/GameManager";
 import IRuleset from "@/lib/Interfaces/IRuleset";
 import Card from "@/lib/Cards/Card";
 import Cards from '@/lib/Cards/Cards';
+import IPlayer from "@/lib/Interfaces/IPlayer";
+import GameManager from '@/lib/Game/GameManager';
+import ILogEvent from "@/lib/Interfaces/ILogEvent";
 
 let Ruleset: IRuleset = {
     nextTurnOnDrawCardFromStack: false,
 
-    beforeTurn: (Player) => {
+    afterTurn: function (Player: IPlayer) {
+        return false;
+    },
+
+    beforeTurn: (Player: IPlayer) => {
         if (!Player.cards.length) {
             console.log('PLAYER ' + Player.playerId + ' WON THE GAME!!');
 
@@ -18,14 +24,14 @@ let Ruleset: IRuleset = {
         }
 
         let lastPlayedCard: Card | undefined = _.last(GameManager.playedCards);
+        let logEvent: ILogEvent;
 
         if (lastPlayedCard) {
             if (lastPlayedCard.value === 2) {
                 console.log(Player.playerId + ' plays a DRAW TWO!');
-                // @ts-ignore
-                GameManager.instance.$root.$emit('log', {message: Player.playerId + ' plays a DRAW TWO!'});
+                logEvent = {message: Player.playerId + ' plays a DRAW TWO!'};
+                GameManager.instance.$root.$emit('log', logEvent);
 
-                // @ts-ignore
                 GameManager.instance.$root.$emit('cards::draw-cards-from-deck', {
                     player: Player.playerId >= GameManager.playerCount
                         ? Player.playerId - 1
@@ -36,8 +42,8 @@ let Ruleset: IRuleset = {
 
             if (lastPlayedCard.value === 8) {
                 console.log(Player.playerId + ' plays a SKIP!');
-                // @ts-ignore
-                GameManager.instance.$root.$emit('log', {message: Player.playerId + ' plays a SKIP!'});
+                logEvent = {message: Player.playerId + ' plays a SKIP!'};
+                GameManager.instance.$root.$emit('log', logEvent);
 
                 GameManager.nextTurn();
 
@@ -46,8 +52,8 @@ let Ruleset: IRuleset = {
 
             if (lastPlayedCard.value === 14 || lastPlayedCard.value === 7) {
                 console.log(Player.playerId + ' can play again!');
-                // @ts-ignore
-                GameManager.instance.$root.$emit('log', {message: Player.playerId + ' can play again!'});
+                logEvent = {message: Player.playerId + ' can play again!'};
+                GameManager.instance.$root.$emit('log', logEvent);
 
                 if (GameManager.turnDirection === 'ASC') {
                     if (GameManager.turnFor - 1 < 1) {
@@ -68,18 +74,17 @@ let Ruleset: IRuleset = {
 
             if (lastPlayedCard.value === 1) {
                 console.log(Player.playerId + ' plays a REVERSE!');
-                // @ts-ignore
-                GameManager.instance.$root.$emit('log', {message: Player.playerId + ' plays a REVERSE!'});
+                logEvent = {message: Player.playerId + ' plays a REVERSE!'};
+                GameManager.instance.$root.$emit('log', logEvent);
 
                 GameManager.reverseDirection();
             }
 
             if (lastPlayedCard.value === 'JOKER') {
                 console.log(Player.playerId + ' plays a JOKER!');
-                // @ts-ignore
-                GameManager.instance.$root.$emit('log', {message: Player.playerId + ' plays a JOKER!'});
+                logEvent = {message: Player.playerId + ' plays a JOKER!'};
+                GameManager.instance.$root.$emit('log', logEvent);
 
-                // @ts-ignore
                 GameManager.instance.$root.$emit('cards::draw-cards-from-deck', {
                     player: Player.playerId >= GameManager.playerCount
                         ? Player.playerId - 1
@@ -126,12 +131,11 @@ let Ruleset: IRuleset = {
 
     deckIsEmpty: (cards: Card[]) => {
         _.forEach(cards, (card: Card) => {
-            // @ts-ignore
             GameManager.instance.$root.$emit('stack::remove-card', card);
         });
 
         Cards.deck = _.shuffle(cards);
-    },
+    }
 };
 
 export default Ruleset;

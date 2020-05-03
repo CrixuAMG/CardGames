@@ -1,6 +1,7 @@
 import Cards from "@/lib/Cards/Cards";
 import IGameManager from "@/lib/Interfaces/IGameManager";
 import IPlayer from "@/lib/Interfaces/IPlayer";
+import IRuleset from "@/lib/Interfaces/IRuleset";
 
 let GameManager: IGameManager = {
     turnCounter: 0,
@@ -10,7 +11,7 @@ let GameManager: IGameManager = {
     instance: {},
     Cards: Cards,
     CardsPile: [],
-    Ruleset: {},
+    Ruleset: IRuleset,
     playedCards: [],
     players: [],
 
