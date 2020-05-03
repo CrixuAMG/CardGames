@@ -1,12 +1,13 @@
 import Cards from "@/lib/Cards/Cards";
-import Card from "@/lib/Cards/Card";
+import IGameManager from "@/lib/Interfaces/IGameManager";
+import IPlayer from "@/lib/Interfaces/IPlayer";
 
-let GameManager = {
+let GameManager: IGameManager = {
     turnCounter: 0,
     turnFor: <number | null>null,
     turnDirection: 'ASC',
     playerCount: 0,
-    instance: null,
+    instance: {},
     Cards: Cards,
     CardsPile: [],
     Ruleset: {},
@@ -14,15 +15,13 @@ let GameManager = {
     players: [],
 
     registerEventHandlers() {
-        // @ts-ignore
-        this.instance.$root.$on('stack::add-card', (Card) => {
+        this.instance.$root.$on('stack::add-card', (Card: Card) => {
             this.CardsPile.push(Card);
         });
 
-        // @ts-ignore
-        this.instance.$root.$on('stack::remove-card', (Card) => {
-            this.CardsPile = _.filter(this.CardsPile, (cardInStack) => {
-                return cardInStack.indentifier === Card.identifier;
+        this.instance.$root.$on('stack::remove-card', (Card: Card) => {
+            this.CardsPile = _.filter(this.CardsPile, (cardInStack: Card) => {
+                return cardInStack.is(Card);
             });
         });
     },
@@ -37,11 +36,10 @@ let GameManager = {
 
         this.registerEventHandlers();
 
-        // @ts-ignore
         this.instance.$root.$emit('game::has-been-setup');
     },
 
-    nextTurn(Player?: { playerId: number }, Card?: Card) {
+    nextTurn(Player?: IPlayer, Card?: Card) {
         if (this.Ruleset.afterTurn && typeof this.Ruleset.afterTurn === 'function') {
             this.Ruleset.afterTurn(Player);
         }
@@ -70,7 +68,6 @@ let GameManager = {
 
         if (Card) {
             this.playedCards.push(Card);
-            // @ts-ignore
             this.instance.$root.$emit('stack::add-card', Card);
 
             if (this.Ruleset.beforeTurn && typeof this.Ruleset.beforeTurn === 'function') {
@@ -78,7 +75,6 @@ let GameManager = {
             }
         }
 
-        // @ts-ignore
         this.instance.$root.$emit('game::recalculate:deck-remaining');
 
         if (!this.Cards.deck.length) {
@@ -104,7 +100,6 @@ let GameManager = {
     startGame() {
         console.log('START GAME');
 
-        // @ts-ignore
         this.instance.$root.$emit('cards::build::draw-stack');
 
         for (let player = 1; player <= this.playerCount; player++) {
@@ -114,7 +109,6 @@ let GameManager = {
             });
         }
 
-        // @ts-ignore
         this.instance.$root.$emit('game::start');
 
         this.nextTurn();
@@ -124,7 +118,6 @@ let GameManager = {
         this.playerCount += 1;
         this.players[this.playerCount] = player;
 
-        // @ts-ignore
         console.log(this.playerCount + ' players have been registered');
 
         return this.playerCount;

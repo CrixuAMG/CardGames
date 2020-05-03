@@ -1,9 +1,9 @@
 import GameManager from "../../Game/GameManager";
-import Ruleset from "@/lib/Game/Ruleset";
+import IRuleset from "@/lib/Interfaces/IRuleset";
 import Card from "@/lib/Cards/Card";
 import Cards from '@/lib/Cards/Cards';
 
-let Ruleset: Ruleset = {
+let Ruleset: IRuleset = {
     nextTurnOnDrawCardFromStack: false,
 
     beforeTurn: (Player) => {

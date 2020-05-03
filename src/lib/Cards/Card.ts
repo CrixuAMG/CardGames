@@ -1,3 +1,5 @@
+import ICard from "@/lib/Interfaces/ICard";
+
 class Card {
     private _name: string;
     private _identifier: string;
@@ -20,7 +22,7 @@ class Card {
         return this._name;
     }
 
-    constructor(data: { suit: string, name: string, value: number | string }) {
+    constructor(data: ICard) {
         if (data.suit) {
             this._suit = data.suit;
         }
