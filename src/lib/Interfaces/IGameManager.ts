@@ -2,16 +2,12 @@ import Card from "@/lib/Cards/Card";
 import IPlayer from "@/lib/Interfaces/IPlayer";
 import IRuleset from "@/lib/Interfaces/IRuleset";
 import ICards from "@/lib/Interfaces/ICards";
+import IVueInstance from "@/lib/Interfaces/IVueInstance";
 
 interface IGameManager {
     Ruleset: IRuleset;
     turnCounter: number;
-    instance: {
-        $root: {
-            $on: (event: string, ...any: []) => void,
-            $emit: (event: string, ...any: []) => void
-        }
-    };
+    instance: IVueInstance;
     turnDirection: string;
     playerCount: number;
     players: any[];
