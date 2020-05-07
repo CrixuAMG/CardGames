@@ -2,7 +2,7 @@ import Card from "@/lib/Cards/Card";
 import IPlayer from "@/lib/Interfaces/IPlayer";
 import IRuleset from "@/lib/Interfaces/IRuleset";
 import ICards from "@/lib/Interfaces/ICards";
-import IVueInstance from "@/lib/Interfaces/IVueInstance";
+import {IVueInstance} from "@/lib/Interfaces/Vue";
 
 interface IGameManager {
     Ruleset: IRuleset;

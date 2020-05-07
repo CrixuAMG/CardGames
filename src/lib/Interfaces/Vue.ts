@@ -1,8 +1,10 @@
-interface IVueInstance {
+export interface IVueInstance {
     $root: {
         $on: (event: string, ...any: []) => void,
         $emit: (event: string, ...any: []) => void
     }
 }
 
-export default IVueInstance;
+export interface IVueEvent {
+    func(...args: any[]): void;
+}

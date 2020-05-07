@@ -1,7 +1,7 @@
 <template>
     <div class="hand" :class="{'can-play': canPlay}" :id="`player-${playerId}`">
         <card @drag="draggingCard(card, index)" @dragend="dragend(card, $event)"
-              :draggable="canDrag && canPlayCard(card)" :card="card"
+              :draggable="canDrag && canPlayCard(card)" :card="card" @click.native="playCard(card)"
               v-for="(card, index) in cards" :style="style(index)"></card>
     </div>
 </template>
@@ -65,6 +65,13 @@
                 if (event.dataTransfer.dropEffect === 'none') {
                     // this.$emit('add', Card);
 
+                    return;
+                }
+
+                this.playCard(Card);
+            },
+            playCard(Card) {
+                if (!this.canPlayCard(Card)) {
                     return;
                 }
 

@@ -2,7 +2,7 @@ import Cards from "@/lib/Cards/Cards";
 import IGameManager from "@/lib/Interfaces/IGameManager";
 import IPlayer from "@/lib/Interfaces/IPlayer";
 import IRuleset from "@/lib/Interfaces/IRuleset";
-import IVueInstance from "@/lib/Interfaces/IVueInstance";
+import {IVueInstance} from "@/lib/Interfaces/Vue";
 
 let GameManager: IGameManager = {
     turnCounter: 0,
