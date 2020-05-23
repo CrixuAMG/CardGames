@@ -4,9 +4,10 @@ import IPlayer from "@/lib/Interfaces/IPlayer";
 import IRuleset from "@/lib/Interfaces/IRuleset";
 import {IVueInstance} from "@/lib/Interfaces/Vue";
 
-let GameManager: IGameManager = {
+let GameManager: IGameManager;
+GameManager = {
     turnCounter: 0,
-    turnFor: <number | null>null,
+    turnFor: null,
     turnDirection: 'ASC',
     playerCount: 0,
     instance: {} as IVueInstance,
@@ -28,13 +29,13 @@ let GameManager: IGameManager = {
         });
     },
 
-    setup(instance: { playerId: number }, Ruleset: object) {
+    setup(instance: IPlayer, Ruleset: object) {
         this.instance = instance;
         this.Cards = Cards;
         this.Ruleset = Ruleset;
         this.CardsPile = [];
         this.players = [];
-        this.playerCount = null;
+        this.playerCount = 0;
 
         this.registerEventHandlers();
 

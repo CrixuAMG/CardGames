@@ -1,8 +1,7 @@
 <template>
     <div class="hand" :class="{'can-play': canPlay}" :id="`player-${playerId}`">
-        <card @drag="draggingCard(card, index)" @dragend="dragend(card, $event)"
-              :draggable="canDrag && canPlayCard(card)" :card="card" @click.native="playCard(card)"
-              v-for="(card, index) in cards" :style="style(index)"></card>
+        <card @drag="draggingCard(card, index)" @dragend="dragend(card, $event)" :draggable="canPlayCard(card)"
+              :card="card" @click.native="playCard(card)" v-for="(card, index) in cards" :style="style(index)"></card>
     </div>
 </template>
 

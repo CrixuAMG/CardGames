@@ -1,6 +1,7 @@
 <template>
-    <drag class="card" :class="[card.suit, `card-${card.value.toString().toLowerCase()}`]" @drag="drag"
-          @dragend="dragend" :draggable="draggable" :transfer-data="card" tag="div">
+    <drag class="card"
+          :class="[card.suit, `card-${card.value.toString().toLowerCase()}`, {'not-playable': draggable === false}]"
+          @drag="drag" @dragend="dragend" :draggable="draggable" :transfer-data="card" tag="div">
         <div class="card-top-mark">
             <div class="card-name">
                 {{ card.name }}
@@ -11,7 +12,7 @@
 
         <div class="card-middle-mark">
             <div :class="[`mark-${mark}`]" v-for="(mark, index) in amountOfIcons" v-if="card.value <= 10">
-<!--                <suit :card="card"></suit>-->
+                <!--                <suit :card="card"></suit>-->
             </div>
         </div>
 
