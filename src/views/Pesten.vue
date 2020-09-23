@@ -40,14 +40,15 @@
                 GameManager.startGame();
             },
         },
-        props: {
-            opponents: {
-                type: Number,
-                default: 3
+        data() {
+            return {
+                opponents: 3
             }
         },
 
         mounted() {
+            this.opponents = localStorage.getItem('opponents');
+
             this.setup();
         }
     }

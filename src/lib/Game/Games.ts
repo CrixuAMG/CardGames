@@ -2,7 +2,9 @@ const Games = [
     {
         name: 'Pesten',
         route: {
-            name: 'Pesten'
+            name: 'Pesten',
+            params: {},
+            query: {},
         },
         opponents: {
             min: 1,
@@ -12,7 +14,9 @@ const Games = [
     {
         name: 'Mau Mau',
         route: {
-            name: 'MauMau'
+            name: 'MauMau',
+            params: {},
+            query: {},
         },
         opponents: {
             min: 1,

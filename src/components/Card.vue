@@ -12,7 +12,7 @@
 
         <div class="card-middle-mark">
             <div :class="[`mark-${mark}`]" v-for="(mark, index) in amountOfIcons" v-if="card.value <= 10">
-                <!--                <suit :card="card"></suit>-->
+                <suit :card="card"></suit>
             </div>
         </div>
 

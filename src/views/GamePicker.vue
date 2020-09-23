@@ -1,15 +1,99 @@
 <template>
-    <div id="home">
-        <div id="game-picker">
-            <game-carousel></game-carousel>
+    <div id="game-picker" class="game-picker">
+        <div class="game-picker__option" :class="{'selected': isSelected(game)}" v-for="game in Games" @click="selectGame(game)">
+            {{ game.name }}
         </div>
+
+        <div id="game-picker__details" v-if="selectedGame">
+            <h5>
+                Opponents: 
+            </h5>
+
+                Min: {{ selectedGame.opponents.min }} 
+                Max: {{ selectedGame.opponents.max }} 
+        </div>
+
+        <label for="opponents">
+            Opponents
+            <input name="opponents" type="number" v-model="opponents">
+        </label>
+
+        <button @click="goToGame">
+            Play!
+        </button>
     </div>
 </template>
 
 <script>
-    import GameCarousel from "../components/GameSlider/GameCarousel";
+    import Games from "../lib/Game/Games";
+
     export default {
         name: "GamePicker",
-        components: {GameCarousel},
+        data() {
+            return {
+                Games: Games,
+                selectedGame: null,
+                opponents: null,
+            }
+        },
+        watch: {
+            selectedGame: {
+                deep: true,
+                immediate: true,
+                handler: function() {
+                    this.checkOpponents();
+                }
+            },
+            opponents: function() {
+                if (!this.selectedGame) {
+                    return false;
+                }
+
+                if (this.opponents < this.selectedGame.opponents.min) {
+                    this.opponents = this.selectedGame.opponents.min;
+
+                    return;
+                }
+
+                if (this.opponents > this.selectedGame.opponents.max) {
+                    this.opponents = this.selectedGame.opponents.max;
+
+                    return;
+                }
+            }
+        },
+        methods: {
+            goToGame() {
+                let GameOptions = _.cloneDeep(this.selectedGame);
+
+                localStorage.setItem('opponents', this.opponents);
+
+                this.$router.push(GameOptions);
+            },
+            selectGame(Game) {
+                this.selectedGame = Game;
+            },
+            checkOpponents() {
+                if (!this.selectedGame) {
+                    return false;
+                }
+
+                if (this.opponents >= this.selectedGame.opponents.min && this.opponents <= this.selectedGame.opponents.max) {
+                    return;
+                }
+
+                this.opponents = this.selectedGame.opponents.min;
+            },
+            isSelected(Game) {
+                if (!this.selectedGame) {
+                    return false;
+                }
+
+                return this.selectedGame.name === Game.name;
+            }
+        },
+        mounted() {
+            this.selectedGame = _.first(this.Games);
+        }
     }
 </script>

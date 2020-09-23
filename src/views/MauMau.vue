@@ -45,10 +45,12 @@
         data() {
             return {
                 hand: [],
+                opponents: 3
             }
         },
 
         mounted() {
+            this.opponents = localStorage.getItem('opponents');
             this.setup();
         }
     }

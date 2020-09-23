@@ -7,7 +7,7 @@
             Turn: {{ turnCounter }}
         </div>
         <div id="turn-for">
-            Turn for: {{ turnFor }}
+            Turn for: Player {{ turnFor }}
         </div>
     </div>
 </template>

@@ -49,11 +49,13 @@
         },
         data() {
             return {
-                hand: []
+                hand: [],
+                opponents: 3
             }
         },
 
         mounted() {
+            this.opponents = localStorage.getItem('opponents');
             this.setup();
         }
     }
