@@ -14,13 +14,13 @@
 </template>
 
 <script>
-    export default {
-        name: "Suit",
-        props: {
-            card: {
-                required: true,
-                type: Object
-            }
+export default {
+    name:  "Suit",
+    props: {
+        card: {
+            required: true,
+            type:     Object
         }
     }
+}
 </script>

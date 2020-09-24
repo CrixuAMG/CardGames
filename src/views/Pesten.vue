@@ -6,7 +6,7 @@
             <game-log></game-log>
 
             <div class="opponents">
-                <opponent v-for="(opponent, index) in opponents" :key="index"></opponent>
+                <opponent :key="index" v-for="(opponent, index) in opponents"></opponent>
             </div>
         </div>
 
@@ -19,37 +19,50 @@
 </template>
 
 <script>
-    import Cards from "../lib/Cards/Cards";
-    import Hand from "../components/Hand";
-    import Stack from "../components/Stack";
-    import DrawStack from "../components/DrawStack";
-    import GameData from "../components/GameData";
-    import GameManager from "../lib/Game/GameManager";
-    import Opponent from "../components/Opponent";
-    import Ruleset from "../lib/GameTypes/Pesten/Ruleset";
-    import GameLog from "../components/GameLog";
+import Cards from "../lib/Cards/Cards";
+import Hand from "../components/Hand";
+import Stack from "../components/Stack";
+import DrawStack from "../components/DrawStack";
+import GameData from "../components/GameData";
+import GameManager from "../lib/Game/GameManager";
+import Opponent from "../components/Opponent";
+import Ruleset from "../lib/GameTypes/Pesten/Ruleset";
+import GameLog from "../components/GameLog";
 
-    export default {
-        name: "Pesten",
-        components: {GameLog, Opponent, GameData, DrawStack, Stack, Hand},
-        methods: {
-            setup() {
-                Cards.get(true, true);
-                GameManager.setup(this, Ruleset);
+export default {
+    name:       "Pesten",
+    components: {
+        GameLog,
+        Opponent,
+        GameData,
+        DrawStack,
+        Stack,
+        Hand
+    },
+    methods:    {
+        setup() {
+            Cards.get(true, true);
+            GameManager.setup(this, Ruleset);
 
-                GameManager.startGame();
-            },
+            GameManager.startGame();
         },
-        data() {
-            return {
-                opponents: 3
-            }
-        },
-
-        mounted() {
-            this.opponents = localStorage.getItem('opponents');
-
-            this.setup();
+    },
+    data() {
+        return {
+            opponents: 3
         }
+    },
+
+    mounted() {
+        this.opponents = localStorage.getItem('opponents');
+
+        if (!this.opponents || this.opponents < 1) {
+            this.$router.replace({
+                name: 'GamePicker',
+            });
+        }
+
+        this.setup();
     }
+}
 </script>

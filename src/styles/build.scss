@@ -2,6 +2,24 @@
     box-sizing: border-box;
 }
 
+::-webkit-scrollbar
+{
+    width: 12px;  /* for vertical scrollbars */
+    height: 12px; /* for horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track
+{
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+}
+
+::-webkit-scrollbar-thumb
+{
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+}
+
 html, body {
     box-sizing: border-box;
     margin: 0;

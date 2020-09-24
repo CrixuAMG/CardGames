@@ -1,27 +1,6 @@
 import ICard from "@/lib/Interfaces/ICard";
 
 class Card {
-    private _name: string;
-    private _identifier: string;
-    private _value: number | string;
-    private _suit: string;
-
-    get suit(): string {
-        return this._suit;
-    }
-
-    get value(): number | string {
-        return this._value;
-    }
-
-    get identifier(): string {
-        return this._identifier;
-    }
-
-    get name(): string {
-        return this._name;
-    }
-
     constructor(data: ICard) {
         if (data.suit) {
             this._suit = data.suit;
@@ -39,6 +18,30 @@ class Card {
 
         return this;
     };
+
+    private _name: string;
+
+    get name(): string {
+        return this._name;
+    }
+
+    private _identifier: string;
+
+    get identifier(): string {
+        return this._identifier;
+    }
+
+    private _value: number | string;
+
+    get value(): number | string {
+        return this._value;
+    }
+
+    private _suit: string;
+
+    get suit(): string {
+        return this._suit;
+    }
 
     is(Card: { identifier: string }): boolean {
         return this._identifier === Card.identifier;

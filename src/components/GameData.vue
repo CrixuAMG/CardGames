@@ -1,5 +1,5 @@
 <template>
-    <div id="game-data" class="game-data">
+    <div class="game-data" id="game-data">
         <div id="deck-counter">
             Cards left: {{ cardsRemaining }}
         </div>
@@ -13,28 +13,28 @@
 </template>
 
 <script>
-    export default {
-        name: "GameData",
-        data() {
-            return {
-                cardsRemaining: null,
-                turnCounter: null,
-                turnFor: null
-            }
-        },
-        mounted() {
-            this.$root.$on('game::recalculate:deck-remaining', () => {
-                this.cardsRemaining = Cards.deck.length;
-
-                if (!this.cardsRemaining) {
-                    this.$root.$emit('game::deck-is-empty');
-                }
-            });
-
-            this.$root.$on('game::next-turn', () => {
-                this.turnCounter = GameManager.turnCounter;
-                this.turnFor = GameManager.turnFor;
-            });
+export default {
+    name: "GameData",
+    data() {
+        return {
+            cardsRemaining: null,
+            turnCounter:    null,
+            turnFor:        null
         }
+    },
+    mounted() {
+        this.$root.$on('game::recalculate:deck-remaining', () => {
+            this.cardsRemaining = Cards.deck.length;
+
+            if (!this.cardsRemaining) {
+                this.$root.$emit('game::deck-is-empty');
+            }
+        });
+
+        this.$root.$on('game::next-turn', () => {
+            this.turnCounter = GameManager.turnCounter;
+            this.turnFor     = GameManager.turnFor;
+        });
     }
+}
 </script>

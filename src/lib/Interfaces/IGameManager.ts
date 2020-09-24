@@ -13,14 +13,12 @@ interface IGameManager {
     players: any[];
     Cards: ICards;
     turnFor: number | null;
+    playedCards: any[];
+    CardsPile: Card[];
 
     reverseDirection(): void;
 
-    playedCards: any[];
-
     registerEventHandlers(): void;
-
-    CardsPile: Card[];
 
     nextTurn(Player?: IPlayer, Card?: Card): void;
 

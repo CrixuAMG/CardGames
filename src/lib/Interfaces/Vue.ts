@@ -1,5 +1,3 @@
-import GameManager from "@/lib/Game/GameManager";
-
 export interface IVueInstance {
     $root: {
         $on: ({key, value}: { key: string, value?: any[] }) => void,
