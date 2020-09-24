@@ -1,13 +1,12 @@
 import Card from "@/lib/Cards/Card";
-import IPlayer from "@/lib/Interfaces/IPlayer";
 import IRuleset from "@/lib/Interfaces/IRuleset";
 import ICards from "@/lib/Interfaces/ICards";
-import {IVueInstance} from "@/lib/Interfaces/Vue";
+import IPlayer from './IPlayer';
 
 interface IGameManager {
     Ruleset: IRuleset;
     turnCounter: number;
-    instance: IVueInstance;
+    instance: IPlayer;
     turnDirection: string;
     playerCount: number;
     players: any[];

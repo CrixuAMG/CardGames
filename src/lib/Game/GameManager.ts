@@ -1,8 +1,9 @@
 import Cards from "@/lib/Cards/Cards";
 import IGameManager from "@/lib/Interfaces/IGameManager";
-import IPlayer from "@/lib/Interfaces/IPlayer";
 import IRuleset from "@/lib/Interfaces/IRuleset";
-import {IVueInstance} from "@/lib/Interfaces/Vue";
+import IPlayer from "@/lib/Interfaces/IPlayer";
+import ICard from '../Interfaces/ICard';
+import Card from "@/lib/Cards/Card";
 
 let GameManager: IGameManager;
 GameManager = {
@@ -10,7 +11,7 @@ GameManager = {
     turnFor: null,
     turnDirection: 'ASC',
     playerCount: 0,
-    instance: {} as IVueInstance,
+    instance: {} as IPlayer,
     Cards: Cards,
     CardsPile: [],
     Ruleset: {} as IRuleset,
@@ -22,14 +23,14 @@ GameManager = {
             this.CardsPile.push(Card);
         });
 
-        this.instance.$root.$on('stack::remove-card', (Card: Card) => {
-            this.CardsPile = _.filter(this.CardsPile, (cardInStack: Card) => {
+        this.instance.$root.$on('stack::remove-card', (Card: ICard) => {
+            this.CardsPile = _.filter(this.CardsPile, (cardInStack: ICard) => {
                 return cardInStack.is(Card);
             });
         });
     },
 
-    setup(instance: IPlayer, Ruleset: object) {
+    setup(instance: IPlayer, Ruleset: IRuleset) {
         this.instance = instance;
         this.Cards = Cards;
         this.Ruleset = Ruleset;
@@ -42,8 +43,8 @@ GameManager = {
         this.instance.$root.$emit('game::has-been-setup');
     },
 
-    nextTurn(Player?: IPlayer, Card?: Card) {
-        if (this.Ruleset.afterTurn && typeof this.Ruleset.afterTurn === 'function') {
+    nextTurn(Player?: IPlayer, Card?: ICard) {
+        if (typeof Player !== "undefined" && this.Ruleset.afterTurn && typeof this.Ruleset.afterTurn === 'function') {
             this.Ruleset.afterTurn(Player);
         }
 
@@ -73,7 +74,7 @@ GameManager = {
             this.playedCards.push(Card);
             this.instance.$root.$emit('stack::add-card', Card);
 
-            if (this.Ruleset.beforeTurn && typeof this.Ruleset.beforeTurn === 'function') {
+            if (typeof Player !== "undefined" && this.Ruleset.beforeTurn && typeof this.Ruleset.beforeTurn === 'function') {
                 emitEvent = this.Ruleset.beforeTurn(Player);
             }
         }
