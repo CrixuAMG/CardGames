@@ -50,6 +50,8 @@ export default {
         },
 
         range(size, startAt = 0) {
+            console.log(size);
+
             return [...Array(size).keys()].map(i => i + startAt);
         },
     },
@@ -61,7 +63,12 @@ export default {
     },
 
     mounted() {
-        this.opponents = this.range(parseInt(localStorage.getItem('opponents')));
+        let opponents = parseInt(localStorage.getItem('opponents'));
+
+        opponents = 3;
+        console.log(opponents);
+
+        this.opponents = this.range(opponents);
 
         console.log(this.opponents)
 
