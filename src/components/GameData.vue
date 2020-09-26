@@ -1,13 +1,28 @@
 <template>
     <div class="game-data" id="game-data">
         <div id="deck-counter">
-            Cards left: {{ cardsRemaining }}
+            <div class="game-data-title">
+                Cards left: 
+            </div>
+            <div class="game-data-data">
+                {{ cardsRemaining }}
+            </div>
         </div>
         <div id="turn-counter">
-            Turn: {{ turnCounter }}
+            <div class="game-data-title">
+                Turn:
+            </div>
+            <div class="game-data-data"> 
+                {{ turnCounter || 0 }}
+            </div>
         </div>
         <div id="turn-for">
-            Turn for: Player {{ turnFor }}
+            <div class="game-data-title">
+                Turn for: 
+            </div>
+            <div class="game-data-data">
+                {{ turnForText }}
+            </div>
         </div>
     </div>
 </template>
@@ -20,6 +35,11 @@ export default {
             cardsRemaining: null,
             turnCounter:    null,
             turnFor:        null
+        }
+    },
+    computed: {
+        turnForText() {
+            return `Player ${this.turnFor || ''}`;
         }
     },
     mounted() {

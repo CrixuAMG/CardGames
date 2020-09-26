@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import GameManager from '@/lib/Game/GameManager';
 import Card from "./Card";
 
 export default {
@@ -87,6 +88,8 @@ export default {
     mounted() {
         this.$root.$on('game::has-been-setup', () => {
             this.playerId = GameManager.registerPlayer(this);
+
+            console.log(this.playerId, GameManager);
         });
 
         this.$root.$on('game::next-turn', () => {

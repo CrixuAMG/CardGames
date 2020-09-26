@@ -49,7 +49,7 @@ export default {
     },
     data() {
         return {
-            opponents: 3
+            opponents: null,
         }
     },
 

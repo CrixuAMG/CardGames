@@ -1,5 +1,5 @@
 <template>
-    <div :id="`player-${playerId}`" class="opponent">
+    <div :id="`player-${playerId}`" class="opponent" :class="{'turn-for': canPlay}">
         OPPONENT {{ playerId }} ({{ cards.length }} cards)
     </div>
 </template>
