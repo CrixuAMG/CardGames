@@ -23,8 +23,8 @@ GameManager = {
             this.CardsPile.push(Card);
         });
 
-        this.instance.$root.$on('stack::remove-card', (Card: ICard) => {
-            this.CardsPile = _.filter(this.CardsPile, (cardInStack: ICard) => {
+        this.instance.$root.$on('stack::remove-card', (Card: Card) => {
+            this.CardsPile = _.filter(this.CardsPile, (cardInStack: Card) => {
                 return cardInStack.is(Card);
             });
         });
@@ -39,6 +39,8 @@ GameManager = {
         this.playerCount = 0;
 
         this.registerEventHandlers();
+
+        console.log('here');
 
         this.instance.$root.$emit('game::has-been-setup');
     },
@@ -118,7 +120,7 @@ GameManager = {
         this.nextTurn();
     },
 
-    registerPlayer(player: { playerId: number }) {
+    registerPlayer(player: IPlayer) {
         this.playerCount += 1;
         this.players[this.playerCount] = player;
 

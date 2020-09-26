@@ -88,14 +88,19 @@ export default {
     mounted() {
         this.$root.$on('game::has-been-setup', () => {
             this.playerId = GameManager.registerPlayer(this);
-
-            console.log(this.playerId, GameManager);
         });
 
         this.$root.$on('game::next-turn', () => {
             this.canPlay = GameManager.turnFor === this.playerId;
 
             if (this.canPlay) {
+                if (!this.cards.length) {
+                    console.log(`Player ${this.playerId} won the game!`)
+                    GameManager.instance.$root.$emit(`Player ${this.playerId} won the game!`);
+
+                    return;
+                }
+
                 let playableCards = _.filter(this.cards, Card => {
                     return GameManager.Ruleset.cardIsPlayable(Card);
                 });

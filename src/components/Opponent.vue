@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import GameManager from '@/lib/Game/GameManager';
 export default {
     name: "Opponent",
 
@@ -26,6 +27,13 @@ export default {
 
     methods: {
         playCard() {
+            if (!this.cards.length) {
+                console.log(`Player ${this.playerId} won the game!`)
+                GameManager.instance.$root.$emit(`Player ${this.playerId} won the game!`);
+
+                return;
+            }
+
             let playableCards = _.filter(this.cards, Card => {
                 return GameManager.Ruleset.cardIsPlayable(Card);
             });

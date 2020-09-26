@@ -40,23 +40,32 @@ export default {
         Hand
     },
     methods:    {
-        setup() {
+        async setup() {
             Cards.get(true, true);
-            GameManager.setup(this, Ruleset);
+            await GameManager.setup(this, Ruleset);
 
-            GameManager.startGame();
+            setTimeout(() => {
+                GameManager.startGame();
+            }, 1000);
+        },
+
+        range(size, startAt = 0) {
+            return [...Array(size).keys()].map(i => i + startAt);
         },
     },
+
     data() {
         return {
-            opponents: null,
+            opponents: 3,
         }
     },
 
     mounted() {
-        this.opponents = localStorage.getItem('opponents');
+        this.opponents = this.range(parseInt(localStorage.getItem('opponents')));
 
-        if (!this.opponents || this.opponents < 1) {
+        console.log(this.opponents)
+
+        if (!this.opponents || this.opponents.length < 1) {
             this.$router.replace({
                 name: 'GamePicker',
             });
