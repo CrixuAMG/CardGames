@@ -1,9 +1,7 @@
 <template>
     <div class="stack">
         <div class="stack-cards-wrapper">
-            <!--            <div class="stack-card" v-for="card in cards" :style="style(card)"></div>-->
-
-            <card :card="card" :style="style(card)" v-for="card in cards"></card>
+            <card :card="card" :style="style" :key="index" v-for="(card, index) in cards"></card>
         </div>
 
         <drop :class="{overlay: overlay}" @dragend="drop" @dragenter="overlay = true"
@@ -23,10 +21,14 @@ export default {
             cards:   []
         }
     },
-    methods:    {
+    
+    computed: {
         style() {
             return `transform: rotate(${_.random(-5, 5, false)}deg) translateY(-50%) translateX(-50%);`;
         },
+    },
+
+    methods:    {
         drop(event) {
             this.overlay = false;
         }
