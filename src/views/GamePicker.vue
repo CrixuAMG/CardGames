@@ -34,7 +34,7 @@ export default {
     data () {
         return {
             Games:        Games,
-            selectedGame: null,
+            selectedGame: first(Games),
             opponents:    null,
         };
     },
@@ -92,8 +92,5 @@ export default {
             return this.selectedGame.name === Game.name;
         }
     },
-    mounted () {
-        this.selectedGame = first(this.Games);
-    }
 };
 </script>
