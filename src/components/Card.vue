@@ -12,7 +12,7 @@
 
         <div class="card-middle-mark">
             <div v-for="(mark, index) in amountOfIcons" v-if="card.value <= 10" :key="index" :class="[`mark-${mark}`]">
-                <!-- <suit :card="card"></suit> -->
+                 <suit :card="card"/>
             </div>
         </div>
 
@@ -28,10 +28,11 @@
 
 <script>
 import Suit from "./Suit";
+import Drag from '@/modules/vue-drag-drop/src/Drag';
 
 export default {
     name:       "Card",
-    components: { Suit },
+    components: { Suit, Drag },
     props:      {
         card:      {
             type:     Object,
