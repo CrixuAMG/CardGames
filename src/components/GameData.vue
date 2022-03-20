@@ -1,8 +1,8 @@
 <template>
-    <div class="game-data" id="game-data">
+    <div id="game-data" class="game-data">
         <div id="deck-counter">
             <div class="game-data-title">
-                Cards left: 
+                Cards left:
             </div>
             <div class="game-data-data">
                 {{ cardsRemaining }}
@@ -12,13 +12,13 @@
             <div class="game-data-title">
                 Turn:
             </div>
-            <div class="game-data-data"> 
+            <div class="game-data-data">
                 {{ turnCounter || 0 }}
             </div>
         </div>
         <div id="turn-for">
             <div class="game-data-title">
-                Turn for: 
+                Turn for:
             </div>
             <div class="game-data-data">
                 {{ turnForText }}
@@ -30,31 +30,31 @@
 <script>
 export default {
     name: "GameData",
-    data() {
+    data () {
         return {
             cardsRemaining: null,
             turnCounter:    null,
             turnFor:        null
-        }
+        };
     },
     computed: {
-        turnForText() {
+        turnForText () {
             return `Player ${this.turnFor || ''}`;
         }
     },
-    mounted() {
-        this.$root.$on('game::recalculate:deck-remaining', () => {
+    mounted () {
+        this.emitter.$on('game::recalculate:deck-remaining', () => {
             this.cardsRemaining = Cards.deck.length;
 
             if (!this.cardsRemaining) {
-                this.$root.$emit('game::deck-is-empty');
+                this.emitter.$emit('game::deck-is-empty');
             }
         });
 
-        this.$root.$on('game::next-turn', () => {
+        this.emitter.$on('game::next-turn', () => {
             this.turnCounter = GameManager.turnCounter;
             this.turnFor     = GameManager.turnFor;
         });
     }
-}
+};
 </script>

@@ -9,12 +9,13 @@
 <script>
 import Cards from "../lib/Cards/Cards";
 import Hand from "../components/Hand";
+import { forEach } from 'lodash-es';
 
 export default {
     name:       "War",
-    components: {Hand},
+    components: { Hand },
     methods:    {
-        setup() {
+        setup () {
             let cards        = {};
             cards.createCard = function (Card) {
                 let card = document.createElement('div');
@@ -40,25 +41,25 @@ export default {
 
             Cards.get(true, true);
 
-            _.forEach(Cards.take(3), Card => {
+            forEach(Cards.take(3), Card => {
                 cards.createCard(Card);
             });
 
             this.hand = Cards.take(7);
         }
     },
-    data() {
+    data () {
         return {
             hand:      [],
             opponents: 3
-        }
+        };
     },
 
-    mounted() {
+    mounted () {
         this.opponents = localStorage.getItem('opponents');
         this.setup();
     }
-}
+};
 </script>
 
 <style lang="scss">

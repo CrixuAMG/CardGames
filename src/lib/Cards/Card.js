@@ -1,7 +1,5 @@
-import ICard from "@/lib/Interfaces/ICard";
-
 class Card {
-    constructor(data: ICard) {
+    constructor (data) {
         if (data.suit) {
             this._suit = data.suit;
         }
@@ -19,39 +17,36 @@ class Card {
         return this;
     };
 
-    private _name: string;
+    _name;
+    _identifier;
+    _value;
+    _suit;
 
-    get name(): string {
+    get name () {
         return this._name;
     }
 
-    private _identifier: string;
-
-    get identifier(): string {
+    get identifier () {
         return this._identifier;
     }
 
-    private _value: number | string;
-
-    get value(): number | string {
+    get value () {
         return this._value;
     }
 
-    private _suit: string;
-
-    get suit(): string {
+    get suit () {
         return this._suit;
     }
 
-    is(Card: { identifier: string }): boolean {
+    is (Card) {
         return this._identifier === Card.identifier;
     }
 
-    isNot(Card: { identifier: string }): boolean {
+    isNot (Card) {
         return !this.is(Card);
     }
 
-    getIdentifier(): string {
+    getIdentifier () {
         return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     }
 }

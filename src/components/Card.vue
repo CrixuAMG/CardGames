@@ -1,7 +1,7 @@
 <template>
     <drag :class="[card.suit, `card-${card.value.toString().toLowerCase()}`, {'not-playable': draggable === false}]"
           :draggable="draggable"
-          :transfer-data="card" @drag="drag" @dragend="dragend" class="card" tag="div">
+          :transfer-data="card" class="card" tag="div" @drag="drag" @dragend="dragend">
         <div class="card-top-mark">
             <div class="card-name">
                 {{ card.name }}
@@ -11,7 +11,7 @@
         </div>
 
         <div class="card-middle-mark">
-            <div :class="[`mark-${mark}`]" :key="index" v-for="(mark, index) in amountOfIcons" v-if="card.value <= 10">
+            <div v-for="(mark, index) in amountOfIcons" v-if="card.value <= 10" :key="index" :class="[`mark-${mark}`]">
                 <!-- <suit :card="card"></suit> -->
             </div>
         </div>
@@ -31,7 +31,7 @@ import Suit from "./Suit";
 
 export default {
     name:       "Card",
-    components: {Suit},
+    components: { Suit },
     props:      {
         card:      {
             type:     Object,
@@ -43,7 +43,7 @@ export default {
         },
     },
     computed:   {
-        amountOfIcons() {
+        amountOfIcons () {
             if (Number.isInteger(this.card.value)) {
                 return this.card.value;
             }
@@ -52,12 +52,12 @@ export default {
         }
     },
     methods:    {
-        drag(card, event) {
+        drag (card, event) {
             this.$emit('drag', event);
         },
-        dragend(card, event) {
+        dragend (card, event) {
             this.$emit('dragend', event);
         }
     }
-}
+};
 </script>

@@ -1,14 +1,14 @@
 <template>
-    <div class="card-suit" v-if="card.suit === 'heart'">
+    <div v-if="card.suit === 'heart'" class="card-suit">
         &heartsuit;
     </div>
-    <div class="card-suit" v-else-if="card.suit === 'pike'">
+    <div v-else-if="card.suit === 'pike'" class="card-suit">
         &spadesuit;
     </div>
-    <div class="card-suit" v-else-if="card.suit === 'clover'">
+    <div v-else-if="card.suit === 'clover'" class="card-suit">
         &clubsuit;
     </div>
-    <div class="card-suit" v-else-if="card.suit === 'tile'">
+    <div v-else-if="card.suit === 'tile'" class="card-suit">
         &diamondsuit;
     </div>
 </template>
@@ -22,5 +22,5 @@ export default {
             type:     Object
         }
     }
-}
+};
 </script>

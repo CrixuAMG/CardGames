@@ -1,41 +1,42 @@
 <template>
-    <div :class="{'can-play': canPlay}" :id="`player-${playerId}`" class="hand">
-        <card :card="card" :draggable="canPlayCard(card)" :style="style(index)"
-              @click.native="playCard(card)" @drag="draggingCard(card, index)" @dragend="dragend(card, $event)"
-              v-for="(card, index) in cards"></card>
+    <div :id="`player-${playerId}`" :class="{'can-play': canPlay}" class="hand">
+        <card v-for="(card, index) in cards" :card="card" :draggable="canPlayCard(card)"
+              :style="style(index)" @drag="draggingCard(card, index)" @dragend="dragend(card, $event)"
+              @click.native="playCard(card)"></card>
     </div>
 </template>
 
 <script>
 import GameManager from '@/lib/Game/GameManager';
 import Card from "./Card";
+import { filter, forEach } from 'lodash-es';
 
 export default {
     name:       "Hand",
-    components: {Card},
+    components: { Card },
     watch:      {
-        canPlay(newValue) {
+        canPlay (newValue) {
             this.canDrag = newValue;
         }
     },
-    data() {
+    data () {
         return {
             canPlay:            false,
             canDrag:            false,
             draggingCardObject: null,
             playerId:           null,
             cards:              []
-        }
+        };
     },
-    methods:    {
-        canPlayCard(Card) {
+    methods: {
+        canPlayCard (Card) {
             if (!this.canPlay) {
                 return false;
             }
 
             return GameManager.Ruleset.cardIsPlayable(Card);
         },
-        style(index) {
+        style (index) {
             let degreesToRotate = (((this.cards.length / 2) / this.cards.length) * 100) - (((this.cards.length - index) / this.cards.length) * 100);
 
             let style = `transform: rotate(${degreesToRotate}deg);`;
@@ -48,7 +49,7 @@ export default {
 
             return style;
         },
-        draggingCard(Card, index) {
+        draggingCard (Card, index) {
             if (!this.canDrag) {
                 return;
             }
@@ -59,7 +60,7 @@ export default {
             console.log('DRAGGING ' + Card.name + ' of ' + Card.suit + 's');
             // this.$emit('remove', Card);
         },
-        dragend(Card, event) {
+        dragend (Card, event) {
             this.canDrag            = true;
             this.draggingCardObject = null;
 
@@ -71,12 +72,12 @@ export default {
 
             this.playCard(Card);
         },
-        playCard(Card) {
+        playCard (Card) {
             if (!this.canPlayCard(Card)) {
                 return;
             }
 
-            this.cards = _.filter(this.cards, cardInHand => {
+            this.cards = filter(this.cards, cardInHand => {
                 return cardInHand.isNot(Card);
             });
 
@@ -85,36 +86,36 @@ export default {
             GameManager.nextTurn(this, Card);
         }
     },
-    mounted() {
-        this.$root.$on('game::has-been-setup', () => {
+    mounted () {
+        this.emitter.$on('game::has-been-setup', () => {
             this.playerId = GameManager.registerPlayer(this);
         });
 
-        this.$root.$on('game::next-turn', () => {
+        this.emitter.$on('game::next-turn', () => {
             this.canPlay = GameManager.turnFor === this.playerId;
 
             if (this.canPlay) {
                 if (!this.cards.length) {
-                    console.log(`Player ${this.playerId} won the game!`)
-                    GameManager.instance.$root.$emit(`Player ${this.playerId} won the game!`);
+                    console.log(`Player ${this.playerId} won the game!`);
+                    GameManager.instance.emitter.$emit(`Player ${this.playerId} won the game!`);
 
                     return;
                 }
 
-                let playableCards = _.filter(this.cards, Card => {
+                let playableCards = filter(this.cards, Card => {
                     return GameManager.Ruleset.cardIsPlayable(Card);
                 });
 
                 if (!playableCards.length) {
                     console.log('PLAYER ' + this.playerId + ' CANNOT PLAY ANY CARDS');
-                    GameManager.instance.$root.$emit('Player ' + this.playerId + ' CANNOT PLAY ANY CARDS');
+                    GameManager.instance.emitter.$emit('Player ' + this.playerId + ' CANNOT PLAY ANY CARDS');
 
                     let cards = GameManager.Cards.take(1);
 
-                    this.$root.$emit('Player ' + this.playerId + ' draws ' + cards.length + ' cards');
+                    this.emitter.$emit('Player ' + this.playerId + ' draws ' + cards.length + ' cards');
 
                     if (cards.length) {
-                        _.forEach(cards, card => {
+                        forEach(cards, card => {
                             this.cards.push(card);
                         });
                     }
@@ -124,16 +125,16 @@ export default {
             }
         });
 
-        this.$root.$on('cards::draw-cards-from-deck', async (data) => {
+        this.emitter.$on('cards::draw-cards-from-deck', async (data) => {
             if (data.player === this.playerId) {
                 let cards = await Cards.take(data.amount);
 
                 if (cards.length) {
-                    _.forEach(cards, card => {
+                    forEach(cards, card => {
                         this.cards.push(card);
                     });
 
-                    this.$root.$emit('Player ' + this.playerId + ' draws ' + data.amount + ' cards');
+                    this.emitter.$emit('Player ' + this.playerId + ' draws ' + data.amount + ' cards');
                 }
 
                 if (data.nextTurn) {
@@ -142,7 +143,7 @@ export default {
             }
         });
     }
-}
+};
 </script>
 
 <style lang="scss" scoped>

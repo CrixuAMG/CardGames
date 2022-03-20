@@ -1,30 +1,28 @@
-import * as _ from 'lodash';
 import Card from "./Card";
-import ICards from "@/lib/Interfaces/ICards";
-import ICard from "@/lib/Interfaces/ICard";
 import GameManager from "@/lib/Game/GameManager";
+import { filter, first, forEach, remove, shuffle } from 'lodash-es';
 
-let Cards: ICards = {
+let Cards = {
     collection: [],
-    deck: [],
-    useDeck: false,
-    get(shuffle: boolean = true, setupDeck: boolean = false): Card[] {
+    deck:       [],
+    useDeck:    false,
+    get (shuffleCards = true, setupDeck = false) {
         let cards = this.useDeck ? this.deck : this.collection;
 
-        if (shuffle) {
-            cards = _.shuffle(cards);
+        if (shuffleCards) {
+            cards = shuffle(cards);
         }
 
         if (setupDeck) {
             this.useDeck = setupDeck;
-            this.deck = cards;
+            this.deck    = cards;
         }
 
         return cards;
     },
 
-    async take(amount: number, exclude: Card[] = []) {
-        let cards = [];
+    async take (amount, exclude = []) {
+        let cards         = [];
         let cardsFromDeck = this.get();
 
         if (!cardsFromDeck.length) {
@@ -34,8 +32,8 @@ let Cards: ICards = {
         cardsFromDeck = this.get();
 
         for (let i = 0; i < amount; i++) {
-            let card = _.first(cardsFromDeck);
-            cardsFromDeck = _.remove(cardsFromDeck, (cardFromDeck: ICard) => {
+            let card      = first(cardsFromDeck);
+            cardsFromDeck = remove(cardsFromDeck, (cardFromDeck) => {
                 return cardFromDeck.isNot(card);
             });
             cardsFromDeck = this.get();
@@ -51,7 +49,7 @@ let Cards: ICards = {
             }
 
             let addCard = true;
-            _.forEach(exclude, (cardToExclude: Card) => {
+            forEach(exclude, (cardToExclude) => {
                 if (cardToExclude.suit) {
 
                 } else {
@@ -67,7 +65,7 @@ let Cards: ICards = {
                 return;
             }
 
-            this.deck = _.filter(this.deck, (cardInDeck: Card) => {
+            this.deck = filter(this.deck, (cardInDeck) => {
                 return cardInDeck.isNot(card);
             });
 
@@ -78,7 +76,7 @@ let Cards: ICards = {
     }
 };
 
-const Suits = [
+const Suits      = [
     'heart',
     'clover',
     'tile',
@@ -87,77 +85,77 @@ const Suits = [
 let cardsToSetup = [
     {
         value: 1,
-        name: 'A'
+        name:  'A'
     },
     {
         value: 2,
-        name: '2'
+        name:  '2'
     },
     {
         value: 3,
-        name: '3'
+        name:  '3'
     },
     {
         value: 4,
-        name: '4'
+        name:  '4'
     },
     {
         value: 5,
-        name: '5'
+        name:  '5'
     },
     {
         value: 6,
-        name: '6'
+        name:  '6'
     },
     {
         value: 7,
-        name: '7'
+        name:  '7'
     },
     {
         value: 8,
-        name: '8'
+        name:  '8'
     },
     {
         value: 9,
-        name: '9'
+        name:  '9'
     },
     {
         value: 10,
-        name: '10'
+        name:  '10'
     },
     {
         value: 11,
-        name: 'J'
+        name:  'J'
     },
     {
         value: 12,
-        name: 'Q'
+        name:  'Q'
     },
     {
         value: 13,
-        name: 'K'
+        name:  'K'
     },
 ];
 
-_.forEach(Suits, Suit => {
-    _.forEach(cardsToSetup, cardToSetup => {
+forEach(Suits, Suit => {
+    forEach(cardsToSetup, cardToSetup => {
         Cards.collection.push(new Card({
             ...cardToSetup,
             suit: Suit
-        }))
+        }));
     });
 });
 
 Cards.collection.push(new Card({
     value: 'JOKER',
-    name: 'JOKER',
-    suit: 'black'
+    name:  'JOKER',
+    suit:  'black'
 }));
 
 Cards.collection.push(new Card({
     value: 'JOKER',
-    name: 'JOKER',
-    suit: 'red'
+    name:  'JOKER',
+    suit:  'red'
 }));
 
 window.Cards = Cards;

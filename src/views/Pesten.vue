@@ -6,7 +6,7 @@
             <game-log></game-log>
 
             <div class="opponents">
-                <opponent :key="index" v-for="(opponent, index) in opponents"></opponent>
+                <opponent v-for="(opponent, index) in opponents" :key="index"></opponent>
             </div>
         </div>
 
@@ -40,7 +40,7 @@ export default {
         Hand
     },
     methods:    {
-        async setup() {
+        async setup () {
             Cards.get(true, true);
             await GameManager.setup(this, Ruleset);
 
@@ -49,20 +49,20 @@ export default {
             }, 1000);
         },
 
-        range(size, startAt = 0) {
+        range (size, startAt = 0) {
             console.log(size);
 
             return [...Array(size).keys()].map(i => i + startAt);
         },
     },
 
-    data() {
+    data () {
         return {
             opponents: 3,
-        }
+        };
     },
 
-    mounted() {
+    mounted () {
         let opponents = parseInt(localStorage.getItem('opponents'));
 
         opponents = 3;
@@ -70,7 +70,7 @@ export default {
 
         this.opponents = this.range(opponents);
 
-        console.log(this.opponents)
+        console.log(this.opponents);
 
         if (!this.opponents || this.opponents.length < 1) {
             this.$router.replace({
@@ -80,5 +80,5 @@ export default {
 
         this.setup();
     }
-}
+};
 </script>

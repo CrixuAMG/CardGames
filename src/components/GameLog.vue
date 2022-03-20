@@ -9,17 +9,17 @@
 <script>
 export default {
     name: "GameLog",
-    data() {
+    data () {
         return {
             logs: []
-        }
+        };
     },
-    mounted() {
-        this.$root.$on('game::start', () => {
+    mounted () {
+        this.emitter.$on('game::start', () => {
             this.logs = [];
         });
 
-        this.$root.$on('log', (data) => {
+        this.emitter.$on('log', (data) => {
             this.logs.push(data);
 
             setTimeout(() => {
@@ -28,5 +28,5 @@ export default {
             }, 1);
         });
     }
-}
+};
 </script>
