@@ -12,9 +12,9 @@ import Hand from "../components/Hand";
 
 export default {
     name:       "War",
-    components: {Hand},
+    components: { Hand },
     methods:    {
-        setup() {
+        setup () {
             let cards        = {};
             cards.createCard = function (Card) {
                 let card = document.createElement('div');
@@ -47,18 +47,18 @@ export default {
             this.hand = Cards.take(7);
         }
     },
-    data() {
+    data () {
         return {
             hand:      [],
             opponents: 3
-        }
+        };
     },
 
-    mounted() {
+    mounted () {
         this.opponents = localStorage.getItem('opponents');
         this.setup();
     }
-}
+};
 </script>
 
 <style lang="scss">

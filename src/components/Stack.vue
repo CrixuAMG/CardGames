@@ -1,11 +1,11 @@
 <template>
     <div class="stack">
         <div class="stack-cards-wrapper">
-            <card :card="card" :style="style" :key="index" v-for="(card, index) in cards"></card>
+            <card v-for="(card, index) in cards" :key="index" :card="card" :style="style"></card>
         </div>
 
-        <drop :class="{overlay: overlay}" @dragend="drop" @dragenter="overlay = true"
-              @dragleave="overlay = false" @drop="drop" id="stack-dropzone"></drop>
+        <drop id="stack-dropzone" :class="{overlay: overlay}" @dragend="drop"
+              @dragenter="overlay = true" @dragleave="overlay = false" @drop="drop"></drop>
     </div>
 </template>
 
@@ -14,27 +14,27 @@ import Card from "./Card";
 
 export default {
     name:       "Stack",
-    components: {Card},
-    data() {
+    components: { Card },
+    data () {
         return {
             overlay: false,
             cards:   []
-        }
+        };
     },
-    
+
     computed: {
-        style() {
+        style () {
             return `transform: rotate(${_.random(-5, 5, false)}deg) translateY(-50%) translateX(-50%);`;
         },
     },
 
-    methods:    {
-        drop(event) {
+    methods: {
+        drop (event) {
             this.overlay = false;
         }
     },
 
-    mounted() {
+    mounted () {
         this.$root.$on('stack::add-card', (Card) => {
             this.cards = GameManager.CardsPile;
         });
@@ -47,5 +47,5 @@ export default {
             GameManager.Ruleset.deckIsEmpty(this.cards);
         });
     }
-}
+};
 </script>

@@ -1,8 +1,8 @@
 <template>
-    <div :class="{'can-play': canPlay}" :id="`player-${playerId}`" class="hand">
-        <card :card="card" :draggable="canPlayCard(card)" :style="style(index)"
-              @click.native="playCard(card)" @drag="draggingCard(card, index)" @dragend="dragend(card, $event)"
-              v-for="(card, index) in cards"></card>
+    <div :id="`player-${playerId}`" :class="{'can-play': canPlay}" class="hand">
+        <card v-for="(card, index) in cards" :card="card" :draggable="canPlayCard(card)"
+              :style="style(index)" @drag="draggingCard(card, index)" @dragend="dragend(card, $event)"
+              @click.native="playCard(card)"></card>
     </div>
 </template>
 
@@ -12,30 +12,30 @@ import Card from "./Card";
 
 export default {
     name:       "Hand",
-    components: {Card},
+    components: { Card },
     watch:      {
-        canPlay(newValue) {
+        canPlay (newValue) {
             this.canDrag = newValue;
         }
     },
-    data() {
+    data () {
         return {
             canPlay:            false,
             canDrag:            false,
             draggingCardObject: null,
             playerId:           null,
             cards:              []
-        }
+        };
     },
-    methods:    {
-        canPlayCard(Card) {
+    methods: {
+        canPlayCard (Card) {
             if (!this.canPlay) {
                 return false;
             }
 
             return GameManager.Ruleset.cardIsPlayable(Card);
         },
-        style(index) {
+        style (index) {
             let degreesToRotate = (((this.cards.length / 2) / this.cards.length) * 100) - (((this.cards.length - index) / this.cards.length) * 100);
 
             let style = `transform: rotate(${degreesToRotate}deg);`;
@@ -48,7 +48,7 @@ export default {
 
             return style;
         },
-        draggingCard(Card, index) {
+        draggingCard (Card, index) {
             if (!this.canDrag) {
                 return;
             }
@@ -59,7 +59,7 @@ export default {
             console.log('DRAGGING ' + Card.name + ' of ' + Card.suit + 's');
             // this.$emit('remove', Card);
         },
-        dragend(Card, event) {
+        dragend (Card, event) {
             this.canDrag            = true;
             this.draggingCardObject = null;
 
@@ -71,7 +71,7 @@ export default {
 
             this.playCard(Card);
         },
-        playCard(Card) {
+        playCard (Card) {
             if (!this.canPlayCard(Card)) {
                 return;
             }
@@ -85,7 +85,7 @@ export default {
             GameManager.nextTurn(this, Card);
         }
     },
-    mounted() {
+    mounted () {
         this.$root.$on('game::has-been-setup', () => {
             this.playerId = GameManager.registerPlayer(this);
         });
@@ -95,7 +95,7 @@ export default {
 
             if (this.canPlay) {
                 if (!this.cards.length) {
-                    console.log(`Player ${this.playerId} won the game!`)
+                    console.log(`Player ${this.playerId} won the game!`);
                     GameManager.instance.$root.$emit(`Player ${this.playerId} won the game!`);
 
                     return;
@@ -142,7 +142,7 @@ export default {
             }
         });
     }
-}
+};
 </script>
 
 <style lang="scss" scoped>

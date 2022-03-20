@@ -9,12 +9,12 @@
 <script>
 export default {
     name: "GameLog",
-    data() {
+    data () {
         return {
             logs: []
-        }
+        };
     },
-    mounted() {
+    mounted () {
         this.$root.$on('game::start', () => {
             this.logs = [];
         });
@@ -28,5 +28,5 @@ export default {
             }, 1);
         });
     }
-}
+};
 </script>

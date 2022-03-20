@@ -1,6 +1,6 @@
 <template>
     <div class="draw-stack">
-        <div :style="style" @click="drawFromStack" class="stack-card" v-for="card in cards">
+        <div v-for="card in cards" :style="style" class="stack-card" @click="drawFromStack">
             <div class="card-background"></div>
         </div>
     </div>
@@ -12,10 +12,10 @@ import Ruleset from "../lib/GameTypes/MauMau/Ruleset";
 export default {
     name:    "DrawStack",
     methods: {
-        style() {
+        style () {
             return `transform: rotate(${_.random(-10, 10)};)`;
         },
-        drawFromStack() {
+        drawFromStack () {
             this.$root.$emit('cards::draw-cards-from-deck', {
                 player:   GameManager.turnFor,
                 amount:   1,
@@ -23,15 +23,15 @@ export default {
             });
         }
     },
-    data() {
+    data () {
         return {
             cards: []
-        }
+        };
     },
-    mounted() {
+    mounted () {
         this.$root.$on('cards::build::draw-stack', () => {
             this.cards = Cards.get();
         });
     }
-}
+};
 </script>
