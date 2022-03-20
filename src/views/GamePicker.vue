@@ -16,7 +16,7 @@
 
         <label for="opponents">
             Opponents
-            <input v-model="opponents" name="opponents" type="number">
+            <input id="opponents" v-model="opponents" name="opponents" type="number">
         </label>
 
         <button @click="goToGame">
