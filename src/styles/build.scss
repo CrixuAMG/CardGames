@@ -40,6 +40,14 @@ html, body {
 
         #app-logo {
             max-width: 30vw;
+
+            @media only screen and (max-width: 600px) {
+                max-width: 80vw;
+            }
+
+            @media only screen and (min-width: 600px) and (max-width: 1024px) {
+                max-width: 40vw;
+            }
         }
 
         #game-picker {
@@ -49,6 +57,14 @@ html, body {
             grid-gap: 1rem;
             width: 100%;
             margin: 3rem 0;
+
+            @media only screen and (max-width: 600px) {
+                grid-template-columns: repeat(1, 1fr);
+            }
+
+            @media only screen and (min-width: 600px) and (max-width: 1024px) {
+                grid-template-columns: repeat(2, 1fr);
+            }
 
             .game-picker__details {
                 display: block;
