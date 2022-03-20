@@ -1,6 +1,6 @@
 import Card from "./Card";
 import GameManager from "@/lib/Game/GameManager";
-import { filter, forEach, shuffle } from 'lodash-es';
+import { filter, first, forEach, remove, shuffle } from 'lodash-es';
 
 let Cards = {
     collection: [],

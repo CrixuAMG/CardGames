@@ -6,6 +6,7 @@
 
 <script>
 import GameManager from '@/lib/Game/GameManager';
+import { filter } from 'lodash-es';
 
 export default {
     name: "Opponent",
@@ -35,7 +36,7 @@ export default {
                 return;
             }
 
-            let playableCards = _.filter(this.cards, Card => {
+            let playableCards = filter(this.cards, Card => {
                 return GameManager.Ruleset.cardIsPlayable(Card);
             });
 
@@ -60,7 +61,7 @@ export default {
 
             let Card = playableCards[_.random(0, playableCards.length - 1)];
 
-            this.cards = _.filter(this.cards, cardInHand => {
+            this.cards = filter(this.cards, cardInHand => {
                 return cardInHand.isNot(Card);
             });
 
