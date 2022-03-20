@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import GameManager from '../lib/Game/GameManager';
+
 export default {
     name: "GameData",
     data () {
@@ -39,7 +41,7 @@ export default {
     },
     computed: {
         turnForText () {
-            return `Player ${this.turnFor || ''}`;
+            return GameManager.getPlayerAlias();
         }
     },
     mounted () {

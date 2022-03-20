@@ -9,16 +9,22 @@
         </div>
 
         <button class="game-play"
-                @click="selectGame(game)">
+                @click="selectGame">
             {{ $t('general.play') }}
         </button>
 
         <dialog>
-            <div id="game-picker__details">
+            <div class="game-details">
                 <h4>
-                    Opponents:
+                    Game settings
                 </h4>
 
+                <div @click="closeDialog">
+                    &times;
+                </div>
+            </div>
+
+            <div id="game-picker__details">
                 Min: {{ game.opponents.min }}<br>
                 Max: {{ game.opponents.max }}
             </div>
@@ -47,7 +53,7 @@ export default {
     },
     data () {
         return {
-            opponents: null,
+            opponents: 1,
             randomId:  Math.random().toString(36).slice(-10),
         };
     },
@@ -78,6 +84,9 @@ export default {
         selectGame () {
             document.querySelector(`#game-card-${this.randomId} dialog`).showModal();
         },
+        closeDialog () {
+            document.querySelector(`#game-card-${this.randomId} dialog`).close();
+        },
         checkOpponents () {
             if (!this.selectedGame) {
                 return false;
@@ -104,10 +113,8 @@ export default {
     width: 100%;
     transition: all 300ms ease-in-out;
     background-color: #F18B45;
-
-    &.selected {
-        border-color: red;
-    }
+    box-shadow: 0 0 3rem rgba(0, 0, 0, 0.4),
+    inset 0 0 3rem rgba(0, 0, 0, 0.1);
 
     .game-name {
         font-size: 3rem;
@@ -128,9 +135,14 @@ export default {
         border-radius: 1rem;
         min-width: 30rem;
 
-        h4 {
-            margin-top: 0;
-            margin-bottom: 1rem;
+        .game-details {
+            display: flex;
+            justify-content: space-between;
+
+            h4 {
+                margin-top: 0;
+                margin-bottom: 1rem;
+            }
         }
 
         label {

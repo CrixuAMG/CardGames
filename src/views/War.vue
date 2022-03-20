@@ -64,7 +64,7 @@ export default {
 
 <style lang="scss">
 body {
-    background-color: forestgreen;
+    background-color: #408b40;
     height: 100vh;
 }
 

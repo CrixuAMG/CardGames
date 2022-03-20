@@ -1,4 +1,5 @@
 import Cards from "@/lib/Cards/Cards";
+import { filter } from 'lodash-es';
 
 let GameManager = {
     turnCounter:   0,
@@ -33,8 +34,6 @@ let GameManager = {
         this.playerCount = 0;
 
         this.registerEventHandlers();
-
-        console.log('here');
 
         this.instance.emitter.$emit('game::has-been-setup');
     },
@@ -102,10 +101,12 @@ let GameManager = {
 
         this.instance.emitter.$emit('cards::build::draw-stack');
 
+        console.log(this);
+
         for (let player = 1; player <= this.playerCount; player++) {
             this.instance.emitter.$emit('cards::draw-cards-from-deck', {
                 player: player,
-                amount: 7
+                amount: 7,
             });
         }
 
@@ -121,7 +122,13 @@ let GameManager = {
         console.log(this.playerCount + ' players have been registered');
 
         return this.playerCount;
-    }
+    },
+
+    getPlayerAlias() {
+        const player = this.players?.[this.turnFor];
+
+        return player?.alias || `Opponent ${this.turnFor}`;
+    },
 };
 
 

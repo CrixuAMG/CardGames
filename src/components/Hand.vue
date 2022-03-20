@@ -21,6 +21,7 @@ export default {
     },
     data () {
         return {
+            alias:              'Player',
             canPlay:            false,
             canDrag:            false,
             draggingCardObject: null,

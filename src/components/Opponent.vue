@@ -72,7 +72,11 @@ export default {
 
     created () {
         this.emitter.$on('game::has-been-setup', () => {
-            this.playerId = GameManager.registerPlayer(this);
+            const playerId = GameManager.registerPlayer(this);
+
+            console.log(playerId);
+
+            this.playerId = playerId;
         });
 
         this.emitter.$on('game::next-turn', () => {

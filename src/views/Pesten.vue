@@ -62,14 +62,9 @@ export default {
     },
 
     mounted () {
-        let opponents = parseInt(localStorage.getItem('opponents'));
-
-        opponents = 3;
-        console.log(opponents);
-
-        this.opponents = this.range(opponents);
-
-        console.log(this.opponents);
+        this.opponents = this.range(
+            parseInt(localStorage.getItem('opponents'))
+        );
 
         if (!this.opponents || this.opponents.length < 1) {
             this.$router.replace({

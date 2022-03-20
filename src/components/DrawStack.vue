@@ -17,10 +17,15 @@ export default {
             return `transform: rotate(${random(-10, 10)};)`;
         },
         drawFromStack () {
+            console.log(GameManager);
+            if (!this.cards.length) {
+                return null;
+            }
+
             this.emitter.$emit('cards::draw-cards-from-deck', {
                 player:   GameManager.turnFor,
                 amount:   1,
-                nextTurn: Ruleset.nextTurnOnDrawCardFromStack
+                nextTurn: Ruleset.nextTurnOnDrawCardFromStack,
             });
         }
     },
