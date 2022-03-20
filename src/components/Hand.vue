@@ -64,7 +64,9 @@ export default {
             this.canDrag            = true;
             this.draggingCardObject = null;
 
-            if (event.dataTransfer.dropEffect === 'none') {
+            console.log(event);
+
+            if (event?.dataTransfer?.dropEffect === 'none') {
                 // this.$emit('add', Card);
 
                 return;

@@ -1,20 +1,19 @@
 <template>
     <div class="pesten">
         <div class="d-flex flex-row justify-between">
-            <game-data></game-data>
+            <game-data/>
 
-            <game-log></game-log>
+            <game-log/>
 
             <div class="opponents">
-                <opponent v-for="(opponent, index) in opponents" :key="index"></opponent>
+                <opponent v-for="(opponent, index) in opponents" :key="index"/>
             </div>
         </div>
 
-        <stack></stack>
-        <draw-stack></draw-stack>
+        <stack/>
+        <draw-stack/>
 
-
-        <hand></hand>
+        <hand/>
     </div>
 </template>
 

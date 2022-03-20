@@ -1,22 +1,19 @@
 <template>
     <div class="mau-mau">
         <div class="d-flex flex-row justify-between">
-            <game-data></game-data>
+            <game-data/>
 
-            <game-log></game-log>
+            <game-log/>
 
             <div class="opponents">
-                <opponent></opponent>
-                <opponent></opponent>
-                <opponent></opponent>
+                <opponent v-for="(opponent, index) in opponents" :key="index"/>
             </div>
         </div>
 
-        <stack></stack>
-        <draw-stack></draw-stack>
+        <stack/>
+        <draw-stack/>
 
-
-        <hand></hand>
+        <hand/>
     </div>
 </template>
 

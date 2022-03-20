@@ -1,5 +1,8 @@
 <template>
+    <img src="/img/logo-light.svg" alt="Logo" id="app-logo">
+
     <div id="game-picker" class="game-picker">
+
         <div v-for="game in Games" :class="{'selected': isSelected(game)}" class="game-picker__option"
              @click="selectGame(game)">
             {{ game.name }}
@@ -16,7 +19,7 @@
 
         <label for="opponents">
             Opponents
-            <input v-model="opponents" name="opponents" type="number">
+            <input id="opponents" v-model="opponents" name="opponents" type="number">
         </label>
 
         <button @click="goToGame">
@@ -34,7 +37,7 @@ export default {
     data () {
         return {
             Games:        Games,
-            selectedGame: null,
+            selectedGame: first(Games),
             opponents:    null,
         };
     },
@@ -92,8 +95,5 @@ export default {
             return this.selectedGame.name === Game.name;
         }
     },
-    mounted () {
-        this.selectedGame = first(this.Games);
-    }
 };
 </script>

@@ -12,10 +12,14 @@
 <script>
 import Card from "./Card";
 import { random } from 'lodash-es';
+import Drop from '@/modules/vue-drag-drop/src/Drop';
 
 export default {
-    name:       "Stack",
-    components: { Card },
+    name: "Stack",
+    components: {
+        Card,
+        Drop,
+    },
     data () {
         return {
             overlay: false,
