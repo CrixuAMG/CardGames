@@ -32,8 +32,8 @@ let Cards = {
         cardsFromDeck = this.get();
 
         for (let i = 0; i < amount; i++) {
-            let card      = _.first(cardsFromDeck);
-            cardsFromDeck = _.remove(cardsFromDeck, (cardFromDeck) => {
+            let card      = first(cardsFromDeck);
+            cardsFromDeck = remove(cardsFromDeck, (cardFromDeck) => {
                 return cardFromDeck.isNot(card);
             });
             cardsFromDeck = this.get();

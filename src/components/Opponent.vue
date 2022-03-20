@@ -30,7 +30,7 @@ export default {
         playCard () {
             if (!this.cards.length) {
                 console.log(`Player ${this.playerId} won the game!`);
-                GameManager.instance.$root.$emit(`Player ${this.playerId} won the game!`);
+                GameManager.instance.emitter.$emit(`Player ${this.playerId} won the game!`);
 
                 return;
             }
@@ -41,12 +41,12 @@ export default {
 
             if (!playableCards.length) {
                 console.log('OPPONENT ' + this.playerId + ' CANNOT PLAY ANY CARDS');
-                GameManager.instance.$root.$emit('OPPONENT ' + this.playerId + ' CANNOT PLAY ANY CARDS');
+                GameManager.instance.emitter.$emit('OPPONENT ' + this.playerId + ' CANNOT PLAY ANY CARDS');
 
                 let cards = GameManager.Cards.take(1);
 
                 if (cards) {
-                    this.$root.$emit('Player ' + this.playerId + ' draws ' + cards.length + ' cards');
+                    this.emitter.$emit('Player ' + this.playerId + ' draws ' + cards.length + ' cards');
 
                     _.forEach(cards, card => {
                         this.cards.push(card);
@@ -70,15 +70,15 @@ export default {
     },
 
     created () {
-        this.$root.$on('game::has-been-setup', () => {
+        this.emitter.$on('game::has-been-setup', () => {
             this.playerId = GameManager.registerPlayer(this);
         });
 
-        this.$root.$on('game::next-turn', () => {
+        this.emitter.$on('game::next-turn', () => {
             this.canPlay = GameManager.turnFor === this.playerId;
         });
 
-        this.$root.$on('cards::draw-cards-from-deck', async (data) => {
+        this.emitter.$on('cards::draw-cards-from-deck', async (data) => {
             if (data.player === this.playerId) {
                 let cards = await Cards.take(data.amount);
 
@@ -86,7 +86,7 @@ export default {
                     this.cards.push(card);
                 });
 
-                this.$root.$emit('Player ' + this.playerId + ' draws ' + data.amount + ' cards');
+                this.emitter.$emit('Player ' + this.playerId + ' draws ' + data.amount + ' cards');
 
                 if (data.nextTurnOnDrawCardFromStack) {
                     GameManager.nextTurn();

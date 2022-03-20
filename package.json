@@ -7,13 +7,13 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "axios": "^0.26.1",
     "core-js": "^3.6.5",
     "flickity": "^2.2.1",
     "lodash-es": "^4.17.21",
     "register-service-worker": "^1.7.1",
+    "tiny-emitter": "^2.1.0",
     "vue": "^3.0.0",
-    "vue-drag-drop": "latest",
+    "vue-drag-drop": "^1.1.4",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
   },

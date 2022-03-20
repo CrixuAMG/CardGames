@@ -35,15 +35,15 @@ export default {
     },
 
     mounted () {
-        this.$root.$on('stack::add-card', (Card) => {
+        this.emitter.$on('stack::add-card', (Card) => {
             this.cards = GameManager.CardsPile;
         });
 
-        this.$root.$on('stack::remove-card', (Card) => {
+        this.emitter.$on('stack::remove-card', (Card) => {
             this.cards = GameManager.CardsPile;
         });
 
-        this.$root.$on('game::deck-is-empty', () => {
+        this.emitter.$on('game::deck-is-empty', () => {
             GameManager.Ruleset.deckIsEmpty(this.cards);
         });
     }
