@@ -12,7 +12,7 @@
 <script>
 import Card from "./Card";
 import { random } from 'lodash-es';
-import Drop from '@/modules/vue-drag-drop/src/Drop';
+import Drop from '@/modules/vue-drag-drop/Drop';
 
 export default {
     name: "Stack",

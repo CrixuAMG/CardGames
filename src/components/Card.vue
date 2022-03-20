@@ -28,7 +28,7 @@
 
 <script>
 import Suit from "./Suit";
-import Drag from '@/modules/vue-drag-drop/src/Drag';
+import Drag from '@/modules/vue-drag-drop/Drag';
 
 export default {
     name:       "Card",
