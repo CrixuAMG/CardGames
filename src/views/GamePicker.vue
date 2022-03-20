@@ -1,5 +1,8 @@
 <template>
+    <img src="/img/logo-light.svg" alt="Logo" id="app-logo">
+
     <div id="game-picker" class="game-picker">
+
         <div v-for="game in Games" :class="{'selected': isSelected(game)}" class="game-picker__option"
              @click="selectGame(game)">
             {{ game.name }}
