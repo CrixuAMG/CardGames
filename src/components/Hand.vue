@@ -9,6 +9,7 @@
 <script>
 import GameManager from '@/lib/Game/GameManager';
 import Card from "./Card";
+import { filter, forEach } from 'lodash-es';
 
 export default {
     name:       "Hand",
@@ -76,7 +77,7 @@ export default {
                 return;
             }
 
-            this.cards = _.filter(this.cards, cardInHand => {
+            this.cards = filter(this.cards, cardInHand => {
                 return cardInHand.isNot(Card);
             });
 
@@ -86,35 +87,35 @@ export default {
         }
     },
     mounted () {
-        this.$root.$on('game::has-been-setup', () => {
+        this.emitter.$on('game::has-been-setup', () => {
             this.playerId = GameManager.registerPlayer(this);
         });
 
-        this.$root.$on('game::next-turn', () => {
+        this.emitter.$on('game::next-turn', () => {
             this.canPlay = GameManager.turnFor === this.playerId;
 
             if (this.canPlay) {
                 if (!this.cards.length) {
                     console.log(`Player ${this.playerId} won the game!`);
-                    GameManager.instance.$root.$emit(`Player ${this.playerId} won the game!`);
+                    GameManager.instance.emitter.$emit(`Player ${this.playerId} won the game!`);
 
                     return;
                 }
 
-                let playableCards = _.filter(this.cards, Card => {
+                let playableCards = filter(this.cards, Card => {
                     return GameManager.Ruleset.cardIsPlayable(Card);
                 });
 
                 if (!playableCards.length) {
                     console.log('PLAYER ' + this.playerId + ' CANNOT PLAY ANY CARDS');
-                    GameManager.instance.$root.$emit('Player ' + this.playerId + ' CANNOT PLAY ANY CARDS');
+                    GameManager.instance.emitter.$emit('Player ' + this.playerId + ' CANNOT PLAY ANY CARDS');
 
                     let cards = GameManager.Cards.take(1);
 
-                    this.$root.$emit('Player ' + this.playerId + ' draws ' + cards.length + ' cards');
+                    this.emitter.$emit('Player ' + this.playerId + ' draws ' + cards.length + ' cards');
 
                     if (cards.length) {
-                        _.forEach(cards, card => {
+                        forEach(cards, card => {
                             this.cards.push(card);
                         });
                     }
@@ -124,16 +125,16 @@ export default {
             }
         });
 
-        this.$root.$on('cards::draw-cards-from-deck', async (data) => {
+        this.emitter.$on('cards::draw-cards-from-deck', async (data) => {
             if (data.player === this.playerId) {
                 let cards = await Cards.take(data.amount);
 
                 if (cards.length) {
-                    _.forEach(cards, card => {
+                    forEach(cards, card => {
                         this.cards.push(card);
                     });
 
-                    this.$root.$emit('Player ' + this.playerId + ' draws ' + data.amount + ' cards');
+                    this.emitter.$emit('Player ' + this.playerId + ' draws ' + data.amount + ' cards');
                 }
 
                 if (data.nextTurn) {

@@ -1,6 +1,6 @@
 import Card from "./Card";
 import GameManager from "@/lib/Game/GameManager";
-import { filter, forEach, shuffle } from 'lodash-es';
+import { filter, first, forEach, remove, shuffle } from 'lodash-es';
 
 let Cards = {
     collection: [],
@@ -32,8 +32,8 @@ let Cards = {
         cardsFromDeck = this.get();
 
         for (let i = 0; i < amount; i++) {
-            let card      = _.first(cardsFromDeck);
-            cardsFromDeck = _.remove(cardsFromDeck, (cardFromDeck) => {
+            let card      = first(cardsFromDeck);
+            cardsFromDeck = remove(cardsFromDeck, (cardFromDeck) => {
                 return cardFromDeck.isNot(card);
             });
             cardsFromDeck = this.get();

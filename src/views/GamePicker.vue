@@ -27,6 +27,7 @@
 
 <script>
 import Games from "../lib/Game/Games";
+import { cloneDeep, first } from 'lodash-es';
 
 export default {
     name: "GamePicker",
@@ -58,14 +59,12 @@ export default {
 
             if (this.opponents > this.selectedGame.opponents.max) {
                 this.opponents = this.selectedGame.opponents.max;
-
-
             }
         }
     },
     methods: {
         goToGame () {
-            let GameOptions = _.cloneDeep(this.selectedGame);
+            let GameOptions = cloneDeep(this.selectedGame);
 
             localStorage.setItem('opponents', this.opponents);
 
@@ -94,7 +93,7 @@ export default {
         }
     },
     mounted () {
-        this.selectedGame = _.first(this.Games);
+        this.selectedGame = first(this.Games);
     }
 };
 </script>

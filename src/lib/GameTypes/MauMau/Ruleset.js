@@ -25,9 +25,9 @@ let Ruleset = {
         if (lastPlayedCard) {
             if (lastPlayedCard.value === 2) {
                 console.log(Player.playerId + ' plays a DRAW TWO!');
-                GameManager.instance.$root.$emit('log', { message: Player.playerId + ' plays a DRAW TWO!' });
+                GameManager.instance.emitter.$emit('log', { message: Player.playerId + ' plays a DRAW TWO!' });
 
-                GameManager.instance.$root.$emit('cards::draw-cards-from-deck', {
+                GameManager.instance.emitter.$emit('cards::draw-cards-from-deck', {
                     player: Player.playerId >= GameManager.playerCount
                                 ? Player.playerId - 1
                                 : Player.playerId + 1,
@@ -37,7 +37,7 @@ let Ruleset = {
 
             if (lastPlayedCard.value === 8) {
                 console.log(Player.playerId + ' plays a SKIP!');
-                GameManager.instance.$root.$emit('log', { message: Player.playerId + ' plays a SKIP!' });
+                GameManager.instance.emitter.$emit('log', { message: Player.playerId + ' plays a SKIP!' });
 
                 GameManager.nextTurn();
 
@@ -46,7 +46,7 @@ let Ruleset = {
 
             if (lastPlayedCard.value === 14 || lastPlayedCard.value === 7) {
                 console.log(Player.playerId + ' can play again!');
-                GameManager.instance.$root.$emit('log', { message: Player.playerId + ' can play again!' });
+                GameManager.instance.emitter.$emit('log', { message: Player.playerId + ' can play again!' });
 
                 if (GameManager.turnDirection === 'ASC') {
                     if (GameManager.turnFor - 1 < 1) {
@@ -67,16 +67,16 @@ let Ruleset = {
 
             if (lastPlayedCard.value === 1) {
                 console.log(Player.playerId + ' plays a REVERSE!');
-                GameManager.instance.$root.$emit('log', { message: Player.playerId + ' plays a REVERSE!' });
+                GameManager.instance.emitter.$emit('log', { message: Player.playerId + ' plays a REVERSE!' });
 
                 GameManager.reverseDirection();
             }
 
             if (lastPlayedCard.value === 'JOKER') {
                 console.log(Player.playerId + ' plays a JOKER!');
-                GameManager.instance.$root.$emit('log', { message: Player.playerId + ' plays a JOKER!' });
+                GameManager.instance.emitter.$emit('log', { message: Player.playerId + ' plays a JOKER!' });
 
-                GameManager.instance.$root.$emit('cards::draw-cards-from-deck', {
+                GameManager.instance.emitter.$emit('cards::draw-cards-from-deck', {
                     player: Player.playerId >= GameManager.playerCount
                                 ? Player.playerId - 1
                                 : Player.playerId + 1,
@@ -94,7 +94,7 @@ let Ruleset = {
         }
 
         if (GameManager.playedCards.length) {
-            let lastPlayedCard = _.last(GameManager.playedCards);
+            let lastPlayedCard = last(GameManager.playedCards);
 
             if (lastPlayedCard) {
                 if (lastPlayedCard.value === 'JOKER') {
@@ -122,10 +122,10 @@ let Ruleset = {
 
     deckIsEmpty: (cards = []) => {
         forEach(cards, (card) => {
-            GameManager.instance.$root.$emit('stack::remove-card', card);
+            GameManager.instance.emitter.$emit('stack::remove-card', card);
         });
 
-        Cards.deck = _.shuffle(cards);
+        Cards.deck = shuffle(cards);
     }
 };
 

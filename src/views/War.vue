@@ -9,6 +9,7 @@
 <script>
 import Cards from "../lib/Cards/Cards";
 import Hand from "../components/Hand";
+import { forEach } from 'lodash-es';
 
 export default {
     name:       "War",
@@ -40,7 +41,7 @@ export default {
 
             Cards.get(true, true);
 
-            _.forEach(Cards.take(3), Card => {
+            forEach(Cards.take(3), Card => {
                 cards.createCard(Card);
             });
 

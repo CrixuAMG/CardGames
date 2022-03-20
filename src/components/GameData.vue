@@ -43,15 +43,15 @@ export default {
         }
     },
     mounted () {
-        this.$root.$on('game::recalculate:deck-remaining', () => {
+        this.emitter.$on('game::recalculate:deck-remaining', () => {
             this.cardsRemaining = Cards.deck.length;
 
             if (!this.cardsRemaining) {
-                this.$root.$emit('game::deck-is-empty');
+                this.emitter.$emit('game::deck-is-empty');
             }
         });
 
-        this.$root.$on('game::next-turn', () => {
+        this.emitter.$on('game::next-turn', () => {
             this.turnCounter = GameManager.turnCounter;
             this.turnFor     = GameManager.turnFor;
         });

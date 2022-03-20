@@ -15,11 +15,11 @@ export default {
         };
     },
     mounted () {
-        this.$root.$on('game::start', () => {
+        this.emitter.$on('game::start', () => {
             this.logs = [];
         });
 
-        this.$root.$on('log', (data) => {
+        this.emitter.$on('log', (data) => {
             this.logs.push(data);
 
             setTimeout(() => {

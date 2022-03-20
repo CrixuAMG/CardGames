@@ -8,15 +8,16 @@
 
 <script>
 import Ruleset from "../lib/GameTypes/MauMau/Ruleset";
+import { random } from 'lodash-es';
 
 export default {
     name:    "DrawStack",
     methods: {
         style () {
-            return `transform: rotate(${_.random(-10, 10)};)`;
+            return `transform: rotate(${random(-10, 10)};)`;
         },
         drawFromStack () {
-            this.$root.$emit('cards::draw-cards-from-deck', {
+            this.emitter.$emit('cards::draw-cards-from-deck', {
                 player:   GameManager.turnFor,
                 amount:   1,
                 nextTurn: Ruleset.nextTurnOnDrawCardFromStack
@@ -29,7 +30,7 @@ export default {
         };
     },
     mounted () {
-        this.$root.$on('cards::build::draw-stack', () => {
+        this.emitter.$on('cards::build::draw-stack', () => {
             this.cards = Cards.get();
         });
     }

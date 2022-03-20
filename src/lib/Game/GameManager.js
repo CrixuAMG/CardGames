@@ -13,12 +13,12 @@ let GameManager = {
     players:       [],
 
     registerEventHandlers () {
-        this.instance.$root.$on('stack::add-card', (Card) => {
+        this.instance.emitter.$on('stack::add-card', (Card) => {
             this.CardsPile.push(Card);
         });
 
-        this.instance.$root.$on('stack::remove-card', (Card) => {
-            this.CardsPile = _.filter(this.CardsPile, (cardInStack) => {
+        this.instance.emitter.$on('stack::remove-card', (Card) => {
+            this.CardsPile = filter(this.CardsPile, (cardInStack) => {
                 return cardInStack.is(Card);
             });
         });
@@ -36,7 +36,7 @@ let GameManager = {
 
         console.log('here');
 
-        this.instance.$root.$emit('game::has-been-setup');
+        this.instance.emitter.$emit('game::has-been-setup');
     },
 
     nextTurn (Player, Card) {
@@ -68,14 +68,14 @@ let GameManager = {
 
         if (Card) {
             this.playedCards.push(Card);
-            this.instance.$root.$emit('stack::add-card', Card);
+            this.instance.emitter.$emit('stack::add-card', Card);
 
             if (typeof Player !== "undefined" && this.Ruleset.beforeTurn && typeof this.Ruleset.beforeTurn === 'function') {
                 emitEvent = this.Ruleset.beforeTurn(Player);
             }
         }
 
-        this.instance.$root.$emit('game::recalculate:deck-remaining');
+        this.instance.emitter.$emit('game::recalculate:deck-remaining');
 
         if (!this.Cards.deck.length) {
             this.Ruleset.deckIsEmpty(this.CardsPile);
@@ -84,7 +84,7 @@ let GameManager = {
         if (emitEvent) {
             setTimeout(() => {
                 // @ts-ignore
-                this.instance.$root.$emit('game::next-turn', this.turnFor);
+                this.instance.emitter.$emit('game::next-turn', this.turnFor);
             }, 1000);
         }
     },
@@ -100,16 +100,16 @@ let GameManager = {
     startGame () {
         console.log('START GAME');
 
-        this.instance.$root.$emit('cards::build::draw-stack');
+        this.instance.emitter.$emit('cards::build::draw-stack');
 
         for (let player = 1; player <= this.playerCount; player++) {
-            this.instance.$root.$emit('cards::draw-cards-from-deck', {
+            this.instance.emitter.$emit('cards::draw-cards-from-deck', {
                 player: player,
                 amount: 7
             });
         }
 
-        this.instance.$root.$emit('game::start');
+        this.instance.emitter.$emit('game::start');
 
         this.nextTurn();
     },
