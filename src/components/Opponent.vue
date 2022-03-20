@@ -6,7 +6,7 @@
 
 <script>
 import GameManager from '@/lib/Game/GameManager';
-import { filter } from 'lodash-es';
+import { filter, forEach, random } from 'lodash-es';
 
 export default {
     name: "Opponent",
@@ -49,7 +49,7 @@ export default {
                 if (cards) {
                     this.emitter.$emit('Player ' + this.playerId + ' draws ' + cards.length + ' cards');
 
-                    _.forEach(cards, card => {
+                    forEach(cards, card => {
                         this.cards.push(card);
                     });
                 }
@@ -59,7 +59,7 @@ export default {
                 return;
             }
 
-            let Card = playableCards[_.random(0, playableCards.length - 1)];
+            let Card = playableCards[random(0, playableCards.length - 1)];
 
             this.cards = filter(this.cards, cardInHand => {
                 return cardInHand.isNot(Card);
@@ -83,7 +83,7 @@ export default {
             if (data.player === this.playerId) {
                 let cards = await Cards.take(data.amount);
 
-                _.forEach(cards, card => {
+                forEach(cards, card => {
                     this.cards.push(card);
                 });
 

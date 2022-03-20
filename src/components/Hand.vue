@@ -9,7 +9,7 @@
 <script>
 import GameManager from '@/lib/Game/GameManager';
 import Card from "./Card";
-import { filter } from 'lodash-es';
+import { filter, forEach } from 'lodash-es';
 
 export default {
     name:       "Hand",
@@ -115,7 +115,7 @@ export default {
                     this.emitter.$emit('Player ' + this.playerId + ' draws ' + cards.length + ' cards');
 
                     if (cards.length) {
-                        _.forEach(cards, card => {
+                        forEach(cards, card => {
                             this.cards.push(card);
                         });
                     }
@@ -130,7 +130,7 @@ export default {
                 let cards = await Cards.take(data.amount);
 
                 if (cards.length) {
-                    _.forEach(cards, card => {
+                    forEach(cards, card => {
                         this.cards.push(card);
                     });
 

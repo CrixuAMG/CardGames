@@ -11,6 +11,7 @@
 
 <script>
 import Card from "./Card";
+import { random } from 'lodash-es';
 
 export default {
     name:       "Stack",
@@ -24,7 +25,7 @@ export default {
 
     computed: {
         style () {
-            return `transform: rotate(${_.random(-5, 5, false)}deg) translateY(-50%) translateX(-50%);`;
+            return `transform: rotate(${random(-5, 5, false)}deg) translateY(-50%) translateX(-50%);`;
         },
     },
 

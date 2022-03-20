@@ -8,12 +8,13 @@
 
 <script>
 import Ruleset from "../lib/GameTypes/MauMau/Ruleset";
+import { random } from 'lodash-es';
 
 export default {
     name:    "DrawStack",
     methods: {
         style () {
-            return `transform: rotate(${_.random(-10, 10)};)`;
+            return `transform: rotate(${random(-10, 10)};)`;
         },
         drawFromStack () {
             this.emitter.$emit('cards::draw-cards-from-deck', {
