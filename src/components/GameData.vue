@@ -21,7 +21,7 @@
                 Turn for:
             </div>
             <div class="game-data-data">
-                {{ turnForText }}
+                {{ turnForText() }}
             </div>
         </div>
     </div>
@@ -39,10 +39,10 @@ export default {
             turnFor:        null
         };
     },
-    computed: {
+    methods: {
         turnForText () {
             return GameManager.getPlayerAlias();
-        }
+        },
     },
     mounted () {
         this.emitter.$on('game::recalculate:deck-remaining', () => {

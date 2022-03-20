@@ -125,6 +125,10 @@ let GameManager = {
     },
 
     getPlayerAlias() {
+        if (this.turnFor === null) {
+            return '';
+        }
+
         const player = this.players?.[this.turnFor];
 
         return player?.alias || `Opponent ${this.turnFor}`;

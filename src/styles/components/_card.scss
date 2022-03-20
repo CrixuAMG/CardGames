@@ -58,7 +58,7 @@
         width: 100%;
 
         * {
-            font-size: 56px;
+            font-size: 46px;
         }
 
         div[class^="mark"] {
@@ -128,19 +128,19 @@
 
     &.card-3 .card-middle-mark {
         .mark-1 {
-            top: 50px;
+            top: 45px;
             left: 50%;
             transform: translateX(-50%);
         }
 
         .mark-2 {
-            bottom: 110px;
+            bottom: 105px;
             left: 50%;
             transform: translateX(-50%);
         }
 
         .mark-3 {
-            bottom: 50px;
+            bottom: 45px;
             left: 50%;
             transform: translateX(-50%);
         }
@@ -288,25 +288,25 @@
 
     &.card-8 .card-middle-mark {
         .mark-1 {
-            top: 55px;
+            top: 25px;
             left: 25%;
             transform: translateX(-25%);
         }
 
         .mark-2 {
-            bottom: 55px;
+            bottom: 25px;
             left: 25%;
             transform: translateX(-25%);
         }
 
         .mark-3 {
-            top: 55px;
+            top: 25px;
             left: 75%;
             transform: translateX(-75%);
         }
 
         .mark-4 {
-            bottom: 55px;
+            bottom: 25px;
             left: 75%;
             transform: translateX(-75%);
         }
