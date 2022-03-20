@@ -1,5 +1,6 @@
 *, *::before, *::after {
     box-sizing: border-box;
+    font-family: Roboto, sans-serif;
 }
 
 :root {
@@ -35,37 +36,19 @@ html, body {
         height: 100%;
         position: relative;
         overflow: hidden;
-        padding: 15px 15px 0;
+        padding: 1.5rem 1.5rem 0;
 
         #app-logo {
-            margin: 2rem 0 0 2rem;
+            max-width: 30vw;
         }
 
         #game-picker {
-            margin: 3rem 3rem 0;
-            border: 1px solid black;
-            border-radius: 5px;
-            padding: 15px;
-            max-width: max-content;
+            padding: 1rem;
             display: grid;
-
-            .game-picker__option {
-                display: block;
-                cursor: pointer;
-                margin-bottom: 5px;
-                padding: 5px 10px;
-                border-radius: 5px;
-                border: 1px solid transparent;
-                min-width: 5rem;
-                width: max-content;
-                transform: translateX(0);
-                transition: all 300ms ease-in-out;
-
-                &.selected {
-                    border-color: red;
-                    transform: translateX(15px);
-                }
-            }
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 1rem;
+            width: 100%;
+            margin: 3rem 0;
 
             .game-picker__details {
                 display: block;

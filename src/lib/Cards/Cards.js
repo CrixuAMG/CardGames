@@ -1,5 +1,5 @@
-import Card from "./Card";
-import GameManager from "@/lib/Game/GameManager";
+import Card from './Card';
+import GameManager from '@/lib/Game/GameManager';
 import { filter, first, forEach, remove, shuffle } from 'lodash-es';
 
 let Cards = {
