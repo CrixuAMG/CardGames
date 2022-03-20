@@ -322,6 +322,18 @@
             top: 50%;
             transform: translateY(-50%) translateX(-75%);
         }
+
+        .mark-7 {
+            left: 50%;
+            top: 25%;
+            transform: translateY(-10%) translateX(-50%);
+        }
+
+        .mark-8 {
+            left: 50%;
+            top: 50%;
+            transform: translateY(20%) translateX(-50%);
+        }
     }
 
     &.card-9 .card-middle-mark {
@@ -386,61 +398,67 @@
 
     &.card-10 .card-middle-mark {
         div[class^="mark"] * {
-            font-size: 56px;
+            font-size: 46px;
         }
 
         .mark-1 {
-            top: 55px;
-            left: 15%;
-            transform: translateX(-15%);
+            top: 15px;
+            left: 25%;
+            transform: translateX(-25%);
         }
 
         .mark-2 {
-            top: 55px;
-            left: 85%;
-            transform: translateX(-85%);
+            bottom: 15px;
+            left: 25%;
+            transform: translateX(-25%);
         }
 
         .mark-3 {
-            bottom: 55px;
-            left: 15%;
-            transform: translateX(-15%);
+            top: 15px;
+            left: 75%;
+            transform: translateX(-75%);
         }
 
         .mark-4 {
-            bottom: 55px;
-            left: 85%;
-            transform: translateX(-85%);
+            bottom: 15px;
+            left: 75%;
+            transform: translateX(-75%);
         }
 
         .mark-5 {
-            left: 10%;
+            left: 25%;
             top: 50%;
-            transform: translateY(-50%) translateX(-10%);
+            transform: translateY(-80%) translateX(-25%);
         }
 
         .mark-6 {
-            left: 90%;
+            left: 75%;
             top: 50%;
-            transform: translateY(-50%) translateX(-90%);
+            transform: translateY(-80%) translateX(-75%);
         }
 
         .mark-7 {
             left: 50%;
-            top: 55px;
-            transform: translateX(-50%);
+            top: 25%;
+            transform: translateY(-30%) translateX(-50%);
         }
 
         .mark-8 {
-            left: 50%;
+            left: 25%;
             top: 50%;
-            transform: translateY(-50%) translateX(-50%);
+            transform: translateY(0%) translateX(-25%);
         }
 
         .mark-9 {
+            left: 75%;
+            top: 50%;
+            transform: translateY(0%) translateX(-75%);
+        }
+
+        .mark-10 {
             left: 50%;
-            bottom: 55px;
-            transform: translateX(-50%);
+            top: 50%;
+            transform: translateY(50%) translateX(-50%);
         }
     }
 }
