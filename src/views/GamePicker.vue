@@ -2,98 +2,22 @@
     <img src="/img/logo-light.svg" alt="Logo" id="app-logo">
 
     <div id="game-picker" class="game-picker">
-
-        <div v-for="game in Games" :class="{'selected': isSelected(game)}" class="game-picker__option"
-             @click="selectGame(game)">
-            {{ game.name }}
-        </div>
-
-        <div v-if="selectedGame" id="game-picker__details">
-            <h5>
-                Opponents:
-            </h5>
-
-            Min: {{ selectedGame.opponents.min }}
-            Max: {{ selectedGame.opponents.max }}
-        </div>
-
-        <label for="opponents">
-            Opponents
-            <input id="opponents" v-model="opponents" name="opponents" type="number">
-        </label>
-
-        <button @click="goToGame">
-            Play!
-        </button>
+        <game-card :game="game" v-for="game in Games"
+                   class="game-picker__option"/>
     </div>
 </template>
 
 <script>
 import Games from "../lib/Game/Games";
-import { cloneDeep, first } from 'lodash-es';
+import GameCard from '../components/GameSelection/GameCard';
 
 export default {
-    name: "GamePicker",
+    name:       "GamePicker",
+    components: { GameCard },
     data () {
         return {
-            Games:        Games,
-            selectedGame: first(Games),
-            opponents:    null,
+            Games: Games,
         };
-    },
-    watch:   {
-        selectedGame: {
-            deep:      true,
-            immediate: true,
-            handler:   function () {
-                this.checkOpponents();
-            }
-        },
-        opponents:    function () {
-            if (!this.selectedGame) {
-                return false;
-            }
-
-            if (this.opponents < this.selectedGame.opponents.min) {
-                this.opponents = this.selectedGame.opponents.min;
-
-                return;
-            }
-
-            if (this.opponents > this.selectedGame.opponents.max) {
-                this.opponents = this.selectedGame.opponents.max;
-            }
-        }
-    },
-    methods: {
-        goToGame () {
-            let GameOptions = cloneDeep(this.selectedGame);
-
-            localStorage.setItem('opponents', this.opponents);
-
-            this.$router.push(GameOptions);
-        },
-        selectGame (Game) {
-            this.selectedGame = Game;
-        },
-        checkOpponents () {
-            if (!this.selectedGame) {
-                return false;
-            }
-
-            if (this.opponents >= this.selectedGame.opponents.min && this.opponents <= this.selectedGame.opponents.max) {
-                return;
-            }
-
-            this.opponents = this.selectedGame.opponents.min;
-        },
-        isSelected (Game) {
-            if (!this.selectedGame) {
-                return false;
-            }
-
-            return this.selectedGame.name === Game.name;
-        }
     },
 };
 </script>

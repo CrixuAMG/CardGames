@@ -1,24 +1,26 @@
 const Games = [
     {
-        name:      'Pesten',
-        route:     {
+        name:        'Pesten',
+        description: '',
+        route:       {
             name:   'Pesten',
             params: {},
             query:  {},
         },
-        opponents: {
+        opponents:   {
             min: 1,
             max: 9
         }
     },
     {
-        name:      'Mau Mau',
-        route:     {
+        name:        'Mau Mau',
+        description: '',
+        route:       {
             name:   'MauMau',
             params: {},
             query:  {},
         },
-        opponents: {
+        opponents:   {
             min: 1,
             max: 9
         }
