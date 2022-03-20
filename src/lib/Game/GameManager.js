@@ -1,41 +1,35 @@
 import Cards from "@/lib/Cards/Cards";
-import IGameManager from "@/lib/Interfaces/IGameManager";
-import IRuleset from "@/lib/Interfaces/IRuleset";
-import IPlayer from "@/lib/Interfaces/IPlayer";
-import ICard from '../Interfaces/ICard';
-import Card from "@/lib/Cards/Card";
 
-let GameManager: IGameManager;
-GameManager = {
-    turnCounter: 0,
-    turnFor: null,
+let GameManager = {
+    turnCounter:   0,
+    turnFor:       null,
     turnDirection: 'ASC',
-    playerCount: 0,
-    instance: {} as IPlayer,
-    Cards: Cards,
-    CardsPile: [],
-    Ruleset: {} as IRuleset,
-    playedCards: [],
-    players: [],
+    playerCount:   0,
+    instance:      {},
+    Cards:         Cards,
+    CardsPile:     [],
+    Ruleset:       {},
+    playedCards:   [],
+    players:       [],
 
-    registerEventHandlers() {
-        this.instance.$root.$on('stack::add-card', (Card: Card) => {
+    registerEventHandlers () {
+        this.instance.$root.$on('stack::add-card', (Card) => {
             this.CardsPile.push(Card);
         });
 
-        this.instance.$root.$on('stack::remove-card', (Card: Card) => {
-            this.CardsPile = _.filter(this.CardsPile, (cardInStack: Card) => {
+        this.instance.$root.$on('stack::remove-card', (Card) => {
+            this.CardsPile = _.filter(this.CardsPile, (cardInStack) => {
                 return cardInStack.is(Card);
             });
         });
     },
 
-    setup(instance: IPlayer, Ruleset: IRuleset) {
-        this.instance = instance;
-        this.Cards = Cards;
-        this.Ruleset = Ruleset;
-        this.CardsPile = [];
-        this.players = [];
+    setup (instance, Ruleset) {
+        this.instance    = instance;
+        this.Cards       = Cards;
+        this.Ruleset     = Ruleset;
+        this.CardsPile   = [];
+        this.players     = [];
         this.playerCount = 0;
 
         this.registerEventHandlers();
@@ -45,7 +39,7 @@ GameManager = {
         this.instance.$root.$emit('game::has-been-setup');
     },
 
-    nextTurn(Player?: IPlayer, Card?: ICard) {
+    nextTurn (Player, Card) {
         if (typeof Player !== "undefined" && this.Ruleset.afterTurn && typeof this.Ruleset.afterTurn === 'function') {
             this.Ruleset.afterTurn(Player);
         }
@@ -95,7 +89,7 @@ GameManager = {
         }
     },
 
-    reverseDirection() {
+    reverseDirection () {
         if (this.turnDirection === 'ASC') {
             this.turnDirection = 'DESC';
         } else {
@@ -103,7 +97,7 @@ GameManager = {
         }
     },
 
-    startGame() {
+    startGame () {
         console.log('START GAME');
 
         this.instance.$root.$emit('cards::build::draw-stack');
@@ -120,7 +114,7 @@ GameManager = {
         this.nextTurn();
     },
 
-    registerPlayer(player: IPlayer) {
+    registerPlayer (player) {
         this.playerCount += 1;
         this.players[this.playerCount] = player;
 
@@ -129,6 +123,7 @@ GameManager = {
         return this.playerCount;
     }
 };
+
 
 window.GameManager = GameManager;
 

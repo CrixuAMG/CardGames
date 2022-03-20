@@ -1,11 +1,11 @@
 <template>
-    <div class="game-picker" id="game-picker">
-        <div :class="{'selected': isSelected(game)}" @click="selectGame(game)" class="game-picker__option"
-             v-for="game in Games">
+    <div id="game-picker" class="game-picker">
+        <div v-for="game in Games" :class="{'selected': isSelected(game)}" class="game-picker__option"
+             @click="selectGame(game)">
             {{ game.name }}
         </div>
 
-        <div id="game-picker__details" v-if="selectedGame">
+        <div v-if="selectedGame" id="game-picker__details">
             <h5>
                 Opponents:
             </h5>
@@ -16,7 +16,7 @@
 
         <label for="opponents">
             Opponents
-            <input name="opponents" type="number" v-model="opponents">
+            <input v-model="opponents" name="opponents" type="number">
         </label>
 
         <button @click="goToGame">
@@ -29,13 +29,13 @@
 import Games from "../lib/Game/Games";
 
 export default {
-    name:    "GamePicker",
-    data() {
+    name: "GamePicker",
+    data () {
         return {
             Games:        Games,
             selectedGame: null,
             opponents:    null,
-        }
+        };
     },
     watch:   {
         selectedGame: {
@@ -64,17 +64,17 @@ export default {
         }
     },
     methods: {
-        goToGame() {
+        goToGame () {
             let GameOptions = _.cloneDeep(this.selectedGame);
 
             localStorage.setItem('opponents', this.opponents);
 
             this.$router.push(GameOptions);
         },
-        selectGame(Game) {
+        selectGame (Game) {
             this.selectedGame = Game;
         },
-        checkOpponents() {
+        checkOpponents () {
             if (!this.selectedGame) {
                 return false;
             }
@@ -85,7 +85,7 @@ export default {
 
             this.opponents = this.selectedGame.opponents.min;
         },
-        isSelected(Game) {
+        isSelected (Game) {
             if (!this.selectedGame) {
                 return false;
             }
@@ -93,8 +93,8 @@ export default {
             return this.selectedGame.name === Game.name;
         }
     },
-    mounted() {
+    mounted () {
         this.selectedGame = _.first(this.Games);
     }
-}
+};
 </script>

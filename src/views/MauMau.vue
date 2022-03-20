@@ -42,23 +42,23 @@ export default {
         Hand
     },
     methods:    {
-        setup() {
+        setup () {
             Cards.get(true, true);
             GameManager.setup(this, Ruleset);
 
             GameManager.startGame();
         },
     },
-    data() {
+    data () {
         return {
             hand:      [],
             opponents: 3
-        }
+        };
     },
 
-    mounted() {
+    mounted () {
         this.opponents = localStorage.getItem('opponents');
         this.setup();
     }
-}
+};
 </script>

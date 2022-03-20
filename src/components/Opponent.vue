@@ -1,24 +1,25 @@
 <template>
-    <div :id="`player-${playerId}`" class="opponent" :class="{'turn-for': canPlay}">
+    <div :id="`player-${playerId}`" :class="{'turn-for': canPlay}" class="opponent">
         OPPONENT {{ playerId }} ({{ cards.length }} cards)
     </div>
 </template>
 
 <script>
 import GameManager from '@/lib/Game/GameManager';
+
 export default {
     name: "Opponent",
 
-    data() {
+    data () {
         return {
             playerId: null,
             canPlay:  false,
             cards:    []
-        }
+        };
     },
 
     watch: {
-        canPlay(newValue) {
+        canPlay (newValue) {
             if (newValue) {
                 this.playCard();
             }
@@ -26,9 +27,9 @@ export default {
     },
 
     methods: {
-        playCard() {
+        playCard () {
             if (!this.cards.length) {
-                console.log(`Player ${this.playerId} won the game!`)
+                console.log(`Player ${this.playerId} won the game!`);
                 GameManager.instance.$root.$emit(`Player ${this.playerId} won the game!`);
 
                 return;
@@ -68,7 +69,7 @@ export default {
         }
     },
 
-    created() {
+    created () {
         this.$root.$on('game::has-been-setup', () => {
             this.playerId = GameManager.registerPlayer(this);
         });
@@ -93,5 +94,5 @@ export default {
             }
         });
     }
-}
+};
 </script>
