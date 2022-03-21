@@ -138,9 +138,9 @@ let cardsToSetup = [
 ];
 
 forEach(Suits, Suit => {
-    forEach(cardsToSetup, cardToSetup => {
+    forEach(cardsToSetup, cardData => {
         Cards.collection.push(new Card({
-            ...cardToSetup,
+            ...cardData,
             suit: Suit
         }));
     });

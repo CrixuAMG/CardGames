@@ -1,8 +1,8 @@
 <template>
     <div :id="`player-${playerId}`" :class="{'can-play': canPlay}" class="hand">
-        <card v-for="(card, index) in cards" :card="card" :draggable="canPlayCard(card)"
+        <card v-for="(card, index) in cards" :card="card" :draggable="canPlayCard(card)" :key="index"
               :style="style(index)" @drag="draggingCard(card, index)" @dragend="dragend(card, $event)"
-              @click.native="playCard(card)"></card>
+              @click.native="playCard(card)"/>
     </div>
 </template>
 
@@ -31,7 +31,7 @@ export default {
     },
     methods: {
         canPlayCard (Card) {
-            if (!this.canPlay) {
+            if (!this.canPlay || !Card) {
                 return false;
             }
 
@@ -105,6 +105,7 @@ export default {
                     return;
                 }
 
+                console.log(this.cards);
                 let playableCards = filter(this.cards, Card => {
                     return GameManager.Ruleset.cardIsPlayable(Card);
                 });

@@ -101,8 +101,6 @@ let GameManager = {
 
         this.instance.emitter.$emit('cards::build::draw-stack');
 
-        console.log(this);
-
         for (let player = 1; player <= this.playerCount; player++) {
             this.instance.emitter.$emit('cards::draw-cards-from-deck', {
                 player: player,

@@ -1,11 +1,11 @@
 <template>
     <div class="stack">
         <div class="stack-cards-wrapper">
-            <card v-for="(card, index) in cards" :key="index" :card="card" :style="style"></card>
+            <card v-for="(card, index) in cards" :key="index" :card="card" :style="style"/>
         </div>
 
         <drop id="stack-dropzone" :class="{overlay: overlay}" @dragend="drop"
-              @dragenter="overlay = true" @dragleave="overlay = false" @drop="drop"></drop>
+              @dragenter="overlay = true" @dragleave="overlay = false" @drop="drop"/>
     </div>
 </template>
 
@@ -34,7 +34,7 @@ export default {
     },
 
     methods: {
-        drop (event) {
+        drop () {
             this.overlay = false;
         }
     },

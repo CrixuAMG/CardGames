@@ -6,7 +6,7 @@
 
 <script>
 import GameManager from '@/lib/Game/GameManager';
-import { filter, forEach, random } from 'lodash-es';
+import { cloneDeep, filter, findIndex, forEach, random } from 'lodash-es';
 
 export default {
     name: "Opponent",
@@ -29,28 +29,28 @@ export default {
 
     methods: {
         playCard () {
-            if (!this.cards.length) {
+            const cards = cloneDeep(this.cards);
+            if (!cards.length) {
                 console.log(`Player ${this.playerId} won the game!`);
                 GameManager.instance.emitter.$emit(`Player ${this.playerId} won the game!`);
 
                 return;
             }
 
-            let playableCards = filter(this.cards, Card => {
-                return GameManager.Ruleset.cardIsPlayable(Card);
-            });
+            console.log(cards);
+            let playableCards = filter(cards, Card => GameManager.Ruleset.cardIsPlayable(Card));
 
             if (!playableCards.length) {
                 console.log('OPPONENT ' + this.playerId + ' CANNOT PLAY ANY CARDS');
                 GameManager.instance.emitter.$emit('OPPONENT ' + this.playerId + ' CANNOT PLAY ANY CARDS');
 
-                let cards = GameManager.Cards.take(1);
+                let cardsTakenFromPile = GameManager.Cards.take(1);
 
-                if (cards) {
-                    this.emitter.$emit('Player ' + this.playerId + ' draws ' + cards.length + ' cards');
+                if (cardsTakenFromPile) {
+                    this.emitter.$emit('Player ' + this.playerId + ' draws ' + cardsTakenFromPile.length + ' cards');
 
-                    forEach(cards, card => {
-                        this.cards.push(card);
+                    forEach(cardsTakenFromPile, card => {
+                        cards.push(card);
                     });
                 }
 
@@ -61,9 +61,11 @@ export default {
 
             let Card = playableCards[random(0, playableCards.length - 1)];
 
-            this.cards = filter(this.cards, cardInHand => {
-                return cardInHand.isNot(Card);
-            });
+            const cardIndex = findIndex(cards, cardInHand => cardInHand.is(Card));
+
+            delete cards[cardIndex];
+
+            this.cards = cards;
 
             this.canPlay = false;
             GameManager.nextTurn(this, Card);

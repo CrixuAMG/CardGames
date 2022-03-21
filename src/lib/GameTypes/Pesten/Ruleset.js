@@ -99,31 +99,25 @@ let Ruleset = {
             return true;
         }
 
-        if (GameManager.playedCards.length) {
-            let lastPlayedCard = last(GameManager.playedCards);
+        let lastPlayedCard = last(GameManager.playedCards);
 
-            if (lastPlayedCard) {
-                if (lastPlayedCard.value === 'JOKER') {
-                    return true;
-                }
-
-                if (Card.suit === lastPlayedCard.suit) {
-                    return true;
-                }
-
-                if (Card.value === lastPlayedCard.value) {
-                    return true;
-                }
-
-                if (Card.value === 11) {
-                    return true;
-                }
-
-                return Card.value === 'JOKER';
-            }
+        if (lastPlayedCard.value === 'JOKER') {
+            return true;
         }
 
-        return true;
+        if (Card.suit === lastPlayedCard.suit) {
+            return true;
+        }
+
+        if (Card.value === lastPlayedCard.value) {
+            return true;
+        }
+
+        if (Card.value === 11) {
+            return true;
+        }
+
+        return Card.value === 'JOKER';
     },
 
     deckIsEmpty: (cards = []) => {
