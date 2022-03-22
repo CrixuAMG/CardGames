@@ -17,7 +17,6 @@ export default {
             return `transform: rotate(${random(-10, 10)};)`;
         },
         drawFromStack () {
-            console.log(GameManager);
             if (!this.cards.length) {
                 return null;
             }

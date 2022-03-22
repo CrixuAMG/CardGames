@@ -6,7 +6,7 @@
 
 <script>
 import GameManager from '@/lib/Game/GameManager';
-import { cloneDeep, filter, findIndex, forEach, random } from 'lodash-es';
+import { cloneDeep, filter, forEach, random } from 'lodash-es';
 
 export default {
     name: "Opponent",
@@ -37,7 +37,6 @@ export default {
                 return;
             }
 
-            console.log(cards);
             let playableCards = filter(cards, Card => GameManager.Ruleset.cardIsPlayable(Card));
 
             if (!playableCards.length) {
@@ -50,6 +49,7 @@ export default {
                     this.emitter.$emit('Player ' + this.playerId + ' draws ' + cardsTakenFromPile.length + ' cards');
 
                     forEach(cardsTakenFromPile, card => {
+                        console.log(card);
                         cards.push(card);
                     });
                 }
@@ -61,11 +61,8 @@ export default {
 
             let Card = playableCards[random(0, playableCards.length - 1)];
 
-            const cardIndex = findIndex(cards, cardInHand => cardInHand.is(Card));
-
-            delete cards[cardIndex];
-
-            this.cards = cards;
+            this.cards = filter(cards, cardInHand => cardInHand.isNot(Card))
+                .filter(cardInHand => !!cardInHand);
 
             this.canPlay = false;
             GameManager.nextTurn(this, Card);
@@ -74,11 +71,7 @@ export default {
 
     created () {
         this.emitter.$on('game::has-been-setup', () => {
-            const playerId = GameManager.registerPlayer(this);
-
-            console.log(playerId);
-
-            this.playerId = playerId;
+            this.playerId = GameManager.registerPlayer(this);
         });
 
         this.emitter.$on('game::next-turn', () => {
@@ -89,9 +82,7 @@ export default {
             if (data.player === this.playerId) {
                 let cards = await Cards.take(data.amount);
 
-                forEach(cards, card => {
-                    this.cards.push(card);
-                });
+                this.cards = this.cards.concat(cards);
 
                 this.emitter.$emit('Player ' + this.playerId + ' draws ' + data.amount + ' cards');
 

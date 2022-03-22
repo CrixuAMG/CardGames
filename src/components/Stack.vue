@@ -1,7 +1,7 @@
 <template>
     <div class="stack">
         <div class="stack-cards-wrapper">
-            <card v-for="(card, index) in cards" :key="index" :card="card" :style="style"/>
+            <card v-for="(card, index) in cards" :key="index" :card="card" :style="card.style"/>
         </div>
 
         <drop id="stack-dropzone" :class="{overlay: overlay}" @dragend="drop"
@@ -15,7 +15,7 @@ import { random } from 'lodash-es';
 import Drop from '@/modules/vue-drag-drop/Drop';
 
 export default {
-    name: "Stack",
+    name:       "Stack",
     components: {
         Card,
         Drop,
@@ -27,21 +27,20 @@ export default {
         };
     },
 
-    computed: {
+    methods: {
+        drop () {
+            this.overlay = false;
+        },
         style () {
             return `transform: rotate(${random(-5, 5, false)}deg) translateY(-50%) translateX(-50%);`;
         },
     },
 
-    methods: {
-        drop () {
-            this.overlay = false;
-        }
-    },
-
     mounted () {
         this.emitter.$on('stack::add-card', (Card) => {
-            this.cards = GameManager.CardsPile;
+            Card.style = this.style();
+
+            this.cards.push(Card);
         });
 
         this.emitter.$on('stack::remove-card', (Card) => {

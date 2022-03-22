@@ -5,9 +5,9 @@
 
             <game-log/>
 
-            <div class="opponents">
+            <opponents-wrapper>
                 <opponent v-for="(opponent, index) in opponents" :key="index"/>
-            </div>
+            </opponents-wrapper>
         </div>
 
         <stack/>
@@ -27,10 +27,12 @@ import GameManager from "../lib/Game/GameManager";
 import Opponent from "../components/Opponent";
 import Ruleset from "../lib/GameTypes/Pesten/Ruleset";
 import GameLog from "../components/GameLog";
+import OpponentsWrapper from '../components/OpponentsWrapper';
 
 export default {
     name:       "Pesten",
     components: {
+        OpponentsWrapper,
         GameLog,
         Opponent,
         GameData,
@@ -49,23 +51,23 @@ export default {
         },
 
         range (size, startAt = 0) {
-            console.log(size);
-
             return [...Array(size).keys()].map(i => i + startAt);
         },
     },
 
     data () {
         return {
-            opponents: 3,
+            opponents: null,
         };
     },
 
-    mounted () {
+    created() {
         this.opponents = this.range(
             parseInt(localStorage.getItem('opponents'))
         );
+    },
 
+    mounted () {
         if (!this.opponents || this.opponents.length < 1) {
             this.$router.replace({
                 name: 'GamePicker',

@@ -65,7 +65,7 @@ let GameManager = {
 
         let emitEvent = true;
 
-        if (Card) {
+        if (typeof Card !== 'undefined') {
             this.playedCards.push(Card);
             this.instance.emitter.$emit('stack::add-card', Card);
 
@@ -82,7 +82,6 @@ let GameManager = {
 
         if (emitEvent) {
             setTimeout(() => {
-                // @ts-ignore
                 this.instance.emitter.$emit('game::next-turn', this.turnFor);
             }, 1000);
         }
@@ -116,8 +115,6 @@ let GameManager = {
     registerPlayer (player) {
         this.playerCount += 1;
         this.players[this.playerCount] = player;
-
-        console.log(this.playerCount + ' players have been registered');
 
         return this.playerCount;
     },

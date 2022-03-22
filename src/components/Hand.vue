@@ -105,7 +105,6 @@ export default {
                     return;
                 }
 
-                console.log(this.cards);
                 let playableCards = filter(this.cards, Card => {
                     return GameManager.Ruleset.cardIsPlayable(Card);
                 });
@@ -134,9 +133,7 @@ export default {
                 let cards = await Cards.take(data.amount);
 
                 if (cards.length) {
-                    forEach(cards, card => {
-                        this.cards.push(card);
-                    });
+                    this.cards = this.cards.concat(cards);
 
                     this.emitter.$emit('Player ' + this.playerId + ' draws ' + data.amount + ' cards');
                 }
@@ -162,7 +159,6 @@ export default {
     justify-content: center;
     width: max-content;
 
-    /*
     &.can-play {
         &:after {
             border: 10px solid #3bffd1;
@@ -178,7 +174,6 @@ export default {
             transition: all 1s;
         }
     }
-     */
 
     .card {
         margin: 0 -50px;

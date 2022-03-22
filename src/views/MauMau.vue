@@ -5,9 +5,9 @@
 
             <game-log/>
 
-            <div class="opponents">
+            <opponents-wrapper>
                 <opponent v-for="(opponent, index) in opponents" :key="index"/>
-            </div>
+            </opponents-wrapper>
         </div>
 
         <stack/>
@@ -25,12 +25,14 @@ import DrawStack from "../components/DrawStack";
 import GameData from "../components/GameData";
 import GameManager from "../lib/Game/GameManager";
 import Opponent from "../components/Opponent";
-import Ruleset from "../lib/GameTypes/MauMau/Ruleset";
+import Ruleset from "../lib/GameTypes/Pesten/Ruleset";
 import GameLog from "../components/GameLog";
+import OpponentsWrapper from '../components/OpponentsWrapper';
 
 export default {
     name:       "MauMau",
     components: {
+        OpponentsWrapper,
         GameLog,
         Opponent,
         GameData,
@@ -39,27 +41,44 @@ export default {
         Hand
     },
     methods:    {
-        setup () {
+        async setup () {
             Cards.get(true, true);
-            GameManager.setup(this, Ruleset);
+            await GameManager.setup(this, Ruleset);
 
-            GameManager.startGame();
+            setTimeout(() => {
+                GameManager.startGame();
+            }, 1000);
+        },
+
+        range (size, startAt = 0) {
+            console.log(size);
+
+            return [...Array(size).keys()].map(i => i + startAt);
         },
     },
+
     data () {
         return {
-            hand:      [],
-            opponents: 3
+            opponents: 3,
         };
     },
 
     mounted () {
-        this.opponents = localStorage.getItem('opponents');
+        this.opponents = this.range(
+            parseInt(localStorage.getItem('opponents'))
+        );
+
+        if (!this.opponents || this.opponents.length < 1) {
+            this.$router.replace({
+                name: 'GamePicker',
+            });
+        }
+
         this.setup();
     }
 };
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/games/MauMau";
+@import "../styles/games/Pesten";
 </style>
