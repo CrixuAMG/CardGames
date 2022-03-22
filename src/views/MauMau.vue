@@ -51,27 +51,33 @@ export default {
 
             setTimeout(() => {
                 GameManager.startGame();
+
+                this.emitter.$emit('toast::add', {
+                    text:     'Welkom! Het spel is begonnen!',
+                    position: 'top-center',
+                    canClose: true,
+                });
             }, 1000);
         },
 
         range (size, startAt = 0) {
-            console.log(size);
-
             return [...Array(size).keys()].map(i => i + startAt);
         },
     },
 
     data () {
         return {
-            opponents: 3,
+            opponents: null,
         };
     },
 
-    mounted () {
+    created () {
         this.opponents = this.range(
             parseInt(localStorage.getItem('opponents'))
         );
+    },
 
+    mounted () {
         if (!this.opponents || this.opponents.length < 1) {
             this.$router.replace({
                 name: 'GamePicker',
@@ -84,5 +90,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/games/Pesten";
+@import "../styles/games/MauMau";
 </style>

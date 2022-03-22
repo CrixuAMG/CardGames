@@ -10,10 +10,13 @@ import { ref } from 'vue';
 export default {
     name: "ToastWrapper",
     setup () {
-        const toastsPerformed = ref([]);
+        const toastsPerformed = ref('toasts');
 
         eventHub.$on('toast::add', (options) => {
-            toastsPerformed.value.push(new Toast(options));
+            toastsPerformed.value = [
+                ...toastsPerformed.value,
+                new Toast(options),
+            ];
         });
 
         return {
@@ -38,6 +41,16 @@ export default {
         display: flex;
         flex-flow: column nowrap;
         gap: 1rem;
+        transition: transform 300ms ease-in-out;
+        overflow: hidden;
+
+        &[data-position="top-center"] .toast {
+            transform: translateY(-100vh);
+        }
+
+        &[data-position="bottom-center"] .toast {
+            transform: translateY(100vh);
+        }
 
         &[data-position^="top"] {
             top: 0;
@@ -49,10 +62,18 @@ export default {
 
         &[data-position$="-right"] {
             right: 0;
+
+            .toast {
+                transform: translateX(110%);
+            }
         }
 
         &[data-position$="-left"] {
             left: 0;
+
+            .toast {
+                transform: translateX(-110%);
+            }
         }
 
         &[data-position$="-center"] {
@@ -80,6 +101,10 @@ export default {
                 inset: 0.75rem 0.75rem auto auto;
                 height: max-content;
                 line-height: 0.7;
+            }
+
+            &.show {
+                transform: translate(0, 0);
             }
 
             &.progress::before {
