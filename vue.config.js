@@ -1,6 +1,6 @@
 module.exports = {
     outputDir:  'dist',
-    publicPath: '/CardGames/',
+    // publicPath: '/CardGames/',
     devServer:  {
         host: 'cardgames.test',
     },
