@@ -8,10 +8,18 @@ export function useDataStoreRef (key, value) {
 
                 const localStorageValue = localStorage.getItem(key);
                 if (localStorageValue) {
-                    return JSON.parse(localStorageValue) || [];
+                    return JSON.parse(localStorageValue) || value;
+                }
+                
+                let dataStoreValue = value;
+
+                if (typeof value === 'object' || Array.isArray(value)) {
+                    dataStoreValue = JSON.stringify(value);
                 }
 
-                return localStorage.setItem(key, value) || [];
+                localStorage.setItem(key, dataStoreValue);
+                
+                return value;
             },
             set (newValue) {
                 let dataStoreValue = newValue;
