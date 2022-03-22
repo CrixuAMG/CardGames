@@ -11,7 +11,10 @@ let Ruleset = {
 
     beforeTurn: (Player) => {
         if (!Player.cards.length) {
-            console.log('PLAYER ' + Player.playerId + ' WON THE GAME!!');
+            GameManager.instance.emitter.$emit('toast::add', {
+                text:     `Player ${Player.playerId} won the game!`,
+                canClose: false,
+            });
 
             return false;
         }

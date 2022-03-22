@@ -15,24 +15,32 @@ export default {
         return {
             playerId: null,
             canPlay:  false,
-            cards:    []
+            cards:    [],
+            paused:   false,
         };
     },
 
     watch: {
-        canPlay (newValue) {
-            if (newValue) {
+        canPlay () {
+            if (!this.paused && this.canPlay) {
                 this.playCard();
             }
-        }
+        },
+        paused () {
+            if (!this.paused && this.canPlay) {
+                this.playCard();
+            }
+        },
     },
 
     methods: {
         playCard () {
             const cards = cloneDeep(this.cards);
             if (!cards.length) {
-                console.log(`Player ${this.playerId} won the game!`);
-                GameManager.instance.emitter.$emit(`Player ${this.playerId} won the game!`);
+                GameManager.instance.emitter.$emit('toast::add', {
+                    text:     `Player ${this.playerId} won the game!`,
+                    canClose: false,
+                });
 
                 return;
             }

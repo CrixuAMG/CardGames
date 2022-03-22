@@ -1,7 +1,9 @@
 <template>
     <div class="stack">
         <div class="stack-cards-wrapper">
-            <card v-for="(card, index) in cards" :key="index" :card="card" :style="card.style"/>
+            <template v-if="cards.length">
+                <card v-for="(card, index) in cards" :key="index" :card="card" :style="card.style"/>
+            </template>
         </div>
 
         <drop id="stack-dropzone" :class="{overlay: overlay}" @dragend="drop"
@@ -23,7 +25,7 @@ export default {
     data () {
         return {
             overlay: false,
-            cards:   []
+            cards:   [],
         };
     },
 

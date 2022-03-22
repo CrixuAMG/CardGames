@@ -134,9 +134,9 @@
         }
 
         .mark-2 {
-            bottom: 105px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%) translateY(-50%);
         }
 
         .mark-3 {
@@ -244,45 +244,45 @@
 
     &.card-7 .card-middle-mark {
         .mark-1 {
-            top: 55px;
+            top: 25px;
             left: 25%;
             transform: translateX(-25%);
         }
 
         .mark-2 {
-            bottom: 55px;
+            bottom: 25px;
             left: 25%;
             transform: translateX(-25%);
         }
 
         .mark-3 {
-            top: 55px;
+            top: 25px;
             left: 75%;
             transform: translateX(-75%);
         }
 
         .mark-4 {
-            bottom: 55px;
+            bottom: 25px;
             left: 75%;
             transform: translateX(-75%);
         }
 
         .mark-5 {
-            left: 15%;
+            left: 25%;
             top: 50%;
-            transform: translateY(-50%) translateX(-15%);
+            transform: translateY(-50%) translateX(-25%);
         }
 
         .mark-6 {
-            left: 85%;
+            left: 75%;
             top: 50%;
-            transform: translateY(-50%) translateX(-85%);
+            transform: translateY(-50%) translateX(-75%);
         }
 
         .mark-7 {
             left: 50%;
-            top: 50%;
-            transform: translateY(-50%) translateX(-50%);
+            top: 25%;
+            transform: translateY(-10%) translateX(-50%);
         }
     }
 
@@ -338,61 +338,61 @@
 
     &.card-9 .card-middle-mark {
         div[class^="mark"] * {
-            font-size: 56px;
+            font-size: 50px;
         }
 
         .mark-1 {
-            top: 45px;
-            left: 15%;
-            transform: translateX(-15%);
-        }
+             top: 15px;
+             left: 25%;
+             transform: translateX(-25%);
+         }
 
         .mark-2 {
-            top: 45px;
-            left: 85%;
-            transform: translateX(-85%);
+            bottom: 15px;
+            left: 25%;
+            transform: translateX(-25%);
         }
 
         .mark-3 {
-            bottom: 45px;
-            left: 15%;
-            transform: translateX(-15%);
+            top: 15px;
+            left: 75%;
+            transform: translateX(-75%);
         }
 
         .mark-4 {
-            bottom: 45px;
-            left: 85%;
-            transform: translateX(-85%);
+            bottom: 15px;
+            left: 75%;
+            transform: translateX(-75%);
         }
 
         .mark-5 {
-            left: 15%;
+            left: 25%;
             top: 50%;
-            transform: translateY(-50%) translateX(-15%);
+            transform: translateY(-100%) translateX(-25%);
         }
 
         .mark-6 {
-            left: 85%;
+            left: 75%;
             top: 50%;
-            transform: translateY(-50%) translateX(-85%);
+            transform: translateY(-100%) translateX(-75%);
         }
 
         .mark-7 {
-            left: 50%;
-            top: 45px;
-            transform: translateX(-50%);
-        }
-
-        .mark-8 {
             left: 50%;
             top: 50%;
             transform: translateY(-50%) translateX(-50%);
         }
 
+        .mark-8 {
+            left: 25%;
+            top: 50%;
+            transform: translateX(-25%);
+        }
+
         .mark-9 {
-            left: 50%;
-            bottom: 45px;
-            transform: translateX(-50%);
+            left: 75%;
+            top: 50%;
+            transform: translateX(-75%);
         }
     }
 
@@ -428,13 +428,13 @@
         .mark-5 {
             left: 25%;
             top: 50%;
-            transform: translateY(-80%) translateX(-25%);
+            transform: translateY(-90%) translateX(-25%);
         }
 
         .mark-6 {
             left: 75%;
             top: 50%;
-            transform: translateY(-80%) translateX(-75%);
+            transform: translateY(-90%) translateX(-75%);
         }
 
         .mark-7 {

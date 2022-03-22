@@ -16,12 +16,20 @@ export default {
     components: { Card },
     watch:      {
         canPlay (newValue) {
-            this.canDrag = newValue;
-        }
+            if (newValue && !this.paused) {
+                this.canDrag = newValue;
+            }
+        },
+        paused (newValue) {
+            if (!newValue && this.canPlay) {
+                this.canDrag = true;
+            }
+        },
     },
     data () {
         return {
             alias:              'Player',
+            paused:             false,
             canPlay:            false,
             canDrag:            false,
             draggingCardObject: null,
@@ -99,8 +107,10 @@ export default {
 
             if (this.canPlay) {
                 if (!this.cards.length) {
-                    console.log(`Player ${this.playerId} won the game!`);
-                    GameManager.instance.emitter.$emit(`Player ${this.playerId} won the game!`);
+                    GameManager.instance.emitter.$emit('toast::add', {
+                        text:     `Player ${this.playerId} won the game!`,
+                        canClose: false,
+                    });
 
                     return;
                 }

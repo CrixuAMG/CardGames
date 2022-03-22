@@ -1,5 +1,5 @@
 import Cards from "@/lib/Cards/Cards";
-import { filter } from 'lodash-es';
+import { filter, forEach } from 'lodash-es';
 
 let GameManager = {
     turnCounter:   0,
@@ -12,6 +12,7 @@ let GameManager = {
     Ruleset:       {},
     playedCards:   [],
     players:       [],
+    paused:        false,
 
     registerEventHandlers () {
         this.instance.emitter.$on('stack::add-card', (Card) => {
@@ -116,10 +117,12 @@ let GameManager = {
         this.playerCount += 1;
         this.players[this.playerCount] = player;
 
+        this.players = this.players.filter(player => !!player);
+
         return this.playerCount;
     },
 
-    getPlayerAlias() {
+    getPlayerAlias () {
         if (this.turnFor === null) {
             return '';
         }
@@ -127,6 +130,14 @@ let GameManager = {
         const player = this.players?.[this.turnFor];
 
         return player?.alias || `Opponent ${this.turnFor}`;
+    },
+
+    pause(isPaused) {
+        this.paused = isPaused;
+
+        forEach(this.players, player => {
+            player.paused = this.paused;
+        });
     },
 };
 

@@ -50,7 +50,7 @@ export default {
             }
 
             return 1;
-        }
+        },
     },
     methods:    {
         drag (card, event) {

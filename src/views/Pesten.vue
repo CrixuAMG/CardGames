@@ -1,20 +1,22 @@
 <template>
-    <div class="pesten">
-        <div class="d-flex flex-row justify-between">
-            <game-data/>
+    <game-view>
+        <div class="pesten">
+            <div class="d-flex flex-row justify-between">
+                <game-data/>
 
-            <game-log/>
+                <game-log/>
 
-            <opponents-wrapper>
-                <opponent v-for="(opponent, index) in opponents" :key="index"/>
-            </opponents-wrapper>
+                <opponents-wrapper>
+                    <opponent v-for="(opponent, index) in opponents" :key="index"/>
+                </opponents-wrapper>
+            </div>
+
+            <stack/>
+            <draw-stack/>
+
+            <hand/>
         </div>
-
-        <stack/>
-        <draw-stack/>
-
-        <hand/>
-    </div>
+    </game-view>
 </template>
 
 <script>
@@ -28,10 +30,12 @@ import Opponent from "../components/Opponent";
 import Ruleset from "../lib/GameTypes/Pesten/Ruleset";
 import GameLog from "../components/GameLog";
 import OpponentsWrapper from '../components/OpponentsWrapper';
+import GameView from './Wrappers/GameView';
 
 export default {
     name:       "Pesten",
     components: {
+        GameView,
         OpponentsWrapper,
         GameLog,
         Opponent,
@@ -47,6 +51,12 @@ export default {
 
             setTimeout(() => {
                 GameManager.startGame();
+
+                this.emitter.$emit('toast::add', {
+                    text:     'Welkom! Het spel is begonnen!',
+                    position: 'top-center',
+                    canClose: true,
+                });
             }, 1000);
         },
 
@@ -61,7 +71,7 @@ export default {
         };
     },
 
-    created() {
+    created () {
         this.opponents = this.range(
             parseInt(localStorage.getItem('opponents'))
         );

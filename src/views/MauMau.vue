@@ -1,20 +1,22 @@
 <template>
-    <div class="mau-mau">
-        <div class="d-flex flex-row justify-between">
-            <game-data/>
+    <game-view>
+        <div class="mau-mau">
+            <div class="d-flex flex-row justify-between">
+                <game-data/>
 
-            <game-log/>
+                <game-log/>
 
-            <opponents-wrapper>
-                <opponent v-for="(opponent, index) in opponents" :key="index"/>
-            </opponents-wrapper>
+                <opponents-wrapper>
+                    <opponent v-for="(opponent, index) in opponents" :key="index"/>
+                </opponents-wrapper>
+            </div>
+
+            <stack/>
+            <draw-stack/>
+
+            <hand/>
         </div>
-
-        <stack/>
-        <draw-stack/>
-
-        <hand/>
-    </div>
+    </game-view>
 </template>
 
 <script>
@@ -28,10 +30,12 @@ import Opponent from "../components/Opponent";
 import Ruleset from "../lib/GameTypes/Pesten/Ruleset";
 import GameLog from "../components/GameLog";
 import OpponentsWrapper from '../components/OpponentsWrapper';
+import GameView from './Wrappers/GameView';
 
 export default {
     name:       "MauMau",
     components: {
+        GameView,
         OpponentsWrapper,
         GameLog,
         Opponent,
