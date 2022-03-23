@@ -48,16 +48,12 @@ export default {
             let playableCards = filter(cards, Card => GameManager.Ruleset.cardIsPlayable(Card));
 
             if (!playableCards.length) {
-                console.log('OPPONENT ' + this.playerId + ' CANNOT PLAY ANY CARDS');
-                GameManager.instance.emitter.$emit('OPPONENT ' + this.playerId + ' CANNOT PLAY ANY CARDS');
-
                 let cardsTakenFromPile = GameManager.Cards.take(1);
 
                 if (cardsTakenFromPile) {
                     this.emitter.$emit('Player ' + this.playerId + ' draws ' + cardsTakenFromPile.length + ' cards');
 
                     forEach(cardsTakenFromPile, card => {
-                        console.log(card);
                         cards.push(card);
                     });
                 }

@@ -28,8 +28,7 @@ let Ruleset = {
 
         if (lastPlayedCard) {
             if (lastPlayedCard.value === 2) {
-                console.log(Player.playerId + ' plays a DRAW TWO!');
-                logEvent = { message: Player.playerId + ' plays a DRAW TWO!' };
+                logEvent = { message: GameManager.getPlayerAlias() + ' plays a DRAW TWO!' };
                 GameManager.instance.emitter.$emit('log', logEvent);
 
                 GameManager.instance.emitter.$emit('cards::draw-cards-from-deck', {
@@ -38,11 +37,18 @@ let Ruleset = {
                                 : Player.playerId + 1,
                     amount: 2
                 });
+
+                if (GameManager.currentPlayer()?.isHumanPlayer) {
+                    GameManager.instance.emitter.$emit('toast::add', {
+                        text:     '2! Trek 2 kaarten!',
+                        position: 'top-center',
+                        canClose: true,
+                    });
+                }
             }
 
             if (lastPlayedCard.value === 8) {
-                console.log(Player.playerId + ' plays a SKIP!');
-                logEvent = { message: Player.playerId + ' plays a SKIP!' };
+                logEvent = { message: GameManager.getPlayerAlias() + ' plays a SKIP!' };
                 GameManager.instance.emitter.$emit('log', logEvent);
 
                 GameManager.nextTurn();
@@ -51,8 +57,7 @@ let Ruleset = {
             }
 
             if (lastPlayedCard.value === 14 || lastPlayedCard.value === 7) {
-                console.log(Player.playerId + ' can play again!');
-                logEvent = { message: Player.playerId + ' can play again!' };
+                logEvent = { message: GameManager.getPlayerAlias() + ' can play again!' };
                 GameManager.instance.emitter.$emit('log', logEvent);
 
                 if (GameManager.turnDirection === 'ASC') {
@@ -73,16 +78,14 @@ let Ruleset = {
             }
 
             if (lastPlayedCard.value === 1) {
-                console.log(Player.playerId + ' plays a REVERSE!');
-                logEvent = { message: Player.playerId + ' plays a REVERSE!' };
+                logEvent = { message: GameManager.getPlayerAlias() + ' plays a REVERSE!' };
                 GameManager.instance.emitter.$emit('log', logEvent);
 
                 GameManager.reverseDirection();
             }
 
             if (lastPlayedCard.value === 'JOKER') {
-                console.log(Player.playerId + ' plays a JOKER!');
-                logEvent = { message: Player.playerId + ' plays a JOKER!' };
+                logEvent = { message: GameManager.getPlayerAlias() + ' plays a JOKER!' };
                 GameManager.instance.emitter.$emit('log', logEvent);
 
                 GameManager.instance.emitter.$emit('cards::draw-cards-from-deck', {
@@ -91,6 +94,14 @@ let Ruleset = {
                                 : Player.playerId + 1,
                     amount: 5
                 });
+
+                if (GameManager.currentPlayer()?.isHumanPlayer) {
+                    GameManager.instance.emitter.$emit('toast::add', {
+                        text:     'JOKER! Trek 5 kaarten!',
+                        position: 'top-center',
+                        canClose: true,
+                    });
+                }
             }
         }
 

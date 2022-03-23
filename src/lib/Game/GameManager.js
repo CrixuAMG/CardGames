@@ -97,8 +97,6 @@ let GameManager = {
     },
 
     startGame () {
-        console.log('START GAME');
-
         this.instance.emitter.$emit('cards::build::draw-stack');
 
         for (let player = 1; player <= this.playerCount; player++) {
@@ -122,17 +120,19 @@ let GameManager = {
         return this.playerCount;
     },
 
-    getPlayerAlias () {
+    currentPlayer () {
         if (this.turnFor === null) {
-            return '';
+            return {};
         }
 
-        const player = this.players?.[this.turnFor];
-
-        return player?.alias || `Opponent ${this.turnFor}`;
+        return this.players?.[this.turnFor - 1];
     },
 
-    pause(isPaused) {
+    getPlayerAlias () {
+        return this.currentPlayer()?.alias || `Opponent ${this.turnFor}`;
+    },
+
+    pause (isPaused) {
         this.paused = isPaused;
 
         forEach(this.players, player => {

@@ -1,8 +1,10 @@
 <template>
     <div :id="`player-${playerId}`" :class="{'can-play': canPlay}" class="hand">
-        <card v-for="(card, index) in cards" :card="card" :draggable="canPlayCard(card)" :key="index"
-              :style="style(index)" @drag="draggingCard(card, index)" @dragend="dragend(card, $event)"
-              @click.native="playCard(card)"/>
+        <span v-for="(card, index) in cards" :key="index">
+            <card :card="card" :draggable="canPlayCard(card)" @click.native="playCard(card)"
+                  :style="style(index)" @drag="draggingCard(card, index)" @dragend="dragend(card, $event)"
+                  :class="{'from-deck': card.isFromDeck}"/>
+        </span>
     </div>
 </template>
 
@@ -35,7 +37,8 @@ export default {
             canDrag:            false,
             draggingCardObject: null,
             playerId:           null,
-            cards:              []
+            cards:              [],
+            isHumanPlayer:      true,
         };
     },
     methods: {
@@ -52,9 +55,9 @@ export default {
             let style = `transform: rotate(${degreesToRotate}deg);`;
 
             if (this.cards.length >= 8 && this.cards.length < 10) {
-                style += ` margin: 0 -60px`;
+                style += ` margin: 0 -6rem`;
             } else {
-                style += ` margin: 0 -80px`;
+                style += ` margin: 0 -8rem`;
             }
 
             return style;
@@ -67,14 +70,11 @@ export default {
             this.canDrag            = false;
             this.draggingCardObject = Card;
 
-            console.log('DRAGGING ' + Card.name + ' of ' + Card.suit + 's');
             // this.$emit('remove', Card);
         },
         dragend (Card, event) {
             this.canDrag            = true;
             this.draggingCardObject = null;
-
-            console.log(event);
 
             if (event?.dataTransfer?.dropEffect === 'none') {
                 // this.$emit('add', Card);
@@ -121,9 +121,6 @@ export default {
                 });
 
                 if (!playableCards.length) {
-                    console.log('PLAYER ' + this.playerId + ' CANNOT PLAY ANY CARDS');
-                    GameManager.instance.emitter.$emit('Player ' + this.playerId + ' CANNOT PLAY ANY CARDS');
-
                     let cards = GameManager.Cards.take(1);
 
                     this.emitter.$emit('Player ' + this.playerId + ' draws ' + cards.length + ' cards');
@@ -144,7 +141,14 @@ export default {
                 let cards = await Cards.take(data.amount);
 
                 if (cards.length) {
-                    this.cards = this.cards.concat(cards);
+                    const hasAlreadyDrawnCards = this.cards.length > 0;
+                    this.cards                 = this.cards.concat(cards.map(card => {
+                        if (hasAlreadyDrawnCards) {
+                            card.isFromDeck = true;
+                        }
+
+                        return card;
+                    }));
 
                     this.emitter.$emit('Player ' + this.playerId + ' draws ' + data.amount + ' cards');
                 }
@@ -170,28 +174,72 @@ export default {
     justify-content: center;
     width: max-content;
 
+    &:after {
+        content: '';
+        transition: all 1s;
+        bottom: -2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% + 15rem);
+        position: absolute;
+        height: calc(100% + 4rem);
+        z-index: -1;
+        clip-path: circle(22% 0, 84% 0, 100% 40%, 84% 100%, 22% 100%, 0 40%);
+        filter: blur(10rem);
+        background-color: transparent;
+    }
+
     &.can-play {
+        $animationDuration: 6s;
+
         &:after {
-            border: 10px solid #3bffd1;
-            border-radius: 15px;
-            content: '';
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: calc(100% + 250px);
-            position: absolute;
-            height: calc(100% + 0px);
-            z-index: -1;
-            transition: all 1s;
+            background-color: #fff;
+            animation-name: fadeInOut;
+            animation-duration: $animationDuration;
+            animation-iteration-count: infinite;
+            animation-delay: $animationDuration;
+
+            @keyframes fadeInOut {
+                0% {
+                    background-color: rgba(255, 255, 255, 1);
+                }
+                50% {
+                    background-color: rgba(255, 255, 255, 0);
+                }
+                100% {
+                    background-color: rgba(255, 255, 255, 1);
+                }
+            }
+        }
+
+        .card {
+            &:hover {
+                transform: rotate(0deg) translateY(-80px) scale(1.1) !important;
+                z-index: 999;
+            }
         }
     }
 
     .card {
         margin: 0 -50px;
+        transition: all 0.3s ease-in-out;
+        transform: inherit;
 
-        &:hover {
-            transform: rotate(0deg) translateY(-80px) scale(1.1) !important;
-            z-index: 999;
+        &.from-deck {
+            animation: card;
+            animation-duration: 0.5s;
+
+            @keyframes card {
+                from {
+                    transform: translateX(-50%) translateY(-100px);
+                }
+                50% {
+                    transform: translateX(-50%) translateY(10vh);
+                }
+                to {
+                    transform: unset;
+                }
+            }
         }
     }
 }

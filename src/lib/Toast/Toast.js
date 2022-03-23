@@ -34,6 +34,7 @@ export default class Toast {
         this.#visibilityChange = () => {
             this.#shouldunpause = document.visibilityState === "visible";
         };
+        console.log({ ...DEFAULT_OPTIONS, ...options });
         this.update({ ...DEFAULT_OPTIONS, ...options });
 
         return this;

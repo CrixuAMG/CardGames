@@ -9,6 +9,21 @@
 
         .card {
             position: absolute;
+            transition: all 0.3s ease-in;
+            transform: inherit;
+            z-index: 0;
+
+            animation: card;
+            animation-duration: 0.5s;
+
+            @keyframes card {
+                from {
+                    transform: translateX(calc(-50% + 100px)) translateY(calc(-50% + -10px)) rotate(10deg);
+                }
+                to {
+                    transform: inherit;
+                }
+            }
         }
     }
 
