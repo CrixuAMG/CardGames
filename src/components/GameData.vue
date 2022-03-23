@@ -21,7 +21,7 @@
                 Turn for:
             </div>
             <div class="game-data-data">
-                {{ turnForText() }}
+                {{ turnForText }}
             </div>
         </div>
     </div>
@@ -36,13 +36,9 @@ export default {
         return {
             cardsRemaining: null,
             turnCounter:    null,
-            turnFor:        null
+            turnFor:        null,
+            turnForText:    null,
         };
-    },
-    methods: {
-        turnForText () {
-            return GameManager.getPlayerAlias();
-        },
     },
     mounted () {
         this.emitter.$on('game::recalculate:deck-remaining', () => {
@@ -56,6 +52,7 @@ export default {
         this.emitter.$on('game::next-turn', () => {
             this.turnCounter = GameManager.turnCounter;
             this.turnFor     = GameManager.turnFor;
+            this.turnForText = GameManager.getPlayerAlias();
         });
     }
 };

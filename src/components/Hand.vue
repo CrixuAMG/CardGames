@@ -10,6 +10,7 @@
 import GameManager from '@/lib/Game/GameManager';
 import Card from "./Card";
 import { filter, forEach } from 'lodash-es';
+import { inject } from 'vue';
 
 export default {
     name:       "Hand",
@@ -28,7 +29,7 @@ export default {
     },
     data () {
         return {
-            alias:              'Player',
+            alias:              inject('username'),
             paused:             false,
             canPlay:            false,
             canDrag:            false,

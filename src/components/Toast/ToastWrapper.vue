@@ -10,7 +10,7 @@ import { ref } from 'vue';
 export default {
     name: "ToastWrapper",
     setup () {
-        const toastsPerformed = ref('toasts');
+        const toastsPerformed = ref([]);
 
         eventHub.$on('toast::add', (options) => {
             toastsPerformed.value = [

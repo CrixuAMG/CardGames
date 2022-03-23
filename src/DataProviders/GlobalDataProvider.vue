@@ -3,8 +3,16 @@
 </template>
 
 <script>
+import { useDataStoreRef } from '../CustomRefs/DataStoreRef';
+import { provide } from 'vue';
+
 export default {
-    name: "GlobalDataProvider"
+    name: "GlobalDataProvider",
+    setup () {
+        const username = useDataStoreRef('username', null);
+
+        provide('username', username);
+    },
 };
 </script>
 

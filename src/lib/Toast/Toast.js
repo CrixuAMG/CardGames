@@ -10,120 +10,122 @@ const DEFAULT_OPTIONS = {
 };
 
 export default class Toast {
-    toastElement;
-    autoCloseInterval;
-    progressInterval;
-    removeBinded;
-    autoClose;
-    unpause;
-    pause;
-    visibilityChange;
-    shouldUnPause;
-    timeVisible = 0;
-    isPaused    = false;
+    #toastElement;
+    #autoCloseInterval;
+    #progressInterval;
+    #removeBinded;
+    #autoClose;
+    #unpause;
+    #pause;
+    #visibilityChange;
+    #shouldunpause;
+    #timeVisible = 0;
+    #ispaused    = false;
 
     constructor (options) {
-        this.toastElement = document.createElement("div");
-        this.toastElement.classList.add("toast");
+        this.#toastElement = document.createElement("div");
+        this.#toastElement.classList.add("toast");
         requestAnimationFrame(() => {
-            this.toastElement.classList.add("show");
+            this.#toastElement.classList.add("show");
         });
-        this.removeBinded     = this.remove.bind(this);
-        this.unpause          = () => (this.isPaused = false);
-        this.pause            = () => (this.isPaused = true);
-        this.visibilityChange = () => {
-            this.shouldUnPause = document.visibilityState === "visible";
+        this.#removeBinded     = this.remove.bind(this);
+        this.#unpause          = () => (this.#ispaused = false);
+        this.#pause            = () => (this.#ispaused = true);
+        this.#visibilityChange = () => {
+            this.#shouldunpause = document.visibilityState === "visible";
         };
         this.update({ ...DEFAULT_OPTIONS, ...options });
+
+        return this;
     }
 
     set autoClose (value) {
-        this.autoClose   = value;
-        this.timeVisible = 0;
+        this.#autoClose   = value;
+        this.#timeVisible = 0;
         if (value === false) return;
 
         let lastTime;
         const func = time => {
-            if (this.shouldUnPause) {
+            if (this.#shouldunpause) {
                 lastTime           = null;
-                this.shouldUnPause = false;
+                this.#shouldunpause = false;
             }
             if (lastTime == null) {
                 lastTime               = time;
-                this.autoCloseInterval = requestAnimationFrame(func);
+                this.#autoCloseInterval = requestAnimationFrame(func);
                 return;
             }
-            if (!this.isPaused) {
-                this.timeVisible += time - lastTime;
-                if (this.timeVisible >= this.autoClose) {
+            if (!this.#ispaused) {
+                this.#timeVisible += time - lastTime;
+                if (this.#timeVisible >= this.#autoClose) {
                     this.remove();
                     return;
                 }
             }
 
             lastTime               = time;
-            this.autoCloseInterval = requestAnimationFrame(func);
+            this.#autoCloseInterval = requestAnimationFrame(func);
         };
 
-        this.autoCloseInterval = requestAnimationFrame(func);
+        this.#autoCloseInterval = requestAnimationFrame(func);
     }
 
     set position (value) {
-        const currentContainer = this.toastElement.parentElement;
+        const currentContainer = this.#toastElement.parentElement;
         const selector         = `.toast-container[data-position="${value}"]`;
         const container        = document.querySelector(selector) || createContainer(value);
-        container.append(this.toastElement);
+        container.append(this.#toastElement);
         if (currentContainer == null || currentContainer.hasChildNodes()) return;
         currentContainer.remove();
     }
 
     set text (value) {
-        this.toastElement.textContent = value;
+        this.#toastElement.textContent = value;
     }
 
     set canClose (value) {
-        this.toastElement.classList.toggle("can-close", value);
+        this.#toastElement.classList.toggle("can-close", value);
         if (value) {
-            this.toastElement.addEventListener("click", this.removeBinded);
+            this.#toastElement.addEventListener("click", this.#removeBinded);
         } else {
-            this.toastElement.removeEventListener("click", this.removeBinded);
+            this.#toastElement.removeEventListener("click", this.#removeBinded);
         }
     }
 
     set showProgress (value) {
-        this.toastElement.classList.toggle("progress", value);
-        this.toastElement.style.setProperty("--progress", 1);
+        this.#toastElement.classList.toggle("progress", value);
+        this.#toastElement.style.setProperty("--progress", 1);
 
         if (value) {
             const func = () => {
-                if (!this.isPaused) {
-                    this.toastElement.style.setProperty(
+                if (!this.#ispaused) {
+                    this.#toastElement.style.setProperty(
                         "--progress",
-                        1 - this.timeVisible / this.autoClose
+                        1 - this.#timeVisible / this.#autoClose
                     );
                 }
-                this.progressInterval = requestAnimationFrame(func);
+                this.#progressInterval = requestAnimationFrame(func);
             };
 
-            this.progressInterval = requestAnimationFrame(func);
+            this.#progressInterval = requestAnimationFrame(func);
         }
     }
 
     set pauseOnHover (value) {
         if (value) {
-            this.toastElement.addEventListener("mouseover", this.pause);
-            this.toastElement.addEventListener("mouseleave", this.unpause);
+            this.#toastElement.addEventListener("mouseover", this.#pause);
+            this.#toastElement.addEventListener("mouseleave", this.#unpause);
         } else {
-            this.toastElement.removeEventListener("mouseover", this.pause);
-            this.toastElement.removeEventListener("mouseleave", this.unpause);
+            this.#toastElement.removeEventListener("mouseover", this.#pause);
+            this.#toastElement.removeEventListener("mouseleave", this.#unpause);
         }
     }
 
     set pauseOnFocusLoss (value) {
         if (value) {
-            document.addEventListener("visibilitychange", this.visibilityChange);
+            document.addEventListener("#visibilityChange", this.#visibilityChange);
         } else {
-            document.removeEventListener("visibilitychange", this.visibilityChange);
+            document.removeEventListener("#visibilityChange", this.#visibilityChange);
         }
     }
 
@@ -132,12 +134,12 @@ export default class Toast {
     }
 
     remove () {
-        cancelAnimationFrame(this.autoCloseInterval);
-        cancelAnimationFrame(this.progressInterval);
-        const container = this.toastElement.parentElement;
-        this.toastElement.classList.remove("show");
-        this.toastElement.addEventListener("transitionend", () => {
-            this.toastElement.remove();
+        cancelAnimationFrame(this.#autoCloseInterval);
+        cancelAnimationFrame(this.#progressInterval);
+        const container = this.#toastElement.parentElement;
+        this.#toastElement.classList.remove("show");
+        this.#toastElement.addEventListener("transitionend", () => {
+            this.#toastElement.remove();
             if (container.hasChildNodes()) return;
             container.remove();
         });
