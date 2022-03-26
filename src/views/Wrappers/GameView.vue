@@ -1,5 +1,6 @@
 <template>
     <div id="game-view">
+        <history-tracker/>
         <toast-wrapper/>
 
         <div id="game-template">
@@ -14,10 +15,12 @@
 import ToastWrapper from '../../components/Toast/ToastWrapper';
 import { onMounted, onUnmounted } from 'vue';
 import PauseMenu from '../../components/Game/PauseMenu';
+import HistoryTracker from '../../components/Game/HistoryTracker';
 
 export default {
     name:       "GameView",
     components: {
+        HistoryTracker,
         PauseMenu,
         ToastWrapper,
     },

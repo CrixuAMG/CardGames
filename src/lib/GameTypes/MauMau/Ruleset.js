@@ -32,7 +32,7 @@ let Ruleset = {
                 GameManager.instance.emitter.$emit('log', logEvent);
 
                 GameManager.instance.emitter.$emit('cards::draw-cards-from-deck', {
-                    player: Player.playerId >= GameManager.playerCount
+                    player: Player.playerId >= GameManager.playerCount - 1
                                 ? Player.playerId - 1
                                 : Player.playerId + 1,
                     amount: 2
@@ -59,7 +59,7 @@ let Ruleset = {
                         GameManager.turnFor -= 1;
                     }
                 } else {
-                    if (GameManager.turnFor + 1 > GameManager.playerCount) {
+                    if (GameManager.turnFor + 1 > GameManager.playerCount - 1) {
                         GameManager.turnFor = 1;
                     } else {
                         GameManager.turnFor += 1;
@@ -81,7 +81,7 @@ let Ruleset = {
                 GameManager.instance.emitter.$emit('log', logEvent);
 
                 GameManager.instance.emitter.$emit('cards::draw-cards-from-deck', {
-                    player: Player.playerId >= GameManager.playerCount
+                    player: Player.playerId >= GameManager.playerCount - 1
                                 ? Player.playerId - 1
                                 : Player.playerId + 1,
                     amount: 5

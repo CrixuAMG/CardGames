@@ -2,7 +2,7 @@ import { forEach } from 'lodash-es';
 
 const DEFAULT_OPTIONS = {
     autoClose:    2500,
-    position:     "top-right",
+    position:     "top-center",
     onClose:      () => {
     },
     canClose:     true,

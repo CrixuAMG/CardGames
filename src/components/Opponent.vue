@@ -1,12 +1,13 @@
 <template>
     <div :id="`player-${playerId}`" :class="{'turn-for': canPlay}" class="opponent">
-        OPPONENT {{ playerId }} ({{ cards.length }} cards)
+        {{ alias }} ({{ cards.length }} cards)
     </div>
 </template>
 
 <script>
 import GameManager from '@/lib/Game/GameManager';
 import { cloneDeep, filter, forEach, random } from 'lodash-es';
+import { faker } from '@faker-js/faker';
 
 export default {
     name: "Opponent",
@@ -17,6 +18,7 @@ export default {
             canPlay:  false,
             cards:    [],
             paused:   false,
+            alias:    null,
         };
     },
 
@@ -75,6 +77,8 @@ export default {
 
     created () {
         this.emitter.$on('game::has-been-setup', () => {
+            this.alias = faker.name.firstName();
+
             this.playerId = GameManager.registerPlayer(this);
         });
 

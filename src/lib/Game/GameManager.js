@@ -67,8 +67,7 @@ let GameManager = {
         let emitEvent = true;
 
         if (typeof Card !== 'undefined') {
-            this.playedCards.push(Card);
-            this.instance.emitter.$emit('stack::add-card', Card);
+            this.cardIsPlayed(Player, Card);
 
             if (typeof Player !== "undefined" && this.Ruleset.beforeTurn && typeof this.Ruleset.beforeTurn === 'function') {
                 emitEvent = this.Ruleset.beforeTurn(Player);
@@ -128,8 +127,8 @@ let GameManager = {
         return this.players?.[this.turnFor - 1];
     },
 
-    getPlayerAlias () {
-        return this.currentPlayer()?.alias || `Opponent ${this.turnFor}`;
+    getPlayerAlias (player) {
+        return player?.alias || this.currentPlayer()?.alias;
     },
 
     pause (isPaused) {
@@ -137,6 +136,15 @@ let GameManager = {
 
         forEach(this.players, player => {
             player.paused = this.paused;
+        });
+    },
+
+    cardIsPlayed (Player, Card) {
+        this.playedCards.push(Card);
+        this.instance.emitter.$emit('stack::add-card', Card);
+        this.instance.emitter.$emit('card::to-history', {
+            player: Player,
+            card:   Card
         });
     },
 };

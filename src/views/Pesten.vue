@@ -4,8 +4,6 @@
             <div class="d-flex flex-row justify-between">
                 <game-data/>
 
-                <game-log/>
-
                 <opponents-wrapper>
                     <opponent v-for="(opponent, index) in opponents" :key="index"/>
                 </opponents-wrapper>
@@ -28,7 +26,6 @@ import GameData from "../components/GameData";
 import GameManager from "../lib/Game/GameManager";
 import Opponent from "../components/Opponent";
 import Ruleset from "../lib/GameTypes/Pesten/Ruleset";
-import GameLog from "../components/GameLog";
 import OpponentsWrapper from '../components/OpponentsWrapper';
 import GameView from './Wrappers/GameView';
 
@@ -37,7 +34,6 @@ export default {
     components: {
         GameView,
         OpponentsWrapper,
-        GameLog,
         Opponent,
         GameData,
         DrawStack,
