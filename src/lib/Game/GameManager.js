@@ -40,34 +40,12 @@ let GameManager = {
     },
 
     nextTurn (Player, Card) {
-        if (typeof Player !== "undefined" && this.Ruleset.afterTurn && typeof this.Ruleset.afterTurn === 'function') {
-            this.Ruleset.afterTurn(Player);
-        }
-
-        if (this.turnFor === null) {
-            this.turnFor = 0;
-        }
-
-        if (this.turnDirection === 'ASC') {
-            if (this.turnFor + 1 > this.playerCount) {
-                this.turnFor = 1;
-            } else {
-                this.turnFor += 1;
-            }
-        } else {
-            if (this.turnFor - 1 < 1) {
-                this.turnFor = this.playerCount;
-            } else {
-                this.turnFor -= 1;
-            }
-        }
-
-        this.turnCounter += 1;
+        this.updateTurn();
 
         let emitEvent = true;
 
         if (typeof Card !== 'undefined') {
-            this.cardIsPlayed(Player, Card);
+            this.Ruleset.cardIsPlayed(Player, Card);
 
             if (typeof Player !== "undefined" && this.Ruleset.beforeTurn && typeof this.Ruleset.beforeTurn === 'function') {
                 emitEvent = this.Ruleset.beforeTurn(Player);
@@ -80,15 +58,23 @@ let GameManager = {
             this.Ruleset.deckIsEmpty(this.CardsPile);
         }
 
+        if (typeof Player !== "undefined" && typeof this.Ruleset.afterTurn === 'function') {
+            this.Ruleset.afterTurn(Player);
+        }
+
         if (emitEvent) {
             setTimeout(() => {
                 this.instance.emitter.$emit('game::next-turn', this.turnFor);
-            }, 1000);
+            }, 1500);
         }
     },
 
+    directionIsAscending () {
+        return this.turnDirection === 'ASC';
+    },
+
     reverseDirection () {
-        if (this.turnDirection === 'ASC') {
+        if (this.directionIsAscending()) {
             this.turnDirection = 'DESC';
         } else {
             this.turnDirection = 'ASC';
@@ -119,14 +105,6 @@ let GameManager = {
         return this.playerCount;
     },
 
-    currentPlayer () {
-        if (this.turnFor === null) {
-            return {};
-        }
-
-        return this.players?.[this.turnFor - 1];
-    },
-
     getPlayerAlias (player) {
         return player?.alias || this.currentPlayer()?.alias;
     },
@@ -139,16 +117,63 @@ let GameManager = {
         });
     },
 
-    cardIsPlayed (Player, Card) {
-        this.playedCards.push(Card);
-        this.instance.emitter.$emit('stack::add-card', Card);
-        this.instance.emitter.$emit('card::to-history', {
-            player: Player,
-            card:   Card
-        });
+    updateTurn () {
+        let turnFor = this.turnFor;
+        if (turnFor === null) {
+            turnFor = 0;
+        }
+
+        if (this.turnDirection === 'ASC') {
+            if (turnFor + 1 > this.playerCount) {
+                turnFor = 1;
+            } else {
+                turnFor += 1;
+            }
+        } else {
+            if (turnFor - 1 < 1) {
+                turnFor = this.playerCount;
+            } else {
+                turnFor -= 1;
+            }
+        }
+
+        this.turnFor = turnFor;
+    },
+
+    getPlayer (id) {
+        if (this.turnFor === null) {
+            return {};
+        }
+
+        return this.players?.[id];
+    },
+
+    currentPlayer () {
+        return this.getPlayer(this.turnFor - 1);
+    },
+
+    previousPlayer () {
+        let id = this.directionIsAscending() ? this.turnFor - 1 : this.turnFor + 1;
+        if (id > GameManager.playerCount) {
+            id = 0;
+        } else if (id < 0) {
+            id = GameManager.playerCount;
+        }
+
+        return this.getPlayer(id);
+    },
+
+    nextPlayer () {
+        let id = this.directionIsAscending() ? this.turnFor + 1 : this.turnFor - 1;
+        if (id > GameManager.playerCount) {
+            id = 0;
+        } else if (id < 0) {
+            id = GameManager.playerCount;
+        }
+
+        return this.getPlayer(id);
     },
 };
-
 
 window.GameManager = GameManager;
 

@@ -18,7 +18,7 @@
 
             @keyframes card {
                 from {
-                    transform: translateX(calc(-50% + 100px)) translateY(calc(-50% + -10px)) rotate(10deg);
+                    transform: translateX(calc(-50% - 100px)) translateY(calc(-50% + -10px)) rotate(10deg);
                 }
                 to {
                     transform: inherit;

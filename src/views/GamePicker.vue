@@ -35,8 +35,6 @@ export default {
             if (!element) return setTimeout(checkUsername, 100);
 
             if (!username.value) {
-                console.log('No username?!');
-
                 !element.open ? element.showModal() : undefined;
             }
         };
@@ -46,7 +44,7 @@ export default {
             deep:      true,
         });
 
-        const onDialogClose = (event) => {
+        const onDialogClose = () => {
             if (localUsername.value) {
                 username.value = localUsername.value;
             }

@@ -5,10 +5,6 @@ import { forEach, last, shuffle } from 'lodash-es';
 let Ruleset = {
     nextTurnOnDrawCardFromStack: false,
 
-    afterTurn: function (Player) {
-        return false;
-    },
-
     beforeTurn: (Player) => {
         if (!Player.cards.length) {
             GameManager.instance.emitter.$emit('toast::add', {
@@ -52,19 +48,7 @@ let Ruleset = {
                 logEvent = { message: GameManager.getPlayerAlias() + ' can play again!' };
                 GameManager.instance.emitter.$emit('log', logEvent);
 
-                if (GameManager.turnDirection === 'ASC') {
-                    if (GameManager.turnFor - 1 < 1) {
-                        GameManager.turnFor = GameManager.playerCount;
-                    } else {
-                        GameManager.turnFor -= 1;
-                    }
-                } else {
-                    if (GameManager.turnFor + 1 > GameManager.playerCount - 1) {
-                        GameManager.turnFor = 1;
-                    } else {
-                        GameManager.turnFor += 1;
-                    }
-                }
+                GameManager.updateTurn();
 
                 return true;
             }

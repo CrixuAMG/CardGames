@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Ruleset from "../lib/GameTypes/MauMau/Ruleset";
+import Ruleset from "../lib/GameTypes/Pesten/Ruleset";
 import { random } from 'lodash-es';
 
 export default {

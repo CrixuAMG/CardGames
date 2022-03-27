@@ -6,7 +6,7 @@
 
 <script>
 import GameManager from '@/lib/Game/GameManager';
-import { cloneDeep, filter, forEach, random } from 'lodash-es';
+import { cloneDeep, filter } from 'lodash-es';
 import { faker } from '@faker-js/faker';
 
 export default {
@@ -36,8 +36,9 @@ export default {
     },
 
     methods: {
-        playCard () {
+        async playCard () {
             const cards = cloneDeep(this.cards);
+
             if (!cards.length) {
                 GameManager.instance.emitter.$emit('toast::add', {
                     text:     `Player ${this.playerId} won the game!`,
@@ -47,32 +48,31 @@ export default {
                 return;
             }
 
-            let playableCards = filter(cards, Card => GameManager.Ruleset.cardIsPlayable(Card));
+            const Card = GameManager.Ruleset.cardToPlay(this, cards);
 
-            if (!playableCards.length) {
-                let cardsTakenFromPile = GameManager.Cards.take(1);
+            if (!Card) {
+                GameManager.instance.emitter.$emit('toast::add', {
+                    text: `${this.alias}: getting a new card from the stack!`,
+                });
+                let cards = await Cards.take(1);
 
-                if (cardsTakenFromPile) {
-                    this.emitter.$emit('Player ' + this.playerId + ' draws ' + cardsTakenFromPile.length + ' cards');
+                this.cards = this.cards.concat(cards);
 
-                    forEach(cardsTakenFromPile, card => {
-                        cards.push(card);
-                    });
+                if (!GameManager.Ruleset.nextTurnOnDrawCardFromStack) {
+                    setTimeout(() => {
+                        this.playCard();
+                    }, 1500);
                 }
-
-                GameManager.nextTurn(this);
 
                 return;
             }
-
-            let Card = playableCards[random(0, playableCards.length - 1)];
 
             this.cards = filter(cards, cardInHand => cardInHand.isNot(Card))
                 .filter(cardInHand => !!cardInHand);
 
             this.canPlay = false;
             GameManager.nextTurn(this, Card);
-        }
+        },
     },
 
     created () {

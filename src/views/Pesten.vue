@@ -38,7 +38,7 @@ export default {
         GameData,
         DrawStack,
         Stack,
-        Hand
+        Hand,
     },
     methods:    {
         async setup () {
@@ -48,10 +48,8 @@ export default {
             setTimeout(() => {
                 GameManager.startGame();
 
-                this.emitter.$emit('toast::add', {
+                GameManager.instance.emitter.$emit('toast::add', {
                     text:     'Welkom! Het spel is begonnen!',
-                    position: 'top-center',
-                    canClose: true,
                 });
             }, 1000);
         },

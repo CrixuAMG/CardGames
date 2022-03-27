@@ -1,13 +1,9 @@
 import Cards from '@/lib/Cards/Cards';
 import GameManager from '@/lib/Game/GameManager';
-import { forEach, last, shuffle } from 'lodash-es';
+import { cloneDeep, filter, forEach, last, random, shuffle } from 'lodash-es';
 
 let Ruleset = {
     nextTurnOnDrawCardFromStack: false,
-
-    afterTurn: function (Player) {
-        return false;
-    },
 
     beforeTurn: (Player) => {
         if (!Player.cards.length) {
@@ -41,8 +37,6 @@ let Ruleset = {
                 if (GameManager.currentPlayer()?.isHumanPlayer) {
                     GameManager.instance.emitter.$emit('toast::add', {
                         text:     '2! Trek 2 kaarten!',
-                        position: 'top-center',
-                        canClose: true,
                     });
                 }
             }
@@ -60,19 +54,7 @@ let Ruleset = {
                 logEvent = { message: GameManager.getPlayerAlias() + ' can play again!' };
                 GameManager.instance.emitter.$emit('log', logEvent);
 
-                if (GameManager.turnDirection === 'ASC') {
-                    if (GameManager.turnFor - 1 < 1) {
-                        GameManager.turnFor = GameManager.playerCount;
-                    } else {
-                        GameManager.turnFor -= 1;
-                    }
-                } else {
-                    if (GameManager.turnFor + 1 > GameManager.playerCount - 1) {
-                        GameManager.turnFor = 1;
-                    } else {
-                        GameManager.turnFor += 1;
-                    }
-                }
+                GameManager.updateTurn();
 
                 return true;
             }
@@ -98,8 +80,6 @@ let Ruleset = {
                 if (GameManager.currentPlayer()?.isHumanPlayer) {
                     GameManager.instance.emitter.$emit('toast::add', {
                         text:     'JOKER! Trek 5 kaarten!',
-                        position: 'top-center',
-                        canClose: true,
                     });
                 }
             }
@@ -114,6 +94,8 @@ let Ruleset = {
         }
 
         let lastPlayedCard = last(GameManager.playedCards);
+
+        console.log(Card);
 
         if (lastPlayedCard.value === 'JOKER') {
             return true;
@@ -140,7 +122,41 @@ let Ruleset = {
         });
 
         Cards.deck = shuffle(cards);
-    }
+    },
+
+    cardToPlay: (Player, Cards = []) => {
+        const originalCards = cloneDeep(Cards);
+        Cards               = Cards.filter(Card => !!Card);
+
+        if (Cards.length !== originalCards.length) {
+            console.log(Cards, originalCards);
+        }
+
+        let playableCards = filter(Cards, Card => GameManager.Ruleset.cardIsPlayable(Card));
+
+        if (!playableCards.length) {
+            let cardsTakenFromPile = GameManager.Cards.take(1);
+
+            forEach(cardsTakenFromPile, card => {
+                Cards.push(card);
+            });
+
+            GameManager.nextTurn(Player);
+
+            return;
+        }
+
+        return playableCards[random(0, playableCards.length - 1)];
+    },
+
+    cardIsPlayed (Player, Card) {
+        GameManager.playedCards.push(Card);
+        GameManager.instance.emitter.$emit('stack::add-card', Card);
+        GameManager.instance.emitter.$emit('card::to-history', {
+            player: Player,
+            card:   Card
+        });
+    },
 };
 
 export default Ruleset;

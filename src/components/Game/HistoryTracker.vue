@@ -39,10 +39,13 @@ export default {
             ];
 
             nextTick(() => {
-                const historyTracker = document.querySelector('#history-tracker');
-                if (historyTracker.scrollLeft !== 0) {
-                    historyTracker.scrollTo(historyTracker.scrollLeft + 1, 0);
-                }
+                [...document.querySelector('#history-container').children]
+                    .at(-1)
+                    .scrollIntoView({
+                        behavior: "smooth",
+                        block:    "end",
+                        inline:   "nearest",
+                    });
             });
         });
 
@@ -72,7 +75,7 @@ export default {
 
     #history-container {
         display: flex;
-        flex-flow: row-reverse nowrap;
+        flex-flow: row nowrap;
         overflow-x: scroll;
         overflow-y: visible;
 
