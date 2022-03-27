@@ -46,7 +46,7 @@ export default {
         });
 
         this.emitter.$on('stack::remove-card', (Card) => {
-            this.cards = GameManager.CardsPile;
+            this.cards = GameManager.Ruleset.CardsPile;
         });
 
         this.emitter.$on('game::deck-is-empty', () => {
