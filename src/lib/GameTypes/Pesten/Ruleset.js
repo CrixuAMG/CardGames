@@ -1,9 +1,73 @@
 import Cards from '@/lib/Cards/Cards';
 import GameManager from '@/lib/Game/GameManager';
-import { cloneDeep, filter, forEach, last, random, shuffle } from 'lodash-es';
+import { filter, forEach, last, random, shuffle } from 'lodash-es';
 
 let Ruleset = {
+    CardsPile:                   [],
     nextTurnOnDrawCardFromStack: false,
+
+    setup: function () {
+        this.CardsPile = [];
+
+        this.registerEventHandlers();
+    },
+
+    registerEventHandlers () {
+        GameManager.instance.emitter.$on('stack::add-card', (Card) => {
+            this.CardsPile.push(Card);
+        });
+
+        GameManager.instance.emitter.$on('stack::remove-card', (Card) => {
+            this.CardsPile = filter(this.CardsPile, (cardInStack) => {
+                return cardInStack.is(Card);
+            });
+        });
+    },
+
+    startGame () {
+        GameManager.instance.emitter.$emit('cards::build::draw-stack');
+
+        for (let player = 1; player <= GameManager.playerCount; player++) {
+            GameManager.instance.emitter.$emit('cards::draw-cards-from-deck', {
+                player: player,
+                amount: 7,
+            });
+        }
+
+        GameManager.instance.emitter.$emit('game::start');
+
+        this.nextTurn();
+    },
+
+    nextTurn (Player, Card) {
+        GameManager.updateTurn();
+
+        let emitEvent = true;
+
+        if (typeof Card !== 'undefined') {
+            this.cardIsPlayed(Player, Card);
+
+            if (typeof Player !== "undefined" && this.beforeTurn && typeof this.beforeTurn === 'function') {
+                emitEvent = this.beforeTurn(Player);
+            }
+        }
+
+        GameManager.instance.emitter.$emit('game::recalculate:deck-remaining');
+
+        if (!GameManager.Cards.deck.length) {
+            this.deckIsEmpty(this.CardsPile);
+        }
+
+        if (typeof Player !== "undefined" && typeof this.afterTurn === 'function') {
+            this.afterTurn(Player);
+        }
+
+        if (emitEvent) {
+            setTimeout(() => {
+                GameManager.instance.emitter.$emit('game::next-turn', this.turnFor);
+            }, 1500);
+        }
+    },
 
     beforeTurn: (Player) => {
         if (!Player.cards.length) {
@@ -36,7 +100,7 @@ let Ruleset = {
 
                 if (GameManager.currentPlayer()?.isHumanPlayer) {
                     GameManager.instance.emitter.$emit('toast::add', {
-                        text:     '2! Trek 2 kaarten!',
+                        text: '2! Trek 2 kaarten!',
                     });
                 }
             }
@@ -45,7 +109,7 @@ let Ruleset = {
                 logEvent = { message: GameManager.getPlayerAlias() + ' plays a SKIP!' };
                 GameManager.instance.emitter.$emit('log', logEvent);
 
-                GameManager.nextTurn();
+                GameManager.Ruleset.nextTurn();
 
                 return false;
             }
@@ -79,7 +143,7 @@ let Ruleset = {
 
                 if (GameManager.currentPlayer()?.isHumanPlayer) {
                     GameManager.instance.emitter.$emit('toast::add', {
-                        text:     'JOKER! Trek 5 kaarten!',
+                        text: 'JOKER! Trek 5 kaarten!',
                     });
                 }
             }
@@ -94,8 +158,6 @@ let Ruleset = {
         }
 
         let lastPlayedCard = last(GameManager.playedCards);
-
-        console.log(Card);
 
         if (lastPlayedCard.value === 'JOKER') {
             return true;
@@ -125,13 +187,6 @@ let Ruleset = {
     },
 
     cardToPlay: (Player, Cards = []) => {
-        const originalCards = cloneDeep(Cards);
-        Cards               = Cards.filter(Card => !!Card);
-
-        if (Cards.length !== originalCards.length) {
-            console.log(Cards, originalCards);
-        }
-
         let playableCards = filter(Cards, Card => GameManager.Ruleset.cardIsPlayable(Card));
 
         if (!playableCards.length) {
@@ -141,7 +196,7 @@ let Ruleset = {
                 Cards.push(card);
             });
 
-            GameManager.nextTurn(Player);
+            GameManager.Ruleset.nextTurn(Player);
 
             return;
         }

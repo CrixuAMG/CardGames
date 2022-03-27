@@ -95,7 +95,7 @@ export default {
 
             this.canPlay = false;
 
-            GameManager.nextTurn(this, Card);
+            GameManager.Ruleset.nextTurn(this, Card);
         }
     },
     mounted () {
@@ -131,7 +131,7 @@ export default {
                         });
                     }
 
-                    GameManager.nextTurn(this);
+                    GameManager.Ruleset.nextTurn(this);
                 }
             }
         });
@@ -154,7 +154,7 @@ export default {
                 }
 
                 if (data.nextTurn) {
-                    GameManager.nextTurn();
+                    GameManager.Ruleset.nextTurn();
                 }
             }
         });

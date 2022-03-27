@@ -71,7 +71,7 @@ export default {
                 .filter(cardInHand => !!cardInHand);
 
             this.canPlay = false;
-            GameManager.nextTurn(this, Card);
+            GameManager.Ruleset.nextTurn(this, Card);
         },
     },
 
@@ -95,7 +95,7 @@ export default {
                 this.emitter.$emit('Player ' + this.playerId + ' draws ' + data.amount + ' cards');
 
                 if (data.nextTurnOnDrawCardFromStack) {
-                    GameManager.nextTurn();
+                    GameManager.Ruleset.nextTurn();
                 }
             }
         });
