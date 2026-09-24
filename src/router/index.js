@@ -3,6 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import GamePicker from '../views/GamePicker.vue';
 import Pesten from '../views/Pesten.vue';
 import War from '../views/War.vue';
+import Memory from '../views/Memory.vue';
+import Solitaire from '../views/Solitaire.vue';
 
 const routes = [
     {
@@ -19,6 +21,16 @@ const routes = [
         path:      '/war',
         name:      'War',
         component: War,
+    },
+    {
+        path:      '/memory',
+        name:      'Memory',
+        component: Memory,
+    },
+    {
+        path:      '/solitaire',
+        name:      'Solitaire',
+        component: Solitaire,
     },
 ];
 

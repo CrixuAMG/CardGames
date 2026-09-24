@@ -53,8 +53,11 @@ function startGame () {
                     <span class="game-settings__emoji">{{ game.emoji }}</span>
                     <h2>{{ game.name }}</h2>
 
-                    <label for="opponents">Aantal tegenstanders ({{ game.opponents.min }} – {{ game.opponents.max }})</label>
+                    <label v-if="game.opponents.max > 0" for="opponents">
+                        Aantal tegenstanders ({{ game.opponents.min }} – {{ game.opponents.max }})
+                    </label>
                     <input
+                        v-if="game.opponents.max > 0"
                         id="opponents"
                         v-model.number="opponents"
                         class="game-settings__input"

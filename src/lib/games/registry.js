@@ -19,6 +19,26 @@ export const GAMES = [
         route:        { name: 'War' },
         opponents:    { min: 1, max: 5 },
     },
+    {
+        key:          'memory',
+        name:         'Memory',
+        tagline:      'Train je geheugen, vind alle paren',
+        description:  'Draai kaarten om en zoek de bijpassende paren. Hoe sneller je klaar bent, hoe hoger je score!',
+        emoji:        '🧠',
+        gradient:     'linear-gradient(135deg, #12b2d9 0%, #7f6cff 100%)',
+        route:        { name: 'Memory' },
+        opponents:    { min: 0, max: 0 },
+    },
+    {
+        key:          'solitaire',
+        name:         'Patience',
+        tagline:      'Het klassieke solitaire',
+        description:  'Stapel de kaarten aflopend en wisselend van kleur, en bouw de azen op. Kun jij het bord leeg krijgen?',
+        emoji:        '♠️',
+        gradient:     'linear-gradient(135deg, #1fa856 0%, #0c8f5f 100%)',
+        route:        { name: 'Solitaire' },
+        opponents:    { min: 0, max: 0 },
+    },
 ];
 
 export function getGame (key) {

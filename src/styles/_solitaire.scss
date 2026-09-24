@@ -1,0 +1,221 @@
+.solitaire {
+    display: flex;
+    flex-direction: column;
+    padding: 1.4rem 1.8rem;
+    gap: 1.2rem;
+    min-height: 0;
+    height: 100%;
+}
+
+.solitaire__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.solitaire__title {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+}
+
+.solitaire__emoji {
+    font-size: 4.6rem;
+    line-height: 1;
+    color: var(--accent);
+}
+
+.solitaire__title p {
+    margin: 0.2rem 0 0;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 700;
+}
+
+.solitaire__stats {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.solitaire__stat {
+    padding: 0.5rem 1.3rem;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 1.4rem;
+    backdrop-filter: blur(4px);
+}
+
+.solitaire__restart {
+    flex: none;
+}
+
+.solitaire__table {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    min-height: 0;
+}
+
+.solitaire__upper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    flex-wrap: wrap;
+    padding: 0 0.4rem;
+}
+
+.solitaire__stock-side {
+    display: flex;
+    gap: 1.2rem;
+}
+
+.solitaire__foundations {
+    display: flex;
+    gap: 1.2rem;
+}
+
+.solitaire__slot {
+    position: relative;
+    width: 9.6rem;
+    height: 14rem;
+    border: none;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+button.solitaire__slot {
+    cursor: pointer;
+}
+
+.solitaire__slot .card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.solitaire__slot--foundation {
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.14);
+}
+
+.solitaire__slot--target {
+    background: rgba(255, 201, 60, 0.12);
+    box-shadow: inset 0 0 0 3px rgba(255, 201, 60, 0.65);
+    animation: solitaire-glow 1.2s ease-in-out infinite;
+}
+
+@keyframes solitaire-glow {
+    0%, 100% { box-shadow: inset 0 0 0 3px rgba(255, 201, 60, 0.4); }
+    50% { box-shadow: inset 0 0 0 3px rgba(255, 201, 60, 0.9); }
+}
+
+.solitaire__empty {
+    width: 6rem;
+    height: 8.6rem;
+    border-radius: 10px;
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    display: grid;
+    place-items: center;
+    font-size: 1.8rem;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.solitaire__recycle {
+    font-size: 3rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.6);
+    animation: solitaire-recycle 1.4s ease-in-out infinite;
+}
+
+@keyframes solitaire-recycle {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(180deg); }
+}
+
+.solitaire__foundation-done {
+    position: absolute;
+    top: -0.7rem;
+    right: -0.7rem;
+    min-width: 2.2rem;
+    height: 2.2rem;
+    padding: 0 0.5rem;
+    border-radius: 999px;
+    background: rgba(255, 201, 60, 0.9);
+    color: #2a1c11;
+    font-size: 1.2rem;
+    font-weight: 800;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.solitaire__foundation-done:not(:empty) {
+    opacity: 1;
+}
+
+.solitaire__tableau {
+    flex: 1;
+    display: flex;
+    gap: 0.8rem;
+    justify-content: space-between;
+    min-height: 0;
+    overflow: auto;
+    padding: 0.4rem;
+}
+
+.solitaire__pile {
+    position: relative;
+    flex: 1;
+    min-width: 9rem;
+    height: 30rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.solitaire__pile--target {
+    background: rgba(255, 201, 60, 0.1);
+    box-shadow: inset 0 0 0 3px rgba(255, 201, 60, 0.65);
+    animation: solitaire-glow 1.2s ease-in-out infinite;
+}
+
+.solitaire__pile-slot {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.solitaire__pile-slot .card {
+    width: 8rem;
+    height: 11.4rem;
+    border-radius: 8px;
+}
+
+.solitaire__pile-slot .card--small .card__rank {
+    font-size: 1.5rem;
+}
+
+.solitaire__pile-slot .card--small .card__suit-icon {
+    font-size: 1.3rem;
+}
+
+.solitaire__pile-slot .card--small .card__center-icon {
+    font-size: 3rem;
+}
+
+.solitaire__card--selected {
+    transform: translateY(-0.8rem) scale(1.06);
+    box-shadow: 0 0 0 3px var(--accent), 0 10px 24px rgba(0, 0, 0, 0.55);
+    z-index: 999 !important;
+}
+
+.solitaire__card--top {
+    cursor: grab;
+}
