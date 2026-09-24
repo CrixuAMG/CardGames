@@ -13,6 +13,8 @@ const human = computed(() => game.value?.state.players[0]);
 
 const pendingCard = ref(null);
 const chooseSuitMode = ref(false);
+const hoverIndex = ref(-1);
+const handHovered = ref(false);
 
 const isActive = computed(() => (
     game.value
@@ -61,6 +63,34 @@ function onSuitPicked (suit) {
 function hasPlayableCard () {
     return cards.value.some(card => isActive.value && game.value?.canPlay(card));
 }
+
+function cardStyle (index) {
+    if (!handHovered.value) {
+        return undefined;
+    }
+
+    const count = cards.value.length;
+    const mid = (count - 1) / 2;
+    const offset = index - mid;
+    const reach = Math.max(1, mid);
+    const t = Math.abs(offset) / reach;
+
+    const angle = -offset * (3.2 + t * 3);
+    const lift = 16 * (1 - t * 0.45);
+    const isHovered = hoverIndex.value === index;
+    const origin = offset < 0 ? 'left' : offset > 0 ? 'right' : 'center';
+
+    return {
+        transform: `rotate(${angle}deg) translateY(-${isHovered ? lift + 26 : lift}px) scale(${isHovered ? 1.15 : 1.04})`,
+        transformOrigin: `${origin} bottom`,
+        zIndex: isHovered ? 999 : index + 1,
+    };
+}
+
+function onRowMouseOver (event) {
+    const cardEl = event.target.closest?.('.hand__cards .card') ?? null;
+    hoverIndex.value = cardEl ? Number(cardEl.getAttribute('data-index')) : -1;
+}
 </script>
 
 <template>
@@ -76,12 +106,19 @@ function hasPlayableCard () {
             <template v-else>Jouw beurt — speel een kaart!</template>
         </div>
 
-        <div class="hand__cards">
+        <div
+            class="hand__cards"
+            @mouseenter="handHovered = true"
+            @mouseleave="handHovered = false; hoverIndex = -1"
+            @mouseover="onRowMouseOver"
+        >
             <card
-                v-for="card in cards"
+                v-for="(card, index) in cards"
                 :key="card.id"
                 :card="card"
                 :playable="playability[card.id]"
+                :data-index="index"
+                :style="cardStyle(index)"
                 @card-click="onCardClick"
             />
         </div>

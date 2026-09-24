@@ -26,7 +26,7 @@
     flex: 1;
     display: grid;
     place-items: center;
-    min-height: 34rem;
+    min-height: 28rem;
 }
 
 /* ---------- Discard pile ---------- */
@@ -205,13 +205,14 @@
     align-items: flex-end;
     max-width: 96vw;
     overflow-x: auto;
-    padding: 0.8rem 1.4rem 0;
+    padding: 4.2rem 1.4rem 0;
     scrollbar-width: thin;
 }
 
 .hand__cards .card {
     margin-left: -3rem;
     position: relative;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .hand__cards .card:first-child {
