@@ -37,6 +37,102 @@
     padding: 1.4rem 2.8rem;
 }
 
+.war__controls {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.9rem;
+}
+
+.war__predict {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 1.2rem;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    backdrop-filter: blur(4px);
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.war__predict-label {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.war__predict-btn {
+    border: none;
+    border-radius: 999px;
+    padding: 0.4rem 1.3rem;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.18);
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.war__predict-btn:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.war__predict-btn--on {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #2a1c11;
+    box-shadow: 0 4px 12px rgba(255, 160, 60, 0.45);
+}
+
+.war__predict-bonus {
+    background: rgba(255, 201, 60, 0.28);
+    color: var(--accent);
+    border-radius: 999px;
+    padding: 0.1rem 0.8rem;
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+.war__timer {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+.war__timer-bar {
+    width: 15rem;
+    height: 0.6rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.war__timer-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    border-radius: inherit;
+    transition: width 0.1s linear;
+}
+
+.war__timer-value {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.75);
+    min-width: 4rem;
+    text-align: right;
+}
+
+.war__board {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.4rem;
+    min-height: 0;
+}
+
 .war__spots {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
@@ -110,8 +206,23 @@
     color: #fff;
 }
 
-.war-spot__count {
+.war-spot__badges {
     margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.war-spot__score {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--accent);
+    background: rgba(255, 201, 60, 0.18);
+    border-radius: 999px;
+    padding: 0.2rem 0.9rem;
+}
+
+.war-spot__count {
     font-weight: 800;
     font-size: 2rem;
     color: var(--accent);
@@ -149,8 +260,62 @@
     margin-left: 0.4rem;
 }
 
-.war-spot__reveal {
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+.war-spot__reveal-area {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 13.2rem;
+    flex: 0 0 auto;
+}
+
+.war-spot__flip {
+    width: 9.2rem;
+    height: 13.2rem;
+    perspective: 90rem;
+}
+
+.war-spot__flip-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.war-spot__flip--flipped .war-spot__flip-inner {
+    transform: rotateY(180deg);
+}
+
+.war-spot__flip-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.war-spot__flip-front {
+    transform: rotateY(180deg);
+}
+
+.war-spot--dealing .war-spot__flip {
+    animation: war-deal 0.42s ease-out;
+}
+
+@keyframes war-deal {
+    from {
+        transform: translateY(-2.6rem) rotate(-7deg);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+.war-spot--win .war-spot__flip-front .card {
+    box-shadow: 0 0 0 3px var(--accent), 0 6px 18px rgba(0, 0, 0, 0.4);
 }
 
 .war-spot__placeholder {
@@ -171,12 +336,12 @@
 }
 
 .war-spot__war-badge {
-    margin-left: auto;
     background: rgba(255, 120, 90, 0.9);
     border-radius: 999px;
     padding: 0.3rem 0.9rem;
     font-size: 1.3rem;
     font-weight: 800;
+    animation: banner-pop 0.3s ease;
 }
 
 .war__round-info {
@@ -190,7 +355,7 @@
     flex-wrap: wrap;
 }
 
-.war__pot {
+.war__pot-info {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -218,4 +383,123 @@
     font-size: 1.8rem;
     flex: 1;
     min-width: 20rem;
+}
+
+/* ---------- Pot on the table ---------- */
+
+.war__pot {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem 1.1rem;
+    min-width: 15rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 16px;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.war__pot--pulse {
+    animation: pot-pulse 0.65s ease;
+}
+
+@keyframes pot-pulse {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.14); box-shadow: 0 8px 34px 4px rgba(255, 201, 60, 0.5); }
+    100% { transform: scale(1); }
+}
+
+.war__pot-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.war__pot-stack {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 4.4rem;
+}
+
+.war__pot-card {
+    width: 2.7rem;
+    height: 3.9rem;
+    margin-right: -1.7rem;
+    border-radius: 5px;
+    background: linear-gradient(140deg, #2f6fed, #1d3fdd);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    display: grid;
+    place-items: center;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 1.1rem;
+}
+
+.war__pot-count {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--accent);
+}
+
+/* ---------- War drama ---------- */
+
+.war__banner {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%, -50%);
+    z-index: 30;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 5.4rem;
+    font-weight: 900;
+    color: var(--accent);
+    text-shadow: 0 6px 24px rgba(0, 0, 0, 0.65);
+    white-space: nowrap;
+    pointer-events: none;
+    animation: banner-pop 0.4s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+
+.war__predict-hit {
+    position: absolute;
+    left: 50%;
+    bottom: 0.8rem;
+    transform: translateX(-50%);
+    z-index: 30;
+    padding: 0.5rem 1.5rem;
+    border-radius: 999px;
+    background: rgba(255, 201, 60, 0.92);
+    color: #2a1c11;
+    font-weight: 800;
+    font-size: 1.6rem;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+    white-space: nowrap;
+    animation: chip-pop 0.35s ease;
+}
+
+@keyframes chip-pop {
+    from {
+        transform: translateX(-50%) scale(0.4);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes banner-pop {
+    from {
+        transform: translate(-50%, -50%) scale(0.4);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
 }
