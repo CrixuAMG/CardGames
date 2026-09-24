@@ -5,6 +5,7 @@ import Pesten from '../views/Pesten.vue';
 import War from '../views/War.vue';
 import Memory from '../views/Memory.vue';
 import Solitaire from '../views/Solitaire.vue';
+import Highscores from '../views/Highscores.vue';
 
 const routes = [
     {
@@ -31,6 +32,11 @@ const routes = [
         path:      '/solitaire',
         name:      'Solitaire',
         component: Solitaire,
+    },
+    {
+        path:      '/highscores',
+        name:      'Highscores',
+        component: Highscores,
     },
 ];
 

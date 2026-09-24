@@ -1,0 +1,165 @@
+.highscores {
+    min-height: 100%;
+    padding: 3rem clamp(1.5rem, 5vw, 6rem);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    overflow-y: auto;
+}
+
+.highscores__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.6rem;
+    flex-wrap: wrap;
+}
+
+.highscores__title {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.highscores__logo {
+    font-size: 4.4rem;
+    line-height: 1;
+}
+
+.highscores__back,
+.highscores__clear {
+    flex: none;
+}
+
+.highscores__empty {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1.8rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 3rem;
+    text-align: center;
+}
+
+.highscores__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+    gap: 2rem;
+}
+
+.highscores__card {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(4px);
+}
+
+.highscores__card-head {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.highscores__card-emoji {
+    font-size: 3.6rem;
+    line-height: 1;
+    width: 5.4rem;
+    height: 5.4rem;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.highscores__card-head p {
+    margin: 0.2rem 0 0;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 600;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.highscores__best {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(255, 201, 60, 0.22), rgba(255, 201, 60, 0.08));
+    box-shadow: inset 0 0 0 1px rgba(255, 201, 60, 0.4);
+}
+
+.highscores__best-score {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #ffd968;
+}
+
+.highscores__best-winner {
+    font-weight: 800;
+    font-size: 1.6rem;
+}
+
+.highscores__best-date {
+    margin-left: auto;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.highscores__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.highscores__row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.6rem 0.9rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.highscores__row--top {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.highscores__rank {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, 0.16);
+    font-weight: 800;
+    font-size: 1.3rem;
+}
+
+.highscores__row--top .highscores__rank {
+    background: #ffc93c;
+    color: #2a1c11;
+}
+
+.highscores__name {
+    font-weight: 700;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.highscores__value {
+    font-weight: 900;
+    font-size: 1.7rem;
+}

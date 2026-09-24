@@ -1,9 +1,12 @@
 <script setup>
 import GlobalDataProvider from '@/DataProviders/GlobalDataProvider.vue';
+import StatsTracker from '@/components/Game/StatsTracker.vue';
 </script>
 
 <template>
     <global-data-provider>
-        <router-view/>
+        <stats-tracker>
+            <router-view/>
+        </stats-tracker>
     </global-data-provider>
 </template>

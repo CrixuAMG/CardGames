@@ -104,6 +104,7 @@ export function createPestenGame ({ opponents, humanAlias }) {
     function finishGame (winner) {
         state.status = 'finished';
         state.winner = winner;
+        state.score = state.turnCount;
         toast(`🏆 ${winner.alias} heeft gewonnen!`, { canClose: false });
         eventHub.$emit('game::finished', state);
     }

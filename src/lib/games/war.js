@@ -220,6 +220,7 @@ export function createWarGame ({ opponents, humanAlias }) {
     function finish (winner) {
         state.status = 'finished';
         state.winner = winner;
+        state.score = winner.score;
         toast(`🏆 ${winner.alias} heeft alle kaarten gewonnen!`, { canClose: false });
         eventHub.$emit('game::finished', state);
     }

@@ -34,9 +34,13 @@ function saveName () {
                 <h1>Card Games</h1>
             </div>
 
-            <div class="game-picker__player" title="Je naam aanpassen" @click="showNamePrompt = true">
-                <span class="game-picker__avatar">{{ displayName[0] }}</span>
-                <span>{{ displayName }}</span>
+            <div class="game-picker__actions">
+                <router-link class="btn game-picker__scores" to="/highscores">🏆 Highscores</router-link>
+
+                <div class="game-picker__player" title="Je naam aanpassen" @click="showNamePrompt = true">
+                    <span class="game-picker__avatar">{{ displayName[0] }}</span>
+                    <span>{{ displayName }}</span>
+                </div>
             </div>
         </header>
 
