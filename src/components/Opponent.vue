@@ -59,7 +59,8 @@ function takeTurn () {
     game.value.drawAndPass(p.id);
 }
 
-watch([isTheirTurn, paused], scheduleTurn, { immediate: true });
+watch(() => state.value?.signal, scheduleTurn, { immediate: true });
+watch(paused, scheduleTurn);
 
 onUnmounted(() => {
     if (timer) {

@@ -43,6 +43,7 @@ export function createPestenGame ({ opponents, humanAlias }) {
         discard:         [],
         currentSuit:     null,
         pendingDraw:     0,
+        signal:          0,
         winner:          null,
         suits:           SUIT_META,
     });
@@ -52,6 +53,7 @@ export function createPestenGame ({ opponents, humanAlias }) {
     const directionSign = () => (state.direction === 1 ? 1 : -1);
 
     function emitTurn () {
+        state.signal += 1;
         eventHub.$emit('game::turn', state);
     }
 
@@ -334,7 +336,17 @@ export function choosePlayableCard (state, player) {
         return joker || two || playable[0];
     }
 
-    const action = playable.find(card => card.isJoker() || card.value === 2 || card.value === 8);
+    const eight = playable.find(card => card.value === 8);
 
-    return action ?? playable[Math.floor(Math.random() * playable.length)];
+    if (eight) {
+        return eight;
+    }
+
+    const regular = playable.filter(card => card.value !== 2 && !card.isJoker());
+
+    if (regular.length) {
+        return regular[Math.floor(Math.random() * regular.length)];
+    }
+
+    return playable[0];
 }

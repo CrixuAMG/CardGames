@@ -1,3 +1,7 @@
+@use "game-picker";
+@use "pesten";
+@use "war";
+
 :root {
     --bg-1: #0c3d2e;
     --bg-2: #062820;
@@ -533,6 +537,3 @@ kbd {
     left: 0;
     border-radius: inherit;
 }
-@use "game-picker";
-@use "pesten";
-@use "war";

@@ -1,4 +1,6 @@
-import emitter from 'tiny-emitter/instance';
+import Emitter from 'tiny-emitter';
+
+const emitter = new Emitter();
 
 const eventHub = {
     $on:   (...args) => emitter.on(...args),

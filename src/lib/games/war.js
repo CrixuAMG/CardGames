@@ -146,8 +146,12 @@ export function createWarGame ({ opponents, humanAlias }) {
             });
         }
 
+        if (!winner && active.length === 1) {
+            winner = active[0];
+        }
+
         if (winner) {
-            winner.pile.push(...pot);
+            winner.pile.push(...shuffle(pot));
         }
 
         return {
