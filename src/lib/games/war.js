@@ -6,6 +6,7 @@ import { eventHub } from '@/lib/eventHub';
 
 const WAR_FEE = 3;
 const RANK_VALUE = value => (value === 1 ? 14 : value);
+const PREDICT_BONUS = 3;
 const rankLabel = value => (value === 1 ? 'A' : value);
 
 function toast (text, { canClose = true } = {}) {
@@ -22,6 +23,7 @@ export function createWarGame ({ opponents, humanAlias }) {
         roundCount:   0,
         lastRound:    null,
         winner:       null,
+        prediction:   null,
     });
 
     function emitUpdate () {
@@ -34,6 +36,7 @@ export function createWarGame ({ opponents, humanAlias }) {
         state.players.forEach(p => {
             p.pile = [];
             p.isOut = false;
+            p.score = 0;
         });
 
         let index = 0;
@@ -45,12 +48,26 @@ export function createWarGame ({ opponents, humanAlias }) {
 
         state.roundCount = 0;
         state.lastRound = null;
+        state.prediction = null;
+        state.winner = null;
         state.status = 'playing';
         emitUpdate();
     }
 
     function remainingPlayers () {
         return state.players.filter(p => p.pile.length > 0);
+    }
+
+    function predict (outcome) {
+        if (state.status !== 'playing' || state.prediction) {
+            return;
+        }
+
+        if (!['win', 'lose'].includes(outcome)) {
+            return;
+        }
+
+        state.prediction = outcome;
     }
 
     function round () {
@@ -80,14 +97,39 @@ export function createWarGame ({ opponents, humanAlias }) {
         });
 
         const result = resolveBattles(contenders, reveals, pot, []);
+        const message = String(result.message);
+
+        if (result.winner) {
+            result.winner.score += 1 + result.wars.length;
+        }
+
+        const human = state.players.find(p => p.isHuman) ?? null;
+        const humanInRound = human ? contenders.includes(human) : false;
+        let predictionCorrect = false;
+
+        if (humanInRound && state.prediction) {
+            const wonBattle = result.winner?.id === human.id;
+            const resolved = result.winner !== null;
+            predictionCorrect = state.prediction === 'win'
+                ? wonBattle
+                : (resolved && !wonBattle);
+
+            if (predictionCorrect) {
+                human.score += PREDICT_BONUS;
+                toast(`🎯 Goed voorspeld, ${human.alias}! +${PREDICT_BONUS} punten.`);
+            }
+        }
+
+        state.prediction = null;
 
         state.lastRound = {
-            round:   state.roundCount,
+            round:            state.roundCount,
             reveals,
             pot,
-            winner:  result.winner,
-            wars:    result.wars,
-            message: result.message,
+            winner:           result.winner,
+            wars:             result.wars,
+            predictionCorrect,
+            message:          predictionCorrect ? `${message} (+${PREDICT_BONUS} voorspelling.)` : message,
         };
 
         emitUpdate();
@@ -186,6 +228,7 @@ export function createWarGame ({ opponents, humanAlias }) {
         state,
         start,
         round,
+        predict,
     };
 }
 
