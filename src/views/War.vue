@@ -28,6 +28,14 @@ function startGame () {
 }
 
 onMounted(startGame);
+
+function flipCards () {
+    if (!gameRef.value) {
+        startGame();
+    }
+
+    gameRef.value?.round();
+}
 </script>
 
 <template>
@@ -42,7 +50,7 @@ onMounted(startGame);
                     </div>
                 </div>
 
-                <button class="btn btn--primary war__play" type="button" :disabled="!canPlay" @click="gameRef.value.round()">
+                <button class="btn btn--primary war__play" type="button" :disabled="!canPlay" @click="flipCards">
                     Draai kaarten!
                 </button>
             </header>
