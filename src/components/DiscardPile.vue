@@ -11,6 +11,16 @@ const state = computed(() => game.value?.state);
 const visible = computed(() => state.value?.discard.slice(-5) ?? []);
 const top = computed(() => state.value?.discard[state.value.discard.length - 1] ?? null);
 const currentSuitLabel = computed(() => (state.value?.currentSuit ? SUIT_META[state.value.currentSuit]?.label : ''));
+
+const rotations = new Map();
+
+function rotationFor (card) {
+    if (!rotations.has(card.id)) {
+        rotations.set(card.id, (Math.random() - 0.5) * 12);
+    }
+
+    return rotations.get(card.id);
+}
 </script>
 
 <template>
@@ -23,7 +33,7 @@ const currentSuitLabel = computed(() => (state.value?.currentSuit ? SUIT_META[st
                 class="discard-pile__card"
                 :class="{ 'discard-pile__card--top': card.is(top) }"
                 size="table"
-                :style="{ transform: `rotate(${(card.id.length % 5 - 2) * 3}deg) translateY(${visible.indexOf(card) * -3}px)` }"
+                :style="{ transform: `rotate(${rotationFor(card)}deg) translateY(${visible.indexOf(card) * -3}px)` }"
             />
         </div>
 
