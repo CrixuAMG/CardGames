@@ -1,11 +1,13 @@
 <script setup>
 import { onBeforeUnmount, onMounted } from 'vue';
 
+import { evaluateAchievements } from '@/lib/achievements';
 import { eventHub } from '@/lib/eventHub';
 import { recordScore } from '@/lib/stats';
 
 function onGameFinished (state) {
     recordScore(state);
+    evaluateAchievements(state);
 }
 
 onMounted(() => {

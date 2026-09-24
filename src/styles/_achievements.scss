@@ -1,0 +1,135 @@
+.achievements {
+    min-height: 100%;
+    padding: 3rem clamp(1.5rem, 5vw, 6rem);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    overflow-y: auto;
+}
+
+.achievements__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.6rem;
+    flex-wrap: wrap;
+}
+
+.achievements__title {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.achievements__logo {
+    font-size: 4.4rem;
+    line-height: 1;
+}
+
+.achievements__back {
+    flex: none;
+}
+
+.achievements__counter {
+    background: rgba(255, 201, 60, 0.18);
+    box-shadow: inset 0 0 0 2px rgba(255, 201, 60, 0.5);
+    color: #ffd968;
+    border-radius: 999px;
+    padding: 0.7rem 1.6rem;
+    font-weight: 900;
+    font-size: 1.7rem;
+}
+
+.achievements__progress {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.achievements__progress-bar {
+    flex: 1;
+    height: 1.1rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+}
+
+.achievements__progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #ffc93c);
+    border-radius: 999px;
+    transition: width 0.6s ease;
+}
+
+.achievements__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+    gap: 1.6rem;
+}
+
+.achievement {
+    background: rgba(255, 255, 255, 0.09);
+    border-radius: 18px;
+    padding: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
+    transition: transform 0.18s ease;
+}
+
+.achievement--platinum {
+    background: linear-gradient(135deg, rgba(255, 201, 60, 0.22), rgba(255, 217, 104, 0.08));
+    box-shadow: inset 0 0 0 2px rgba(255, 201, 60, 0.55);
+}
+
+.achievement--locked {
+    filter: saturate(0);
+    opacity: 0.6;
+}
+
+.achievement__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.achievement__emoji {
+    font-size: 4.2rem;
+    line-height: 1;
+}
+
+.achievement__check {
+    width: 2.8rem;
+    height: 2.8rem;
+    border-radius: 50%;
+    background: #35d07f;
+    color: #08291a;
+    display: grid;
+    place-items: center;
+    font-weight: 900;
+}
+
+.achievement__lock {
+    width: 2.8rem;
+    height: 2.8rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+    display: grid;
+    place-items: center;
+    font-size: 1.4rem;
+}
+
+.achievement h2 {
+    margin: 0;
+    font-size: 1.9rem;
+}
+
+.achievement p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 600;
+    line-height: 1.45;
+}

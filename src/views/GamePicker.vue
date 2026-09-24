@@ -38,6 +38,7 @@ function saveName () {
 
             <div class="game-picker__actions">
                 <router-link class="btn game-picker__scores" to="/highscores">🏆 Highscores</router-link>
+                <router-link class="btn game-picker__scores" to="/achievements">🏅 Prestaties</router-link>
 
                 <div class="game-picker__difficulty" title="Moeilijkheidsgraad van de computer">
                     <span class="game-picker__difficulty-label">{{ DIFFICULTIES.find(d => d.key === difficulty.value)?.emoji }} 🤖</span>

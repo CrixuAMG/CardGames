@@ -6,6 +6,7 @@ import War from '../views/War.vue';
 import Memory from '../views/Memory.vue';
 import Solitaire from '../views/Solitaire.vue';
 import Highscores from '../views/Highscores.vue';
+import Achievements from '../views/Achievements.vue';
 
 const routes = [
     {
@@ -37,6 +38,11 @@ const routes = [
         path:      '/highscores',
         name:      'Highscores',
         component: Highscores,
+    },
+    {
+        path:      '/achievements',
+        name:      'Achievements',
+        component: Achievements,
     },
 ];
 
