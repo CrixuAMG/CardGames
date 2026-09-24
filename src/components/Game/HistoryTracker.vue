@@ -17,13 +17,19 @@ function onKeyDown (event) {
     }
 }
 
+function reset () {
+    history.value = [];
+}
+
 onMounted(() => {
     eventHub.$on('card::to-history', onCardPlayed);
+    eventHub.$on('game::start', reset);
     document.addEventListener('keydown', onKeyDown);
 });
 
 onBeforeUnmount(() => {
     eventHub.$off('card::to-history', onCardPlayed);
+    eventHub.$off('game::start', reset);
     document.removeEventListener('keydown', onKeyDown);
 });
 </script>

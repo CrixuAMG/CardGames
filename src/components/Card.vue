@@ -24,7 +24,7 @@ const props = defineProps({
 const emit = defineEmits(['card-click']);
 
 const isJoker = computed(() => props.card.isJoker?.());
-const colorClass = computed(() => (props.card.isJoker?.() ? 'joker' : `suit-${props.card.suit}`));
+const colorClass = computed(() => `suit-${props.card.suit}`);
 
 function onCardClick () {
     emit('card-click', props.card);

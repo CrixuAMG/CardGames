@@ -226,8 +226,8 @@ export function createPestenGame ({ opponents, humanAlias }) {
 
         log(`${p.alias} trekt ${cards.length} kaarten.`);
 
-        if (wasJoker && suitChoice) {
-            state.currentSuit = suitChoice;
+        if (wasJoker) {
+            state.currentSuit = suitChoice || chooseSuitFor(state, p);
         }
 
         if (checkWin(playerId)) {
