@@ -1,7 +1,7 @@
 <script setup>
 import { computed, inject, onUnmounted, ref, watch } from 'vue';
 
-import { AI_DELAY, choosePlayableCard, chooseSuitFor } from '@/lib/games/pesten';
+import { AI_DELAYS, choosePlayableCard, chooseSuitFor } from '@/lib/games/pesten';
 
 const props = defineProps({
     playerId: {
@@ -12,6 +12,7 @@ const props = defineProps({
 
 const gameRef = inject('game');
 const paused = inject('paused');
+const difficulty = inject('difficulty');
 
 const game = computed(() => gameRef.value);
 const state = computed(() => game.value?.state);
@@ -21,6 +22,8 @@ const isTheirTurn = computed(() => (
     state.value?.currentPlayerId === props.playerId
     && state.value?.status === 'playing'
 ));
+
+const level = computed(() => difficulty?.value || 'normal');
 
 let timer = null;
 
@@ -37,22 +40,28 @@ function scheduleTurn () {
         }
 
         takeTurn();
-    }, AI_DELAY);
+    }, AI_DELAYS[level.value] ?? AI_DELAYS.normal);
 }
 
 function takeTurn () {
     const p = player.value;
-    const card = choosePlayableCard(state.value, p);
+
+    if (level.value === 'easy' && Math.random() < 0.3 && state.value.pendingDraw === 0) {
+        game.value.drawAndPass(p.id);
+        return;
+    }
+
+    const card = choosePlayableCard(state.value, p, level.value);
 
     if (card) {
         const needsSuit = card.isJoker() || card.value === 11;
-        game.value.playCard(p.id, card, needsSuit ? chooseSuitFor(state.value, p) : null);
+        game.value.playCard(p.id, card, needsSuit ? chooseSuitFor(state.value, p, level.value) : null);
         return;
     }
 
     if (state.value.pendingDraw > 0) {
         const wasJoker = state.value.discard[state.value.discard.length - 1]?.isJoker();
-        game.value.payPenalty(p.id, wasJoker ? chooseSuitFor(state.value, p) : null);
+        game.value.payPenalty(p.id, wasJoker ? chooseSuitFor(state.value, p, level.value) : null);
         return;
     }
 

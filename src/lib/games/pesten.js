@@ -281,6 +281,20 @@ export function createPestenGame ({ opponents, humanAlias }) {
 
 export const AI_DELAY = 1100;
 
+export const AI_DELAYS = {
+    easy:   1600,
+    normal: 1100,
+    hard:   700,
+};
+
+function nextPlayer (state) {
+    const ids = state.players.map(p => p.id);
+    const index = ids.indexOf(state.currentPlayerId);
+    const step = state.direction === 1 ? 1 : -1;
+
+    return state.players[(index + step + ids.length) % ids.length];
+}
+
 export function canPlayCard (state, card) {
     if (!card) {
         return false;
@@ -311,7 +325,26 @@ export function canPlayCard (state, card) {
     return card.value === top.value;
 }
 
-export function chooseSuitFor (state, player) {
+export function chooseSuitFor (state, player, difficulty = 'normal') {
+    if (difficulty === 'easy') {
+        return randomSuit();
+    }
+
+    if (difficulty === 'hard') {
+        const next = nextPlayer(state);
+
+        if (next) {
+            const counts = { heart: 0, tile: 0, clover: 0, pike: 0 };
+            next.cards.forEach(card => {
+                if (counts[card.suit] != null) {
+                    counts[card.suit] += 1;
+                }
+            });
+
+            return Object.entries(counts).sort((a, b) => a[1] - b[1])[0]?.[0] ?? randomSuit();
+        }
+    }
+
     const counts = { heart: 0, tile: 0, clover: 0, pike: 0 };
 
     player.cards.forEach(card => {
@@ -323,7 +356,7 @@ export function chooseSuitFor (state, player) {
     return Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] ?? randomSuit();
 }
 
-export function choosePlayableCard (state, player) {
+export function choosePlayableCard (state, player, difficulty = 'normal') {
     const playable = player.cards.filter(card => canPlayCard(state, card));
 
     if (!playable.length) {
@@ -334,10 +367,49 @@ export function choosePlayableCard (state, player) {
         const joker = playable.find(card => card.isJoker());
         const two = playable.find(card => card.value === 2);
 
+        if (difficulty === 'easy') {
+            return joker || playable[0];
+        }
+
         return joker || two || playable[0];
     }
 
     const eight = playable.find(card => card.value === 8);
+    const joker = playable.find(card => card.isJoker());
+    const two = playable.find(card => card.value === 2);
+    const jack = playable.find(card => card.value === 11);
+
+    if (difficulty === 'hard') {
+        const next = nextPlayer(state);
+
+        if (next && next.cards.length <= 2) {
+            if (eight) {
+                return eight;
+            }
+            if (joker) {
+                return joker;
+            }
+            if (two) {
+                return two;
+            }
+        }
+
+        const regular = playable.filter(card => card.value !== 2 && !card.isJoker() && card.value !== 8 && card.value !== 11);
+
+        if (regular.length) {
+            return regular.sort((a, b) => b.value - a.value)[0];
+        }
+
+        if (jack) {
+            return jack;
+        }
+
+        if (eight) {
+            return eight;
+        }
+
+        return playable[0];
+    }
 
     if (eight) {
         return eight;

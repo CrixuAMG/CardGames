@@ -28,6 +28,37 @@
     display: flex;
     align-items: center;
     gap: 1.2rem;
+    flex-wrap: wrap;
+}
+
+.game-picker__difficulty {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: rgba(255, 255, 255, 0.14);
+    border-radius: 999px;
+    padding: 0.4rem 0.6rem 0.4rem 1.2rem;
+}
+
+.game-picker__difficulty-label {
+    font-size: 1.7rem;
+}
+
+.game-picker__difficulty-select {
+    background: rgba(255, 255, 255, 0.18);
+    border: none;
+    border-radius: 999px;
+    color: #fff;
+    font-family: inherit;
+    font-weight: 800;
+    font-size: 1.4rem;
+    padding: 0.5rem 2.4rem 0.5rem 1.2rem;
+    cursor: pointer;
+    outline: none;
+}
+
+.game-picker__difficulty-select option {
+    color: #2a1c11;
 }
 
 .game-picker__player {

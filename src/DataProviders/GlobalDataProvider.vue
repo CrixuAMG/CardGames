@@ -10,8 +10,10 @@ export default {
     name: "GlobalDataProvider",
     setup () {
         const username = useDataStoreRef('username', null);
+        const difficulty = useDataStoreRef('cg:difficulty', 'normal');
 
         provide('username', username);
+        provide('difficulty', difficulty);
     },
 };
 </script>
