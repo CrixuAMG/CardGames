@@ -1,88 +1,64 @@
-<template>
-    <game-view>
-        <div class="pesten">
-            <div class="d-flex flex-row justify-between">
-                <game-data/>
+<script setup>
+import { computed, inject, onMounted, provide, ref } from 'vue';
 
-                <opponents-wrapper>
-                    <opponent v-for="(opponent, index) in opponents" :key="index"/>
-                </opponents-wrapper>
-            </div>
+import DiscardPile from '@/components/DiscardPile.vue';
+import DrawPile from '@/components/DrawPile.vue';
+import GameData from '@/components/GameData.vue';
+import GameShell from '@/components/GameShell.vue';
+import Hand from '@/components/Hand.vue';
+import Opponent from '@/components/Opponent.vue';
+import GameOver from '@/components/Game/GameOver.vue';
+import RulesPanel from '@/components/Game/RulesPanel.vue';
+import { RULES, createPestenGame } from '@/lib/games/pesten';
 
-            <stack/>
-            <draw-stack/>
+const username = inject('username');
 
-            <hand/>
-        </div>
-    </game-view>
-</template>
+const gameRef = ref(null);
+provide('game', gameRef);
 
-<script>
-import Cards from "../lib/Cards/Cards";
-import Hand from "../components/Hand";
-import Stack from "../components/Stack";
-import DrawStack from "../components/DrawStack";
-import GameData from "../components/GameData";
-import GameManager from "../lib/Game/GameManager";
-import Opponent from "../components/Opponent";
-import Ruleset from "../lib/GameTypes/Pesten/Ruleset";
-import OpponentsWrapper from '../components/OpponentsWrapper';
-import GameView from './Wrappers/GameView';
+const state = computed(() => gameRef.value?.state);
+const opponents = computed(() => state.value?.players.slice(1) ?? []);
 
-export default {
-    name:       "Pesten",
-    components: {
-        GameView,
-        OpponentsWrapper,
-        Opponent,
-        GameData,
-        DrawStack,
-        Stack,
-        Hand,
-    },
-    methods:    {
-        async setup () {
-            Cards.get(true, true);
-            await GameManager.setup(this, Ruleset);
+function startGame () {
+    const opponentsCount = parseInt(localStorage.getItem('opponents')) || 1;
 
-            setTimeout(() => {
-                GameManager.startGame();
+    gameRef.value = createPestenGame({
+        opponents: opponentsCount,
+        humanAlias: username?.value || 'Jij',
+    });
 
-                GameManager.instance.emitter.$emit('toast::add', {
-                    text:     'Welkom! Het spel is begonnen!',
-                });
-            }, 1000);
-        },
+    gameRef.value.start();
+}
 
-        range (size, startAt = 0) {
-            return [...Array(size).keys()].map(i => i + startAt);
-        },
-    },
-
-    data () {
-        return {
-            opponents: null,
-        };
-    },
-
-    created () {
-        this.opponents = this.range(
-            parseInt(localStorage.getItem('opponents'))
-        );
-    },
-
-    mounted () {
-        if (!this.opponents || this.opponents.length < 1) {
-            this.$router.replace({
-                name: 'GamePicker',
-            });
-        }
-
-        this.setup();
-    }
-};
+onMounted(startGame);
 </script>
 
-<style lang="scss" scoped>
-@import "../styles/games/Pesten";
-</style>
+<template>
+    <game-shell>
+        <div v-if="state" class="pesten">
+            <header class="pesten__top">
+                <game-data/>
+
+                <div class="pesten__opponents">
+                    <opponent v-for="player in opponents" :key="player.id" :player-id="player.id"/>
+                </div>
+            </header>
+
+            <main class="pesten__table">
+                <discard-pile/>
+                <draw-pile/>
+            </main>
+
+            <hand/>
+
+            <rules-panel :rules="RULES" title="Spelregels Pesten"/>
+        </div>
+    </game-shell>
+
+    <game-over
+        v-if="state?.status === 'finished' && state.winner"
+        :winner="state.winner"
+        restart-label="Nog een keer spelen"
+        @restart="startGame"
+    />
+</template>

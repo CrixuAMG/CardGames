@@ -1,0 +1,346 @@
+.pesten {
+    display: flex;
+    flex-direction: column;
+    padding: 1.8rem;
+    gap: 1.5rem;
+    min-height: 0;
+}
+
+.pesten__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.pesten__opponents {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.pesten__table {
+    position: relative;
+    flex: 1;
+    display: grid;
+    place-items: center;
+    min-height: 34rem;
+}
+
+/* ---------- Discard pile ---------- */
+
+.discard-pile {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-55%, -60%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.discard-pile__stack {
+    position: relative;
+    width: 9.2rem;
+    height: 13.2rem;
+}
+
+.discard-pile__card {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.discard-pile__card--top {
+    z-index: 4;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
+}
+
+.discard-pile__suit-tag {
+    padding: 0.5rem 1.4rem;
+    background: rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 1.3rem;
+    backdrop-filter: blur(4px);
+}
+
+/* ---------- Draw pile ---------- */
+
+.draw-pile {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(12%, -60%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    width: 9.2rem;
+}
+
+.draw-pile__back {
+    width: 9.2rem;
+    height: 13.2rem;
+    border-radius: 10px;
+    background: linear-gradient(140deg, #2f6fed, #1d3fdd);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
+    display: grid;
+    place-items: center;
+    position: relative;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.draw-pile__back::before {
+    content: "";
+    position: absolute;
+    inset: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 7px;
+}
+
+.draw-pile__back-inner {
+    font-size: 2.2rem;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.draw-pile--interactive .draw-pile__back {
+    cursor: pointer;
+    animation: pile-pulse 1.6s ease-in-out infinite;
+}
+
+.draw-pile--interactive .draw-pile__back:hover {
+    transform: translateY(-6px) scale(1.04);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes pile-pulse {
+    0%, 100% { box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45); }
+    50% { box-shadow: 0 8px 30px 4px rgba(255, 201, 60, 0.55); }
+}
+
+.draw-pile__count {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.draw-pile__count--hot {
+    color: var(--accent);
+    animation: card-glow;
+}
+
+.draw-pile__hint {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* ---------- Game data ---------- */
+
+.game-data {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.6rem;
+    padding: 1rem 1.6rem;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    backdrop-filter: blur(4px);
+    min-width: 18rem;
+}
+
+.game-data__row {
+    display: flex;
+    gap: 0.8rem;
+    align-items: baseline;
+}
+
+.game-data__label {
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.game-data__value {
+    font-weight: 800;
+}
+
+/* ---------- Hand ---------- */
+
+.hand {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    padding-bottom: 0.5rem;
+}
+
+.hand__status {
+    padding: 0.5rem 1.6rem;
+    border-radius: 999px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    background: rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(4px);
+    min-height: 2.9rem;
+    display: grid;
+    place-items: center;
+}
+
+.hand--active .hand__status {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #2a1c11;
+}
+
+.hand__cards {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    max-width: 96vw;
+    overflow-x: auto;
+    padding: 0.8rem 1.4rem 0;
+    scrollbar-width: thin;
+}
+
+.hand__cards .card {
+    margin-left: -3rem;
+    position: relative;
+}
+
+.hand__cards .card:first-child {
+    margin-left: 0;
+}
+
+/* ---------- Suit picker ---------- */
+
+.suit-picker {
+    position: fixed;
+    inset: 0;
+    z-index: 110;
+    display: grid;
+    place-items: center;
+    background: rgba(5, 20, 16, 0.6);
+    backdrop-filter: blur(4px);
+    animation: overlay-in 0.2s ease-out;
+}
+
+.suit-picker__panel {
+    background: var(--panel);
+    color: var(--ink);
+    border-radius: var(--radius);
+    padding: 2.6rem 3rem;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+}
+
+.suit-picker__panel h4 {
+    margin-bottom: 1.8rem;
+}
+
+.suit-picker__options {
+    display: flex;
+    gap: 1rem;
+}
+
+.suit-picker__option {
+    width: 5.4rem;
+    height: 5.4rem;
+    border-radius: 12px;
+    border: none;
+    font-size: 2.8rem;
+    background: var(--panel-muted);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.suit-picker__option:hover {
+    transform: translateY(-4px) scale(1.06);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+}
+
+/* ---------- Opponent ---------- */
+
+.opponent {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.7rem 1.2rem 0.7rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    min-width: 15.5rem;
+}
+
+.opponent--active {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 0 3px var(--accent);
+    transform: translateY(-3px);
+}
+
+.opponent--penalty {
+    box-shadow: 0 0 0 3px var(--suit-red);
+}
+
+.opponent__avatar {
+    width: 3.8rem;
+    height: 3.8rem;
+    flex: none;
+    border-radius: 50%;
+    background: hsl(var(--hue) 62% 58%);
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.opponent__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.opponent__name {
+    font-weight: 800;
+    font-size: 1.5rem;
+    line-height: 1.1;
+    white-space: nowrap;
+}
+
+.opponent__cards {
+    display: flex;
+    gap: 0.3rem;
+    align-items: center;
+    min-height: 1.5rem;
+}
+
+.opponent__mini-card {
+    width: 0.9rem;
+    height: 1.3rem;
+    background: linear-gradient(140deg, #2f6fed, #1d3fdd);
+    border-radius: 2px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.opponent__extra {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.opponent__count {
+    margin-left: auto;
+    font-weight: 800;
+    font-size: 1.8rem;
+    color: var(--accent);
+}

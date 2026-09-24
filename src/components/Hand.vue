@@ -1,246 +1,106 @@
-<template>
-    <div :id="`player-${playerId}`" :class="{'can-play': canPlay}" class="hand">
-        <span v-for="(card, index) in cards" :key="index">
-            <card :card="card" :draggable="canPlayCard(card)" @click.native="playCard(card)"
-                  :style="style(index)" @drag="draggingCard(card, index)" @dragend="dragend(card, $event)"
-                  :class="{'from-deck': card.isFromDeck}"/>
-        </span>
-    </div>
-</template>
+<script setup>
+import { computed, inject, ref } from 'vue';
 
-<script>
-import GameManager from '@/lib/Game/GameManager';
-import Card from "./Card";
-import { filter, forEach } from 'lodash-es';
-import { inject } from 'vue';
+import Card from '@/components/Card.vue';
+import { SUITS, SUIT_META } from '@/lib/cards';
 
-export default {
-    name:       "Hand",
-    components: { Card },
-    watch:      {
-        canPlay (newValue) {
-            if (newValue && !this.paused) {
-                this.canDrag = newValue;
-            }
-        },
-        paused (newValue) {
-            if (!newValue && this.canPlay) {
-                this.canDrag = true;
-            }
-        },
-    },
-    data () {
-        return {
-            alias:              inject('username'),
-            paused:             false,
-            canPlay:            false,
-            canDrag:            false,
-            draggingCardObject: null,
-            playerId:           null,
-            cards:              [],
-            isHumanPlayer:      true,
-        };
-    },
-    methods: {
-        canPlayCard (Card) {
-            if (!this.canPlay || !Card) {
-                return false;
-            }
+const gameRef = inject('game');
+const username = inject('username');
+const paused = inject('paused');
 
-            return GameManager.Ruleset.cardIsPlayable(Card);
-        },
-        style (index) {
-            let degreesToRotate = (((this.cards.length / 2) / this.cards.length) * 100) - (((this.cards.length - index) / this.cards.length) * 100);
+const game = computed(() => gameRef.value);
+const human = computed(() => game.value?.state.players[0]);
 
-            let style = `transform: rotate(${degreesToRotate}deg);`;
+const pendingCard = ref(null);
+const chooseSuitMode = ref(false);
 
-            if (this.cards.length >= 8 && this.cards.length < 10) {
-                style += ` margin: 0 -6rem`;
-            } else {
-                style += ` margin: 0 -8rem`;
-            }
+const isActive = computed(() => (
+    game.value
+    && game.value.state.status === 'playing'
+    && game.value.state.currentPlayerId === 1
+    && !paused.value
+));
 
-            return style;
-        },
-        draggingCard (Card, index) {
-            if (!this.canDrag) {
-                return;
-            }
+const cards = computed(() => human.value?.cards ?? []);
+const pendingDraw = computed(() => game.value?.state.pendingDraw ?? 0);
 
-            this.canDrag            = false;
-            this.draggingCardObject = Card;
+const playability = computed(() => {
+    const map = {};
 
-            // this.$emit('remove', Card);
-        },
-        dragend (Card, event) {
-            this.canDrag            = true;
-            this.draggingCardObject = null;
+    cards.value.forEach(card => {
+        map[card.id] = isActive.value && game.value.canPlay(card);
+    });
 
-            if (event?.dataTransfer?.dropEffect === 'none') {
-                // this.$emit('add', Card);
+    return map;
+});
 
-                return;
-            }
-
-            this.playCard(Card);
-        },
-        playCard (Card) {
-            if (!this.canPlayCard(Card)) {
-                return;
-            }
-
-            this.cards = filter(this.cards, cardInHand => {
-                return cardInHand.isNot(Card);
-            });
-
-            this.canPlay = false;
-
-            GameManager.Ruleset.nextTurn(this, Card);
-        }
-    },
-    mounted () {
-        this.emitter.$on('game::has-been-setup', () => {
-            this.playerId = GameManager.registerPlayer(this);
-        });
-
-        this.emitter.$on('game::next-turn', () => {
-            this.canPlay = GameManager.turnFor === this.playerId;
-
-            if (this.canPlay) {
-                if (!this.cards.length) {
-                    GameManager.instance.emitter.$emit('toast::add', {
-                        text:     `Player ${this.playerId} won the game!`,
-                        canClose: false,
-                    });
-
-                    return;
-                }
-
-                let playableCards = filter(this.cards, Card => {
-                    return GameManager.Ruleset.cardIsPlayable(Card);
-                });
-
-                if (!playableCards.length) {
-                    let cards = GameManager.Cards.take(1);
-
-                    this.emitter.$emit('Player ' + this.playerId + ' draws ' + cards.length + ' cards');
-
-                    if (cards.length) {
-                        forEach(cards, card => {
-                            this.cards.push(card);
-                        });
-                    }
-
-                    GameManager.Ruleset.nextTurn(this);
-                }
-            }
-        });
-
-        this.emitter.$on('cards::draw-cards-from-deck', async (data) => {
-            if (data.player === this.playerId) {
-                let cards = await Cards.take(data.amount);
-
-                if (cards.length) {
-                    const hasAlreadyDrawnCards = this.cards.length > 0;
-                    this.cards                 = this.cards.concat(cards.map(card => {
-                        if (hasAlreadyDrawnCards) {
-                            card.isFromDeck = true;
-                        }
-
-                        return card;
-                    }));
-
-                    this.emitter.$emit('Player ' + this.playerId + ' draws ' + data.amount + ' cards');
-                }
-
-                if (data.nextTurn) {
-                    GameManager.Ruleset.nextTurn();
-                }
-            }
-        });
+function onCardClick (card) {
+    if (!isActive.value || !game.value.canPlay(card)) {
+        return;
     }
-};
+
+    if (card.value === 11 || card.isJoker()) {
+        pendingCard.value = card;
+        chooseSuitMode.value = true;
+        return;
+    }
+
+    game.value.playCard(1, card);
+}
+
+function onSuitPicked (suit) {
+    if (!pendingCard.value) {
+        return;
+    }
+
+    game.value.playCard(1, pendingCard.value, suit);
+    pendingCard.value = null;
+    chooseSuitMode.value = false;
+}
+
+function hasPlayableCard () {
+    return cards.value.some(card => isActive.value && game.value?.canPlay(card));
+}
 </script>
 
-<style lang="scss" scoped>
-.hand {
-    display: flex;
-    flex-flow: row nowrap;
-    position: absolute;
-    bottom: -50px;
-    left: 50%;
-    transform: translateX(-50%);
-    max-width: 90vw;
-    justify-content: center;
-    width: max-content;
+<template>
+    <div class="hand" :class="{ 'hand--active': isActive }">
+        <div class="hand__status">
+            <template v-if="game?.state.status === 'finished'">Gespeeld!</template>
+            <template v-else-if="!isActive">Wachten op de andere spelers…</template>
+            <template v-else-if="pendingDraw > 0">
+                Je moet {{ pendingDraw }} kaart{{ pendingDraw === 1 ? '' : 'en' }} trekken
+                of stapelen met een 2/Joker!
+            </template>
+            <template v-else-if="!hasPlayableCard()">Klik op de stapel om een kaart te trekken.</template>
+            <template v-else>Jouw beurt — speel een kaart!</template>
+        </div>
 
-    &:after {
-        content: '';
-        transition: all 1s;
-        bottom: -2rem;
-        left: 50%;
-        transform: translateX(-50%);
-        width: calc(100% + 15rem);
-        position: absolute;
-        height: calc(100% + 4rem);
-        z-index: -1;
-        clip-path: circle(22% 0, 84% 0, 100% 40%, 84% 100%, 22% 100%, 0 40%);
-        filter: blur(10rem);
-        background-color: transparent;
-    }
+        <div class="hand__cards">
+            <card
+                v-for="card in cards"
+                :key="card.id"
+                :card="card"
+                :playable="playability[card.id]"
+                @card-click="onCardClick"
+            />
+        </div>
 
-    &.can-play {
-        $animationDuration: 6s;
-
-        &:after {
-            background-color: #fff;
-            animation-name: fadeInOut;
-            animation-duration: $animationDuration;
-            animation-iteration-count: infinite;
-            animation-delay: $animationDuration;
-
-            @keyframes fadeInOut {
-                0% {
-                    background-color: rgba(255, 255, 255, 1);
-                }
-                50% {
-                    background-color: rgba(255, 255, 255, 0);
-                }
-                100% {
-                    background-color: rgba(255, 255, 255, 1);
-                }
-            }
-        }
-
-        .card {
-            &:hover {
-                transform: rotate(0deg) translateY(-80px) scale(1.1) !important;
-                z-index: 999;
-            }
-        }
-    }
-
-    .card {
-        margin: 0 -50px;
-        transition: all 0.3s ease-in-out;
-        transform: inherit;
-
-        &.from-deck {
-            animation: card;
-            animation-duration: 0.5s;
-
-            @keyframes card {
-                from {
-                    transform: translateX(-50%) translateY(-100px);
-                }
-                50% {
-                    transform: translateX(-50%) translateY(10vh);
-                }
-                to {
-                    transform: unset;
-                }
-            }
-        }
-    }
-}
-</style>
+        <div v-if="chooseSuitMode" class="suit-picker">
+            <div class="suit-picker__panel">
+                <h4>Kies een kleur</h4>
+                <div class="suit-picker__options">
+                    <button
+                        v-for="suit in SUITS"
+                        :key="suit"
+                        class="suit-picker__option"
+                        :class="`suit-${suit}`"
+                        @click="onSuitPicked(suit)"
+                    >
+                        {{ SUIT_META[suit].glyph }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

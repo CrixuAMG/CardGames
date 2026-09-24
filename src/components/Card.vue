@@ -1,64 +1,61 @@
-<template>
-    <drag :class="[card.suit, `card-${card.value.toString().toLowerCase()}`, {'not-playable': draggable === false}]"
-          :draggable="draggable"
-          :transfer-data="card" class="card" tag="div" @drag="drag" @dragend="dragend">
-        <div class="card-top-mark">
-            <div class="card-name">
-                {{ card.name }}
-            </div>
+<script setup>
+import { computed } from 'vue';
 
-            <suit :card="card"></suit>
-        </div>
-
-        <div class="card-middle-mark">
-            <div v-for="(mark, index) in amountOfIcons" v-if="card.value <= 10" :key="index" :class="[`mark-${mark}`]">
-                 <suit :card="card"/>
-            </div>
-        </div>
-
-        <div class="card-bottom-mark">
-            <div class="card-name">
-                {{ card.name }}
-            </div>
-
-            <suit :card="card"></suit>
-        </div>
-    </drag>
-</template>
-
-<script>
-import Suit from "./Suit";
-import Drag from '@/modules/vue-drag-drop/Drag';
-
-export default {
-    name:       "Card",
-    components: { Suit, Drag },
-    props:      {
-        card:      {
-            type:     Object,
-            required: true
-        },
-        draggable: {
-            type:    Boolean,
-            default: false
-        },
+const props = defineProps({
+    card: {
+        type:     Object,
+        required: true,
     },
-    computed:   {
-        amountOfIcons () {
-            if (Number.isInteger(this.card.value)) {
-                return this.card.value;
-            }
-
-            return 1;
-        },
+    faceUp: {
+        type:    Boolean,
+        default: true,
     },
-    methods:    {
-        drag (card, event) {
-            this.$emit('drag', event);
-        },
-        dragend (card, event) {
-            this.$emit('dragend', event);
-        }
-    }
-};
+    size: {
+        type:    String,
+        default: 'hand',
+        validator: value => ['hand', 'table', 'small', 'tiny'].includes(value),
+    },
+    playable: {
+        type:    Boolean,
+        default: false,
+    },
+});
+
+const emit = defineEmits(['card-click']);
+
+const isJoker = computed(() => props.card.isJoker?.());
+const colorClass = computed(() => (props.card.isJoker?.() ? 'joker' : `suit-${props.card.suit}`));
+
+function onCardClick () {
+    emit('card-click', props.card);
+}
 </script>
+
+<template>
+    <div
+        class="card"
+        :class="[`card--${size}`, colorClass, { 'card--face-down': !faceUp, 'card--playable': playable, 'card--clickable': playable }]"
+        @click="onCardClick"
+    >
+        <template v-if="faceUp">
+            <div class="card__corner card__corner--top">
+                <span class="card__rank">{{ card.name }}</span>
+                <span class="card__suit-icon">{{ card.glyph }}</span>
+            </div>
+
+            <div class="card__center">
+                <span v-if="isJoker" class="card__joker-label">JOKER</span>
+                <span v-else class="card__center-icon">{{ card.glyph }}</span>
+            </div>
+
+            <div class="card__corner card__corner--bottom">
+                <span class="card__rank">{{ card.name }}</span>
+                <span class="card__suit-icon">{{ card.glyph }}</span>
+            </div>
+        </template>
+
+        <div v-else class="card__back">
+            <div class="card__back-inner">♦</div>
+        </div>
+    </div>
+</template>

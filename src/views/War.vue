@@ -1,91 +1,70 @@
-<template>
-    <div class="war">
-        <div class="cards"></div>
+<script setup>
+import { computed, inject, onMounted, provide, ref } from 'vue';
 
-        <hand :cards="hand"></hand>
-    </div>
-</template>
+import GameShell from '@/components/GameShell.vue';
+import GameOver from '@/components/Game/GameOver.vue';
+import PlayerSpot from '@/components/War/PlayerSpot.vue';
+import { createWarGame } from '@/lib/games/war';
 
-<script>
-import Cards from "../lib/Cards/Cards";
-import Hand from "../components/Hand";
-import { forEach } from 'lodash-es';
+const username = inject('username');
 
-export default {
-    name:       "War",
-    components: { Hand },
-    methods:    {
-        setup () {
-            let cards        = {};
-            cards.createCard = function (Card) {
-                let card = document.createElement('div');
-                card.classList.add(Card.suit);
-                card.classList.add('card');
+const gameRef = ref(null);
+provide('game', gameRef);
 
-                let topMark = document.createElement('div');
-                topMark.classList.add('card-top-mark');
-                topMark.innerText = Card.name;
+const state = computed(() => gameRef.value?.state);
+const players = computed(() => state.value?.players ?? []);
+const contenders = computed(() => state.value?.players.filter(p => p.pile.length > 0) ?? []);
+const canPlay = computed(() => state.value?.status === 'playing' && contenders.value.length > 1);
 
-                card.append(topMark);
+function startGame () {
+    const opponents = parseInt(localStorage.getItem('opponents')) || 1;
 
-                let bottomMark = document.createElement('div');
-                bottomMark.classList.add('card-bottom-mark');
-                bottomMark.innerText = Card.name;
+    gameRef.value = createWarGame({
+        opponents,
+        humanAlias: username?.value || 'Jij',
+    });
 
-                card.append(bottomMark);
+    gameRef.value.start();
+}
 
-                cardWrapper.append(card);
-            };
-
-            let cardWrapper = document.querySelector('.cards');
-
-            Cards.get(true, true);
-
-            forEach(Cards.take(3), Card => {
-                cards.createCard(Card);
-            });
-
-            this.hand = Cards.take(7);
-        }
-    },
-    data () {
-        return {
-            hand:      [],
-            opponents: 3
-        };
-    },
-
-    mounted () {
-        this.opponents = localStorage.getItem('opponents');
-        this.setup();
-    }
-};
+onMounted(startGame);
 </script>
 
-<style lang="scss">
-body {
-    background-color: #408b40;
-    height: 100vh;
-}
+<template>
+    <game-shell>
+        <div v-if="state" class="war">
+            <header class="war__top">
+                <div class="war__title">
+                    <span class="war__emoji">⚔️</span>
+                    <div>
+                        <h1>Oorlog</h1>
+                        <p>Ronde {{ state.roundCount }} — {{ contenders.length }} spelers in de race</p>
+                    </div>
+                </div>
 
-.war {
-    display: flex;
-    flex-flow: column;
+                <button class="btn btn--primary war__play" type="button" :disabled="!canPlay" @click="gameRef.value.round()">
+                    Draai kaarten!
+                </button>
+            </header>
 
-    .cards {
-        display: flex;
-        flex-flow: row wrap;
-        max-width: 100%;
-        margin: auto auto;
-        height: max-content;
-        width: max-content;
+            <div class="war__spots">
+                <player-spot v-for="player in players" :key="player.id" :player="player"/>
+            </div>
 
-        .card {
-            &:hover {
-                transform: rotate(-5deg) scale(1.2);
-                z-index: 999;
-            }
-        }
-    }
-}
-</style>
+            <footer v-if="state.lastRound" class="war__round-info">
+                <div class="war__pot">
+                    <span class="war__pot-label">Pot</span>
+                    <span class="war__pot-value">{{ state.lastRound.pot.length }} kaarten</span>
+                </div>
+                <p class="war__message">{{ state.lastRound.message }}</p>
+            </footer>
+        </div>
+    </game-shell>
+
+    <game-over
+        v-if="state?.status === 'finished' && state.winner"
+        :winner="state.winner"
+        restart-label="Nieuwe oorlog"
+        @restart="startGame"
+    />
+</template>

@@ -1,63 +1,72 @@
+<script setup>
+import { computed, inject, onMounted, ref } from 'vue';
+
+import GameCard from '@/components/GameSelection/GameCard.vue';
+import { GAMES } from '@/lib/games/registry';
+
+const username = inject('username');
+
+const nameDraft = ref('');
+const showNamePrompt = ref(false);
+
+const displayName = computed(() => username.value || 'Speler');
+
+onMounted(() => {
+    if (!username.value) {
+        showNamePrompt.value = true;
+    }
+});
+
+function saveName () {
+    if (nameDraft.value.trim()) {
+        username.value = nameDraft.value.trim();
+    }
+
+    showNamePrompt.value = false;
+}
+</script>
+
 <template>
-    <img src="/img/logo-light.svg" alt="Logo" id="app-logo">
+    <div class="game-picker">
+        <header class="game-picker__header">
+            <div class="game-picker__brand">
+                <span class="game-picker__logo">🂠</span>
+                <h1>Card Games</h1>
+            </div>
 
-    <dialog id="username-form" @close="onDialogClose">
-        <form method="dialog">
-            <input type="text" v-model="localUsername" name="username">
+            <div class="game-picker__player" title="Je naam aanpassen" @click="showNamePrompt = true">
+                <span class="game-picker__avatar">{{ displayName[0] }}</span>
+                <span>{{ displayName }}</span>
+            </div>
+        </header>
 
-            <button type="submit">
-                Save
-            </button>
-        </form>
-    </dialog>
+        <p class="game-picker__intro">
+            Kies een spel en pest je vrienden — of laat de computer het winnen!
+        </p>
 
-    <div id="game-picker" class="game-picker">
-        <game-card :game="game" v-for="game in Games"
-                   class="game-picker__option"/>
+        <div class="game-picker__grid">
+            <game-card v-for="game in GAMES" :key="game.key" :game="game"/>
+        </div>
+
+        <Teleport to="body">
+            <div v-if="showNamePrompt" class="name-prompt" @click.self="saveName">
+                <div class="name-prompt__panel" @submit.prevent="saveName" @keydown.enter="saveName">
+                    <h2>Welkom! 👋</h2>
+                    <p>Hoe heet je? Zo weten de andere spelers wie ze verslaan.</p>
+
+                    <input
+                        v-model="nameDraft"
+                        class="name-prompt__input"
+                        type="text"
+                        placeholder="Je naam"
+                        autofocus
+                    >
+
+                    <button class="btn btn--primary" type="button" @click="saveName">
+                        Start
+                    </button>
+                </div>
+            </div>
+        </Teleport>
     </div>
 </template>
-
-<script>
-import Games from "../lib/Game/Games";
-import GameCard from '../components/GameSelection/GameCard';
-import { inject, watch, ref } from 'vue';
-
-export default {
-    name:       "GamePicker",
-    components: { GameCard },
-    setup () {
-        const username      = inject('username');
-        const localUsername = ref(null);
-
-        const checkUsername = () => {
-            const element = document.querySelector('#username-form');
-
-            if (!element) return setTimeout(checkUsername, 100);
-
-            if (!username.value) {
-                !element.open ? element.showModal() : undefined;
-            }
-        };
-
-        watch(() => username, checkUsername, {
-            immediate: true,
-            deep:      true,
-        });
-
-        const onDialogClose = () => {
-            if (localUsername.value) {
-                username.value = localUsername.value;
-            }
-        };
-
-        return {
-            Games: Games,
-
-            username,
-            localUsername,
-
-            onDialogClose,
-        };
-    },
-};
-</script>

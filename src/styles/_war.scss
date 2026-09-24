@@ -1,0 +1,221 @@
+.war {
+    display: flex;
+    flex-direction: column;
+    padding: 1.8rem;
+    gap: 1.6rem;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.war__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.war__title {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+}
+
+.war__emoji {
+    font-size: 4.6rem;
+    line-height: 1;
+}
+
+.war__title p {
+    margin: 0.2rem 0 0;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 700;
+}
+
+.war__play {
+    font-size: 2rem;
+    padding: 1.4rem 2.8rem;
+}
+
+.war__spots {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+    gap: 1.6rem;
+}
+
+.war-spot {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    border-radius: 16px;
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.war-spot--human {
+    background: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 0 0 2px rgba(255, 201, 60, 0.6);
+}
+
+.war-spot--win {
+    background: rgba(255, 211, 84, 0.28);
+    box-shadow: 0 0 0 3px var(--accent);
+    transform: translateY(-4px);
+}
+
+.war-spot--out {
+    opacity: 0.55;
+    filter: grayscale(0.6);
+}
+
+.war-spot__header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.war-spot__avatar {
+    width: 4rem;
+    height: 4rem;
+    flex: none;
+    border-radius: 50%;
+    background: hsl(var(--hue) 62% 58%);
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.war-spot__name {
+    font-weight: 800;
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+}
+
+.war-spot__tag {
+    padding: 0.1rem 0.7rem;
+    border-radius: 999px;
+    font-size: 1rem;
+    text-transform: uppercase;
+    background: rgba(255, 201, 60, 0.85);
+    color: #2a1c11;
+}
+
+.war-spot__tag--out {
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff;
+}
+
+.war-spot__count {
+    margin-left: auto;
+    font-weight: 800;
+    font-size: 2rem;
+    color: var(--accent);
+}
+
+.war-spot__cards {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    min-height: 13.2rem;
+}
+
+.war-spot__backs {
+    display: flex;
+    align-items: center;
+    min-width: 5rem;
+}
+
+.war-spot__back-card {
+    width: 3rem;
+    height: 4.2rem;
+    border-radius: 6px;
+    background: linear-gradient(140deg, #2f6fed, #1d3fdd);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    display: grid;
+    place-items: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.2rem;
+    margin-right: -1.6rem;
+}
+
+.war-spot__pile-count {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-left: 0.4rem;
+}
+
+.war-spot__reveal {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+.war-spot__placeholder {
+    width: 9.2rem;
+    height: 13.2rem;
+    border-radius: 10px;
+    border: 2px dashed rgba(255, 255, 255, 0.35);
+    display: grid;
+    place-items: center;
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.war-spot__empty {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 2.4rem;
+    font-weight: 800;
+}
+
+.war-spot__war-badge {
+    margin-left: auto;
+    background: rgba(255, 120, 90, 0.9);
+    border-radius: 999px;
+    padding: 0.3rem 0.9rem;
+    font-size: 1.3rem;
+    font-weight: 800;
+}
+
+.war__round-info {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 1.2rem 1.8rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    backdrop-filter: blur(4px);
+    flex-wrap: wrap;
+}
+
+.war__pot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    padding-right: 2rem;
+}
+
+.war__pot-label {
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.war__pot-value {
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: var(--accent);
+}
+
+.war__message {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.8rem;
+    flex: 1;
+    min-width: 20rem;
+}

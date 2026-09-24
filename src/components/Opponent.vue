@@ -1,104 +1,89 @@
+<script setup>
+import { computed, inject, onUnmounted, ref, watch } from 'vue';
+
+import { AI_DELAY, choosePlayableCard, chooseSuitFor } from '@/lib/games/pesten';
+
+const props = defineProps({
+    playerId: {
+        type:     Number,
+        required: true,
+    },
+});
+
+const gameRef = inject('game');
+const paused = inject('paused');
+
+const game = computed(() => gameRef.value);
+const state = computed(() => game.value?.state);
+const player = computed(() => state.value?.players.find(p => p.id === props.playerId));
+
+const isTheirTurn = computed(() => (
+    state.value?.currentPlayerId === props.playerId
+    && state.value?.status === 'playing'
+));
+
+let timer = null;
+
+function scheduleTurn () {
+    if (timer || !isTheirTurn.value || paused.value) {
+        return;
+    }
+
+    timer = setTimeout(() => {
+        timer = null;
+
+        if (!isTheirTurn.value || paused.value || !game.value) {
+            return;
+        }
+
+        takeTurn();
+    }, AI_DELAY);
+}
+
+function takeTurn () {
+    const p = player.value;
+    const card = choosePlayableCard(state.value, p);
+
+    if (card) {
+        const needsSuit = card.isJoker() || card.value === 11;
+        game.value.playCard(p.id, card, needsSuit ? chooseSuitFor(state.value, p) : null);
+        return;
+    }
+
+    if (state.value.pendingDraw > 0) {
+        const wasJoker = state.value.discard[state.value.discard.length - 1]?.isJoker();
+        game.value.payPenalty(p.id, wasJoker ? chooseSuitFor(state.value, p) : null);
+        return;
+    }
+
+    game.value.drawAndPass(p.id);
+}
+
+watch([isTheirTurn, paused], scheduleTurn, { immediate: true });
+
+onUnmounted(() => {
+    if (timer) {
+        clearTimeout(timer);
+    }
+});
+</script>
+
 <template>
-    <div :id="`player-${playerId}`" :class="{'turn-for': canPlay}" class="opponent">
-        {{ alias }} ({{ cards.length }} cards)
+    <div v-if="player" class="opponent" :class="{ 'opponent--active': isTheirTurn, 'opponent--penalty': state.pendingDraw > 0 && isTheirTurn }">
+        <div class="opponent__avatar" :style="{ '--hue': ((player.id * 47) % 360) }">
+            {{ player.alias[0] }}
+        </div>
+
+        <div class="opponent__meta">
+            <div class="opponent__name">{{ player.alias }}</div>
+            <div class="opponent__cards">
+                <span class="opponent__mini-card" v-for="i in Math.min(player.cards.length, 10)" :key="'c' + i" />
+                <span v-if="player.cards.length > 10" class="opponent__extra">+{{ player.cards.length - 10 }}</span>
+            </div>
+        </div>
+
+        <div class="opponent__count">
+            {{ player.cards.length }}
+        </div>
     </div>
 </template>
-
-<script>
-import GameManager from '@/lib/Game/GameManager';
-import { cloneDeep, filter } from 'lodash-es';
-import { faker } from '@faker-js/faker';
-
-export default {
-    name: "Opponent",
-
-    data () {
-        return {
-            playerId: null,
-            canPlay:  false,
-            cards:    [],
-            paused:   false,
-            alias:    null,
-        };
-    },
-
-    watch: {
-        canPlay () {
-            if (!this.paused && this.canPlay) {
-                this.playCard();
-            }
-        },
-        paused () {
-            if (!this.paused && this.canPlay) {
-                this.playCard();
-            }
-        },
-    },
-
-    methods: {
-        async playCard () {
-            const cards = cloneDeep(this.cards);
-
-            if (!cards.length) {
-                GameManager.instance.emitter.$emit('toast::add', {
-                    text:     `Player ${this.playerId} won the game!`,
-                    canClose: false,
-                });
-
-                return;
-            }
-
-            const Card = GameManager.Ruleset.cardToPlay(this, cards);
-
-            if (!Card) {
-                GameManager.instance.emitter.$emit('toast::add', {
-                    text: `${this.alias}: getting a new card from the stack!`,
-                });
-                let cards = await Cards.take(1);
-
-                this.cards = this.cards.concat(cards);
-
-                if (!GameManager.Ruleset.nextTurnOnDrawCardFromStack) {
-                    setTimeout(() => {
-                        this.playCard();
-                    }, 1500);
-                }
-
-                return;
-            }
-
-            this.cards = filter(cards, cardInHand => cardInHand.isNot(Card))
-                .filter(cardInHand => !!cardInHand);
-
-            this.canPlay = false;
-            GameManager.Ruleset.nextTurn(this, Card);
-        },
-    },
-
-    created () {
-        this.emitter.$on('game::has-been-setup', () => {
-            this.alias = faker.name.firstName();
-
-            this.playerId = GameManager.registerPlayer(this);
-        });
-
-        this.emitter.$on('game::next-turn', () => {
-            this.canPlay = GameManager.turnFor === this.playerId;
-        });
-
-        this.emitter.$on('cards::draw-cards-from-deck', async (data) => {
-            if (data.player === this.playerId) {
-                let cards = await Cards.take(data.amount);
-
-                this.cards = this.cards.concat(cards);
-
-                this.emitter.$emit('Player ' + this.playerId + ' draws ' + data.amount + ' cards');
-
-                if (data.nextTurnOnDrawCardFromStack) {
-                    GameManager.Ruleset.nextTurn();
-                }
-            }
-        });
-    }
-};
-</script>

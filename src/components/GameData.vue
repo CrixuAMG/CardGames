@@ -1,59 +1,31 @@
+<script setup>
+import { computed, inject } from 'vue';
+
+const gameRef = inject('game');
+const game = computed(() => gameRef.value);
+const state = computed(() => game.value?.state);
+
+const currentPlayer = computed(() => state.value?.players.find(p => p.id === state.value?.currentPlayerId));
+const directionLabel = computed(() => (state.value?.direction === 1 ? 'Met de klok mee' : 'Tegen de klok in'));
+</script>
+
 <template>
-    <div id="game-data" class="game-data">
-        <div id="deck-counter">
-            <div class="game-data-title">
-                Cards left:
-            </div>
-            <div class="game-data-data">
-                {{ cardsRemaining }}
-            </div>
+    <div v-if="game" class="game-data">
+        <div class="game-data__row">
+            <span class="game-data__label">Beurt</span>
+            <span class="game-data__value">{{ currentPlayer?.alias ?? '—' }}</span>
         </div>
-        <div id="turn-counter">
-            <div class="game-data-title">
-                Turn:
-            </div>
-            <div class="game-data-data">
-                {{ turnCounter || 0 }}
-            </div>
+        <div class="game-data__row">
+            <span class="game-data__label">Richting</span>
+            <span class="game-data__value">{{ directionLabel }}</span>
         </div>
-        <div id="turn-for">
-            <div class="game-data-title">
-                Turn for:
-            </div>
-            <div class="game-data-data">
-                {{ turnForText }}
-            </div>
+        <div class="game-data__row">
+            <span class="game-data__label">Ronde</span>
+            <span class="game-data__value">{{ state.turnCount }}</span>
+        </div>
+        <div class="game-data__row">
+            <span class="game-data__label">Stapel</span>
+            <span class="game-data__value">{{ state.deck.length }} kaarten</span>
         </div>
     </div>
 </template>
-
-<script>
-import GameManager from '../lib/Game/GameManager';
-
-export default {
-    name: "GameData",
-    data () {
-        return {
-            cardsRemaining: null,
-            turnCounter:    null,
-            turnFor:        null,
-            turnForText:    null,
-        };
-    },
-    mounted () {
-        this.emitter.$on('game::recalculate:deck-remaining', () => {
-            this.cardsRemaining = Cards.deck.length;
-
-            if (!this.cardsRemaining) {
-                this.emitter.$emit('game::deck-is-empty');
-            }
-        });
-
-        this.emitter.$on('game::next-turn', () => {
-            this.turnCounter = GameManager.turnCounter;
-            this.turnFor     = GameManager.turnFor;
-            this.turnForText = GameManager.getPlayerAlias();
-        });
-    }
-};
-</script>
