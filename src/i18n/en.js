@@ -5,6 +5,7 @@ export default {
         won:                '{name} won!',
         home:               'Overview',
         start:              'Start',
+        language:           'Language',
     },
     player: {
         fallback:           'You',

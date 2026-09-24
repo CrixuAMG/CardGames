@@ -7,6 +7,7 @@ import Memory from '../views/Memory.vue';
 import Solitaire from '../views/Solitaire.vue';
 import Highscores from '../views/Highscores.vue';
 import Achievements from '../views/Achievements.vue';
+import Profile from '../views/Profile.vue';
 
 const routes = [
     {
@@ -43,6 +44,11 @@ const routes = [
         path:      '/achievements',
         name:      'Achievements',
         component: Achievements,
+    },
+    {
+        path:      '/profile',
+        name:      'Profile',
+        component: Profile,
     },
 ];
 

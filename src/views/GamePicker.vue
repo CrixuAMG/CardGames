@@ -49,10 +49,10 @@ function saveName () {
                     </select>
                 </div>
 
-                <div class="game-picker__player" title="Je naam aanpassen" @click="showNamePrompt = true">
+                <router-link class="game-picker__player" :to="{ name: 'Profile' }" title="Naar je profiel">
                     <span class="game-picker__avatar">{{ displayName[0] }}</span>
                     <span>{{ displayName }}</span>
-                </div>
+                </router-link>
             </div>
         </header>
 

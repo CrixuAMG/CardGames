@@ -78,6 +78,12 @@
     transform: translateY(-2px);
 }
 
+.game-picker__player {
+    text-decoration: none;
+    color: #fff;
+    flex: none;
+}
+
 .game-picker__avatar {
     width: 3.6rem;
     height: 3.6rem;

@@ -5,6 +5,7 @@ export default {
         won:                '{name} heeft gewonnen!',
         home:               'Naar overzicht',
         start:              'Start',
+        language:           'Taal',
     },
     player: {
         fallback:           'Jij',
