@@ -23,7 +23,6 @@ export function createMemoryGame ({ pairs = 8, humanAlias = 'Jij' } = {}) {
         card,
         isFaceUp:   false,
         isMatched:  false,
-        wasMatched: false,
     }));
 
     const human = {
@@ -69,7 +68,9 @@ export function createMemoryGame ({ pairs = 8, humanAlias = 'Jij' } = {}) {
         state.winner = null;
         state.status = 'playing';
 
-        state.board.forEach(tile => {
+        const shuffled = shuffle(layout);
+        state.board.forEach((tile, index) => {
+            tile.card = shuffled[index];
             tile.isFaceUp = false;
             tile.isMatched = false;
         });
@@ -107,13 +108,12 @@ export function createMemoryGame ({ pairs = 8, humanAlias = 'Jij' } = {}) {
             if (first.card.value === second.card.value && first.card.suit === second.card.suit) {
                 first.isMatched = true;
                 second.isMatched = true;
-                first.wasMatched = true;
-                second.wasMatched = true;
                 state.matches += 1;
                 state.picks = [];
                 state.score = computeScore();
 
                 if (state.matches === state.pairs) {
+                    emitUpdate();
                     finish();
                     return;
                 }

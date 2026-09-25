@@ -15,15 +15,22 @@ const isMyTurn = computed(() => (
     && !paused.value
 ));
 
+const human = computed(() => state.value?.players[0]);
+const hasPlayable = computed(() => (
+    Boolean(human.value?.cards.some(card => game.value?.canPlay(card)))
+));
+
 function onDraw () {
     if (!isMyTurn.value) {
         return;
     }
 
-    const wasJoker = state.value?.discard[state.value.discard.length - 1]?.isJoker();
-
     if (state.value?.pendingDraw > 0) {
-        game.value.payPenalty(1, wasJoker ? undefined : null);
+        game.value.payPenalty(1);
+        return;
+    }
+
+    if (hasPlayable.value) {
         return;
     }
 
@@ -40,7 +47,7 @@ function onDraw () {
             {{ remaining }}
         </div>
         <div class="draw-pile__hint">
-            {{ isMyTurn ? (state.pendingDraw > 0 ? 'Trek!' : 'Trek een kaart') : 'Trekstapel' }}
+            {{ isMyTurn ? (state.pendingDraw > 0 ? 'Trek!' : hasPlayable ? 'Je moet spelen' : 'Trek een kaart') : 'Trekstapel' }}
         </div>
     </div>
 </template>

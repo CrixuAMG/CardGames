@@ -49,7 +49,6 @@ export function createPestenGame ({ opponents, humanAlias }) {
     });
 
     const player = id => state.players.find(p => p.id === id);
-    const topCard = () => state.discard[state.discard.length - 1];
     const directionSign = () => (state.direction === 1 ? 1 : -1);
 
     function emitTurn () {
@@ -140,8 +139,12 @@ export function createPestenGame ({ opponents, humanAlias }) {
         state.discard = [first];
         state.currentSuit = first.isJoker() ? randomSuit() : first.suit;
         state.currentPlayerId = state.players[0].id;
+        state.pendingDraw = 0;
+        state.direction = 1;
         state.turnCount = 1;
         state.status = 'playing';
+
+        applyFirstCard(first);
 
         log(`Het spel begint! Eerste kaart: ${first}.`);
         eventHub.$emit('game::start', state);
@@ -214,27 +217,46 @@ export function createPestenGame ({ opponents, humanAlias }) {
         return true;
     }
 
-    function payPenalty (playerId, suitChoice = null) {
+    function applyFirstCard (first) {
+        if (first.isJoker()) {
+            state.pendingDraw = 5;
+            log('De eerste kaart is een JOKER! Eerste speler trekt er 5 (of stapelt).');
+        } else if (first.value === 2) {
+            state.pendingDraw = 2;
+            log('De eerste kaart is een 2! Eerste speler trekt er 2 (of stapelt).');
+        } else if (first.value === 8) {
+            advance(state.currentPlayerId, 2);
+            log('De eerste kaart is een 8! De eerste speler slaat over.');
+        } else if (first.value === 1) {
+            state.direction = -state.direction;
+            log('De eerste kaart is een Aas! De speelrichting draait om.');
+        } else if (first.value === 7) {
+            log('De eerste kaart is een 7. De eerste speler mag meteen spelen.');
+        } else if (first.value === 11) {
+            log('De eerste kaart is een Boer. De eerste speler speelt op die kleur.');
+        }
+    }
+
+    function hasPlayableCard (playerId) {
+        return player(playerId).cards.some(card => canPlayCard(state, card));
+    }
+
+    function payPenalty (playerId) {
         const p = player(playerId);
         const amount = state.pendingDraw;
-        const wasJoker = topCard()?.isJoker() || false;
 
         state.pendingDraw = 0;
-        state.chooseSuitFor = null;
 
         const cards = drawFromDeck(amount);
         p.cards.push(...cards);
 
         log(`${p.alias} trekt ${cards.length} kaarten.`);
 
-        if (wasJoker) {
-            state.currentSuit = suitChoice || chooseSuitFor(state, p);
-        }
-
         if (checkWin(playerId)) {
             return;
         }
 
+        advance(playerId, 1);
         emitTurn();
     }
 
@@ -243,6 +265,10 @@ export function createPestenGame ({ opponents, humanAlias }) {
 
         if (state.pendingDraw > 0) {
             payPenalty(playerId);
+            return;
+        }
+
+        if (hasPlayableCard(playerId)) {
             return;
         }
 
@@ -276,6 +302,7 @@ export function createPestenGame ({ opponents, humanAlias }) {
         payPenalty,
         drawAndPass,
         setSuit,
+        hasPlayableCard,
     };
 }
 
@@ -372,6 +399,10 @@ export function choosePlayableCard (state, player, difficulty = 'normal') {
         }
 
         return joker || two || playable[0];
+    }
+
+    if (difficulty === 'easy') {
+        return playable[Math.floor(Math.random() * playable.length)];
     }
 
     const eight = playable.find(card => card.value === 8);

@@ -46,11 +46,6 @@ function scheduleTurn () {
 function takeTurn () {
     const p = player.value;
 
-    if (level.value === 'easy' && Math.random() < 0.3 && state.value.pendingDraw === 0) {
-        game.value.drawAndPass(p.id);
-        return;
-    }
-
     const card = choosePlayableCard(state.value, p, level.value);
 
     if (card) {
@@ -60,8 +55,7 @@ function takeTurn () {
     }
 
     if (state.value.pendingDraw > 0) {
-        const wasJoker = state.value.discard[state.value.discard.length - 1]?.isJoker();
-        game.value.payPenalty(p.id, wasJoker ? chooseSuitFor(state.value, p, level.value) : null);
+        game.value.payPenalty(p.id);
         return;
     }
 
